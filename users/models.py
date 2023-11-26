@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin
 )
+from location.models import Address
 
 
 class UserAccountManager(BaseUserManager):
@@ -56,8 +57,15 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return self.email
 
 
-# class Company(models.Model):
-#     name
-#     company size
-#     description
+class Company(models.Model):
+    name = models.CharField(max_length=255)
+    # logo = # Todo implement later with s3 bucket
+    company_size = models.CharField(max_length=255, default=1)
+    description = models.TextField(null=True, blank=True)
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    addresses = models.ManyToManyField(Address)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.name

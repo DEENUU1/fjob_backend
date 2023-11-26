@@ -25,3 +25,14 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Address(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True, blank=True)
+    street = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.street
+
