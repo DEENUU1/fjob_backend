@@ -53,7 +53,7 @@ class Salary(models.Model):
 
 class JobOffer(models.Model):
     title = models.CharField(max_length=50)
-    description = models.TextField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=5000, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     adresses = models.ManyToManyField(Address, blank=True)
     is_remote = models.BooleanField(default=False)
