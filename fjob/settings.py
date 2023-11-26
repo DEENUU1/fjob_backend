@@ -47,6 +47,9 @@ INSTALLED_APPS = [
 
     # packages
     'rest_framework',
+    'drf_yasg',
+    'rest_framework_swagger',
+
 
 ]
 
