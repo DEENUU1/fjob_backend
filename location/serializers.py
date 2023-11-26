@@ -26,6 +26,10 @@ class CitySerializer(ModelSerializer):
 
 
 class AddressSerializer(ModelSerializer):
+    country = CountrySerializer()
+    city = CitySerializer()
+    region = RegionSerializer()
+
     class Meta:
         model = Address
         fields = '__all__'

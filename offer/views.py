@@ -1,8 +1,9 @@
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 from django_filters import rest_framework as filters
 from fjob.pagination import CustomPagination
 from .models import (
@@ -16,8 +17,9 @@ from .serializers import (
     WorkTypeSerializer,
     EmploymentTypeSerializer,
     ExperienceSerializer,
-    SalarySerializer,
+    JobOfferSerializer
 )
+from django.shortcuts import get_object_or_404
 
 
 class WorkTypeView(ViewSet):
@@ -59,3 +61,46 @@ class SalaryView(APIView):
         }
 
         return Response(result)
+
+
+class OfferListView(ListAPIView):
+    queryset = JobOffer.objects.filter(is_active=True)
+    serializer_class = JobOfferSerializer
+    pagination_class = CustomPagination
+    filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
+
+    # JobOffer fields by which objects can be ordered
+    # Currently there is a ordering by created time (from newest/oldest) and salary (from lowest/highest)
+    ordering_fields = [
+        "created_at",
+        # salary__salary_from should be used for - price lowest
+        "salary__salary_from",
+        # salary__salary_to should be used for - price highest
+        "salary__salary_to",
+    ]
+    # Job offer fields by which objects can be searched
+    # @ allows to run Full-text search
+    search_fields = ["@title", "@description", "@skills"]
+
+    # Job offer fields by which objects can be filtered
+    # Todo add filtering by city and region
+    filterset_fields = [
+        "is_remote",
+        "is_hybrid",
+        "adresses__country",
+        "experience",
+        "work_type",
+        "employment_type"
+    ]
+
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
+
+class JobOfferView(ViewSet):
+
+    def retrieve(self, request, pk: int=None):
+        queryset = JobOffer.objects.all()
+        offer = get_object_or_404(queryset, pk=pk)
+        serializer = JobOfferSerializer(offer)
+        return Response(serializer.data)

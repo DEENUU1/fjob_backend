@@ -7,6 +7,7 @@ from .models import (
     JobOffer
 )
 from users.serializers import CompanySerializer
+from location.serializers import AddressSerializer
 
 
 class WorkTypeSerializer(ModelSerializer):
@@ -39,7 +40,7 @@ class JobOfferSerializer(ModelSerializer):
     work_type = WorkTypeSerializer(many=True)
     employment_type = EmploymentTypeSerializer(many=True)
     company = CompanySerializer()
-    # adresses = AddressSerializer(many=True)
+    adresses = AddressSerializer(many=True)
 
     class Meta:
         model = JobOffer
