@@ -68,6 +68,13 @@ class JobOffer(models.Model):
     is_active = models.BooleanField(default=True)
     is_archived = models.BooleanField(default=False)
 
+    # This fields are only used for job offers that are scraped from other websites
+    # It shouldn't display for company when the user is trying to add a new offer
+    company_logo = models.URLField(null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
+    is_scraped = models.BooleanField(default=True)
+    company_name = models.CharField(max_length=50, null=True, blank=True)
+
     @property
     def is_new(self):
         threshold_days = 1
