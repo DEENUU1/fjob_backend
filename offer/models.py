@@ -1,5 +1,10 @@
 from django.db import models
+from django.utils import timezone
+
 from location.models import Address
+from users.models import Company
+
+from datetime import timedelta
 
 
 class WorkType(models.Model):
@@ -41,4 +46,33 @@ class Salary(models.Model):
     salary_to = models.FloatField()
     currency = models.CharField(max_length=10, choices=CURRENCIES)
     schedule = models.CharField(max_length=10, choices=SCHEDULES)
+
+    def __str__(self):
+        return f'{self.salary_from} - {self.salary_to} {self.currency} {self.schedule}'
+
+
+class JobOffer(models.Model):
+    title = models.CharField(max_length=50)
+    description = models.TextField(max_length=1000, null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    adresses = models.ManyToManyField(Address, blank=True)
+    is_remote = models.BooleanField(default=False)
+    is_hybrid = models.BooleanField(default=False)
+    skills = models.CharField(max_length=100, null=True, blank=True)
+    salary = models.ManyToManyField(Salary, blank=True)
+    experience = models.ManyToManyField(Experience, blank=True)
+    work_type = models.ManyToManyField(WorkType, blank=True)
+    employment_type = models.ManyToManyField(EmploymentType, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    is_archived = models.BooleanField(default=False)
+
+    @property
+    def is_new(self):
+        threshold_days = 1
+        return (timezone.now() - self.created_at) < timedelta(days=threshold_days)
+
+    def __str__(self):
+        return self.title
 
