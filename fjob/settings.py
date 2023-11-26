@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'users',
     'location',
     'offer',
+    'report',
 
     # packages
     'rest_framework',
