@@ -24,3 +24,9 @@ class ExperienceSerializer(ModelSerializer):
     class Meta:
         model = Experience
         fields = '__all__'
+
+
+class SalarySerializer(ModelSerializer):
+    class Meta:
+        model = Salary
+        fields = '__all__'
