@@ -13,6 +13,7 @@ class JobOfferAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'is_archived', 'is_remote', 'is_hybrid', 'work_type', 'employment_type', 'experience')
     search_fields = ('title', 'description', 'company__name', 'skills', 'company_name')
     filter_horizontal = ('adresses', 'salary', 'experience', 'work_type', 'employment_type')
+    list_editable = ('is_active', 'is_archived')
 
 
 admin.site.register(WorkType)
