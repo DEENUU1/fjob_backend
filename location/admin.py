@@ -1,3 +1,17 @@
 from django.contrib import admin
+from .models import Country, Region, City
 
-# Register your models here.
+
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'country')
+    list_filter = ('country',)
+
+
+class CityAdmin(admin.ModelAdmin):
+    list_display = ('name', 'region', 'country')
+    list_filter = ('region',)
+
+
+admin.site.register(Country)
+admin.site.register(Region, RegionAdmin)
+admin.site.register(City, CityAdmin)
