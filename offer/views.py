@@ -12,7 +12,7 @@ from .models import (
 from .serializers import (
     WorkTypeSerializer,
     EmploymentTypeSerializer,
-
+    ExperienceSerializer,
 )
 
 
@@ -29,4 +29,11 @@ class EmploymentTypeView(ViewSet):
     def list(self, request):
         employment_types = EmploymentType.objects.all()
         serializer = EmploymentTypeSerializer(employment_types, many=True)
+        return Response(serializer.data)
+
+
+class ExperienceView(ViewSet):
+    def list(self, request):
+        experiences = Experience.objects.all()
+        serializer = ExperienceSerializer(experiences, many=True)
         return Response(serializer.data)

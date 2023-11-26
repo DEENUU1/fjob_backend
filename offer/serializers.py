@@ -18,3 +18,9 @@ class EmploymentTypeSerializer(ModelSerializer):
     class Meta:
         model = EmploymentType
         fields = '__all__'
+
+
+class ExperienceSerializer(ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = '__all__'
