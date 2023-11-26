@@ -15,12 +15,19 @@ class LoadPoland:
 
     def load_data(self):
         for data in self.data:
-            city = data.get("Name")
-            region = data.get("Province")
+            if data.get("Type") == "city":
+                city = data.get("Name")
+                region = data.get("Province")
 
-            country, created = Country.objects.get_or_create(name=self.country)
-            region, created = Region.objects.get_or_create(name=region, country=country)
-            City.objects.get_or_create(name=city, region=region)
+                country, created = Country.objects.get_or_create(name=self.country)
+                region, created = Region.objects.get_or_create(name=region, country=country)
+                City.objects.get_or_create(
+                    name=city,
+                    region=region,
+                    country=country,
+                    latitude=data.get("Latitude"),
+                    longitude=data.get("Longitude")
+                )
 
 
 
