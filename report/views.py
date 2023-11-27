@@ -23,3 +23,33 @@ class ReportViewSetUser(ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class ReportViewSetAdmin(ViewSet):
+    permission_classes = [IsAdminUser, ]
+
+    def list(self, request):
+        reports = Report.objects.all()
+        page = CustomPagination()
+        result_page = page.paginate_queryset(reports, request)
+        serializer = ReportSerializer(result_page, many=True)
+        return page.get_paginated_response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        report = get_object_or_404(Report, pk=pk)
+        serializer = ReportSerializer(report)
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        report = get_object_or_404(Report, pk=pk)
+        current_reviewed_value = report.reviewed
+
+        report.reviewed = not current_reviewed_value
+        report.save()
+
+        serializer = ReportSerializer(report)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def destroy(self, request, pk=None):
+        report = get_object_or_404(Report, pk=pk)
+        report.delete()
