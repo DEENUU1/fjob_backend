@@ -9,11 +9,11 @@ from django.urls import path
 
 
 router = DefaultRouter()
-router.register("contact", ContactViewUser, basename="contact_post")
-router.register("dashboard", ContactViewAdmin, basename="contact_post")
+router.register("", ContactViewUser, basename="contact_post")
+router.register("", ContactViewAdmin, basename="contact_post")
 
 urlpatterns = [
-    path("dashboard/all", ContactListViewAdmin.as_view(), name="salary_stats"),
+    path("all", ContactListViewAdmin.as_view(), name="salary_stats"),
 ]
 
 urlpatterns += router.urls
