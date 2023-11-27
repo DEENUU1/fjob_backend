@@ -4,11 +4,16 @@ from .views import (
     ReportViewSetAdmin,
     ReportViewListAdmin
 )
+from django.urls import path
 
 
 router = DefaultRouter()
 router.register("", ReportViewSetUser, basename="report_user")
 router.register("dashboard", ReportViewSetAdmin, basename="report_admin")
-router.register("dashboard/all", ReportViewListAdmin, basename="report_list")
 
-urlpatterns = router.urls
+
+urlpatterns = [
+    path("dashboard/all", ReportViewListAdmin.as_view(), name="report_list")
+]
+
+urlpatterns += router.urls
