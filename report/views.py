@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ViewSet
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from fjob.pagination import CustomPagination
@@ -25,15 +26,32 @@ class ReportViewSetUser(ViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+class ReportViewListAdmin(ListAPIView):
+    permission_classes = [IsAdminUser, ]
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+    pagination_class = CustomPagination
+    filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
+
+    # Report fields by which objects can be ordered
+    ordering_fields = [
+        'created_at',
+    ]
+    # Report fields by which objects can be searched
+    # @ allows to run Full-text search
+    search_fields = ["@title", "@description", "@skills"]
+
+    # Report fields by which objects can be filtered
+    filterset_fields = [
+        "reviewed"
+    ]
+
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
+
 class ReportViewSetAdmin(ViewSet):
     permission_classes = [IsAdminUser, ]
-
-    def list(self, request):
-        reports = Report.objects.all()
-        page = CustomPagination()
-        result_page = page.paginate_queryset(reports, request)
-        serializer = ReportSerializer(result_page, many=True)
-        return page.get_paginated_response(serializer.data)
 
     def retrieve(self, request, pk=None):
         report = get_object_or_404(Report, pk=pk)
