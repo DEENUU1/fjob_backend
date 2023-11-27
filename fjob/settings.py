@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'offer',
     'report',
     'favourite',
+    'contact',
 
     # packages
     'rest_framework',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
     'django_filters',
 
 ]
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
