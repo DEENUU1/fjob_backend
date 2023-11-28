@@ -15,17 +15,17 @@ from .serializers import (
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
-class ReportViewSetUser(ViewSet):
+class ReportCreateView(ViewSet):
     permission_classes = [IsAuthenticated, ]
 
     def create(self, request):
         serializer = ReportSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ReportViewListAdmin(ListAPIView):
+class ReportListViewAdmin(ListAPIView):
     permission_classes = [IsAdminUser, ]
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
@@ -37,8 +37,11 @@ class ReportViewListAdmin(ListAPIView):
         'created_at',
     ]
     # Report fields by which objects can be searched
-    # @ allows to run Full-text search
-    search_fields = ["@title", "@description", "@skills"]
+    # @ allows to run Full-text search - support only for PostgreSQL
+    # $ regex
+    # ^ starts with
+    # = exact matches
+    search_fields = ["^description"]
 
     # Report fields by which objects can be filtered
     filterset_fields = [
