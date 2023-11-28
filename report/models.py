@@ -19,8 +19,3 @@ class Report(models.Model):
     def is_new(self):
         threshold_days = 1
         return (timezone.now() - self.created_at) < timedelta(days=threshold_days)
-
-    @property
-    def is_expired(self):
-        threshold_days = 90
-        return (timezone.now() - self.created_at) > timedelta(days=threshold_days)

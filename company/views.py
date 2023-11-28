@@ -5,11 +5,59 @@ from rest_framework import status
 from .models import (
     Company,
 )
+from offer.models import (
+    JobOffer,
+)
 from .serializers import (
     CompanySerializer,
 )
+from offer.serializers import (
+    JobOfferSerializer
+)
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+
+
+class CompanyOfferView(ViewSet):
+    permission_classes = [IsAuthenticated, ]
+
+    def list(self):
+        queryset = JobOffer.objects.all()
+        serializer = JobOfferSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = JobOffer.objects.all()
+        offer = get_object_or_404(queryset, pk=pk)
+        serializer = JobOfferSerializer(offer)
+        return Response(serializer.data)
+
+    def create(self, request):
+        company_id = request.data.get("company_id")
+
+        company = Company.objects.get(pk=company_id)
+        if company.number_of_offers_to_add > 0:
+            serializer = JobOfferSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            company.num_of_offers_to_add -= 1
+            company.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, pk=None):
+        offer = JobOffer.objects.get(pk=pk)
+
+        if offer.is_expired:
+            return Response({"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = JobOfferSerializer(offer, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 class UserCheckCompanyView(APIView):
