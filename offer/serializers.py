@@ -6,7 +6,7 @@ from .models import (
     Salary,
     JobOffer
 )
-from users.serializers import CompanySerializer
+from company.serializers import CompanySerializer
 from location.serializers import AddressSerializer
 
 
