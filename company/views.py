@@ -23,7 +23,7 @@ class UserCheckCompanyView(ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-class CompanyViewSet(ViewSet):
+class CompanyPublicView(ViewSet):
 
     def list(self, request):
         companies = Company.objects.filter(is_active=True)
@@ -31,7 +31,16 @@ class CompanyViewSet(ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        queryset = Company.objects.all()
+        queryset = Company.objects.filter(is_active=True)
+        company = get_object_or_404(queryset, pk=pk)
+        serializer = CompanySerializer(company)
+        return Response(serializer.data)
+
+
+class CompanyUserView(ViewSet):
+
+    def retrive(self, request, pk=None):
+        queryset = Company.objects.filter(user=request.user)
         company = get_object_or_404(queryset, pk=pk)
         serializer = CompanySerializer(company)
         return Response(serializer.data)
