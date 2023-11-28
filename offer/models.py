@@ -58,6 +58,7 @@ class JobOffer(models.Model):
     adresses = models.ManyToManyField(Address, blank=True)
     is_remote = models.BooleanField(default=False)
     is_hybrid = models.BooleanField(default=False)
+    days_until_expiration = models.IntegerField(default=30)
     skills = models.CharField(max_length=100, null=True, blank=True)
     salary = models.ManyToManyField(Salary, blank=True)
     experience = models.ManyToManyField(Experience, blank=True)
@@ -79,6 +80,15 @@ class JobOffer(models.Model):
     def is_new(self):
         threshold_days = 1
         return (timezone.now() - self.created_at) < timedelta(days=threshold_days)
+
+    @property
+    def is_expired(self):
+        return (timezone.now() - self.created_at) < timedelta(days=self.days_until_expiration)
+
+    @property
+    def days_until_expiration_str(self):
+        # Count based on days_until_expiration and created_at fields
+        return self.days_until_expiration - (timezone.now() - self.created_at).days
 
     def __str__(self):
         return self.title

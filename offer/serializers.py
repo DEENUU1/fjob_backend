@@ -8,6 +8,7 @@ from .models import (
 )
 from company.serializers import CompanySerializer
 from location.serializers import AddressSerializer
+from rest_framework import serializers
 
 
 class WorkTypeSerializer(ModelSerializer):
@@ -41,6 +42,9 @@ class JobOfferSerializer(ModelSerializer):
     employment_type = EmploymentTypeSerializer(many=True)
     company = CompanySerializer()
     adresses = AddressSerializer(many=True)
+    is_new = serializers.ReadOnlyField()
+    is_expired = serializers.ReadOnlyField()
+    days_until_expiration_str = serializers.ReadOnlyField()
 
     class Meta:
         model = JobOffer
