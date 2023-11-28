@@ -46,17 +46,20 @@ class CompanyUserView(ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
+        # Check if user has Company
+        # In the future I'll move this code because it's going to be more complex
+        # Because user will be able to pay for creating more companies
+        existing_company = Company.objects.filter(user=request.user).exists()
+        if existing_company:
+            return Response(
+                {"info": "You already have created Company"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         serializer = CompanySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def update(self, request, pk=None):
-        company = Company.objects.get(pk=pk)
-        serializer = CompanySerializer(company, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def partial_update(self, request, pk=None):
         company = Company.objects.get(pk=pk)
