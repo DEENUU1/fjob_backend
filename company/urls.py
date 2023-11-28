@@ -11,8 +11,8 @@ from django.urls import path
 
 router = DefaultRouter()
 router.register("management", CompanyUserView, basename="company_user")
-router.register("", CompanyPublicView, basename="company_public")
-router.register("company", CompanyOfferView, basename="manage_company")
+router.register("company", CompanyPublicView, basename="company_public")
+router.register("offer", CompanyOfferView, basename="manage_company")
 
 urlpatterns = [
     path("check/", UserCheckCompanyView.as_view(), name="check_user_company"),

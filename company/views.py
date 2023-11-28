@@ -34,19 +34,24 @@ class CompanyOfferView(ViewSet):
 
     def create(self, request):
         company_id = request.data.get("company_id")
+        if company_id is None:
+            return Response({"info": "You need to select Company"}, status=status.HTTP_400_BAD_REQUEST)
 
         company = Company.objects.get(pk=company_id)
-        if company.number_of_offers_to_add > 0:
-            serializer = JobOfferSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+        if company:
+            if company.num_of_offers_to_add > 0:
+                serializer = JobOfferSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
 
-            company.num_of_offers_to_add -= 1
-            company.save()
+                company.num_of_offers_to_add -= 1
+                company.save()
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"info": "Company does not exists"}, status=status.HTTP_404_NOT_FOUND)
 
     def partial_update(self, request, pk=None):
         offer = JobOffer.objects.get(pk=pk)
@@ -111,10 +116,10 @@ class CompanyUserView(ViewSet):
         # Check if user has Company
         # In the future I'll move this code because it's going to be more complex
         # Because user will be able to pay for creating more companies
-        existing_company = Company.objects.filter(user=request.user).exists()
-        if existing_company:
+        user_companies = Company.objects.filter(user=self.request.user).count()
+        if request.user.num_of_available_companies == user_companies:
             return Response(
-                {"info": "You already have created Company"},
+                {"info": "You have reached the limit of Companies. Pay to make more"},
                 status=status.HTTP_400_BAD_REQUEST
             )
 

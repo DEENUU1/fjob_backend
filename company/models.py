@@ -9,7 +9,7 @@ class Company(models.Model):
     company_size = models.CharField(max_length=255, default=1)
     description = models.TextField(null=True, blank=True)
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
-    addresses = models.ManyToManyField(Address)
+    addresses = models.ManyToManyField(Address, blank=True)
     num_of_offers_to_add = models.IntegerField(default=1)
     linkedin_url = models.URLField(null=True, blank=True)
     facebook_url = models.URLField(null=True, blank=True)
