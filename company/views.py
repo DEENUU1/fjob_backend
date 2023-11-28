@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import (
@@ -10,9 +11,22 @@ from .serializers import (
 from django.shortcuts import get_object_or_404
 
 
+class UserCheckCompanyView(ViewSet):
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+
+        try:
+            company = Company.objects.get(user=user)
+            if company:
+                return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 class CompanyViewSet(ViewSet):
+
     def list(self, request):
-        companies = Company.objects.all()
+        companies = Company.objects.filter(is_active=True)
         serializer = CompanySerializer(companies, many=True)
         return Response(serializer.data)
 
@@ -41,3 +55,9 @@ class CompanyViewSet(ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def destroy(self, request, pk=None):
+        company = Company.objects.get(pk=pk)
+        company.is_active = False
+        company.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)

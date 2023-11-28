@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 from location.models import Address
-from users.models import Company
+from company.models import Company
 
 from datetime import timedelta
 
