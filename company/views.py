@@ -9,9 +9,12 @@ from .serializers import (
     CompanySerializer,
 )
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
 
-class UserCheckCompanyView(ViewSet):
+class UserCheckCompanyView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
     def get(self, request, *args, **kwargs):
         user = self.request.user
 
@@ -38,6 +41,7 @@ class CompanyPublicView(ViewSet):
 
 
 class CompanyUserView(ViewSet):
+    permission_classes = [IsAuthenticated, ]
 
     def retrive(self, request, pk=None):
         queryset = Company.objects.filter(user=request.user)
