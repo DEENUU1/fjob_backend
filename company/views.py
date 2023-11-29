@@ -34,7 +34,6 @@ class CompanyOfferListView(View):
 class CompanyOfferView(ViewSet):
     permission_classes = [IsAuthenticated, ]
 
-
     def retrieve(self, request, pk=None):
         queryset = JobOffer.objects.all()
         offer = get_object_or_404(queryset, pk=pk)
@@ -107,6 +106,11 @@ class CompanyPublicView(ViewSet):
 
 class CompanyUserView(ViewSet):
     permission_classes = [IsAuthenticated, ]
+
+    def list(self, request, *args, **kwargs):
+        queryset = Company.objects.filter(user=self.request.user)
+        serializer = CompanySerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def retrive(self, request, pk=None):
         queryset = Company.objects.filter(user=request.user)
