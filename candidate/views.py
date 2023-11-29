@@ -1,8 +1,8 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Candidate, OfferCandidate
-from .serializers import CandidateSerializer, OfferCandidateSerializer
+from .models import Candidate
+from .serializers import CandidateSerializer
 from offer.models import JobOffer
 
 
@@ -22,11 +22,11 @@ class SendApplicationView(ViewSet):
         serializer = CandidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
-        offer_candidate = OfferCandidate.objects.create(
-            offer_id=offer_id,
-            candidate_id=serializer.data["id"]
-        )
-        offer_candidate.save()
-
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class UserApplicationsView(ViewSet):
+    def list(self, request):
+        candidate = Candidate.objects.filter(user=request.user)
+        serializer = CandidateSerializer(candidate, many=True)
+        return Response(serializer.data)
