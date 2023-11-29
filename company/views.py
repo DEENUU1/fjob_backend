@@ -26,7 +26,7 @@ class CompanyOfferListView(View):
         if company.user != self.request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        queryset = JobOffer.objects.all()
+        queryset = JobOffer.objects.filter(company=company)
         serializer = JobOfferSerializer(queryset, many=True)
         return Response(serializer.data)
 
