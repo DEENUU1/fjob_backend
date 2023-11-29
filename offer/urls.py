@@ -6,6 +6,7 @@ from .views import (
     SalaryView,
     OfferListView,
     JobOfferView,
+    CompanyOfferListView,
 
 )
 from django.urls import path
@@ -21,5 +22,6 @@ router.register("offer", JobOfferView, basename="job_offer")
 urlpatterns = [
     path("salary/", SalaryView.as_view(), name="salary_stats"),
     path("offer/", OfferListView.as_view(), name="offer_list"),
+    path("offer/company/", CompanyOfferListView.as_view(), name="company_offer_list"),
 ]
 urlpatterns += router.urls

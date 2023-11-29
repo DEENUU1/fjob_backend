@@ -20,6 +20,7 @@ from .serializers import (
     JobOfferSerializer
 )
 from django.shortcuts import get_object_or_404
+from company.models import Company
 
 
 class WorkTypeView(ViewSet):
@@ -103,4 +104,14 @@ class JobOfferView(ViewSet):
         queryset = JobOffer.objects.all()
         offer = get_object_or_404(queryset, pk=pk)
         serializer = JobOfferSerializer(offer)
+        return Response(serializer.data)
+
+
+class CompanyOfferListView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        company_id = kwargs.get("company_id")
+        company = Company.objects.get(pk=company_id)
+        offers = JobOffer.objects.filter(company=company, is_active=True)
+        serializer = JobOfferSerializer(offers, many=True)
         return Response(serializer.data)

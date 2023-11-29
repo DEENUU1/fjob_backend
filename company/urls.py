@@ -4,7 +4,6 @@ from .views import (
     CompanyUserView,
     UserCheckHasCompanyView,
     CompanyOfferView,
-    CompanyOfferListView
 )
 from django.urls import path
 
@@ -16,7 +15,6 @@ router.register("offer", CompanyOfferView, basename="manage_company")
 
 urlpatterns = [
     path("check/", UserCheckHasCompanyView.as_view(), name="check_user_company"),
-    path("company/offer", CompanyOfferListView.as_view(), name="list_of_campany_offers"),
 ]
 
 urlpatterns += router.urls

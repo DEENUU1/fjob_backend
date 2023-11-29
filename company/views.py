@@ -63,16 +63,6 @@ class CompanyOfferView(ViewSet):
         return Response(serializer.data)
 
 
-class CompanyOfferListView(APIView):
-
-    def get(self, request, *args, **kwargs):
-        company_id = kwargs.get("company_id")
-        company = Company.objects.get(pk=company_id)
-        offers = JobOffer.objects.filter(company=company, is_active=True)
-        serializer = JobOfferSerializer(offers, many=True)
-        return Response(serializer.data)
-
-
 class UserCheckHasCompanyView(APIView):
     permission_classes = [IsAuthenticated, ]
 
