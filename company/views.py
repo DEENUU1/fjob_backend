@@ -72,6 +72,10 @@ class CompanyOfferView(ViewSet):
                 company.save()
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+            # elif
+
+
             else:
                 return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
         else:

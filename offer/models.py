@@ -5,7 +5,6 @@ from location.models import Address
 from company.models import Company
 
 from datetime import timedelta
-from payment.models import Package
 
 
 class WorkType(models.Model):
@@ -56,7 +55,6 @@ class JobOffer(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=5000, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
-    package = models.ForeignKey(Package, on_delete=models.CASCADE, null=True, blank=True)
     addresses = models.ManyToManyField(Address, blank=True)
     is_remote = models.BooleanField(default=False)
     is_hybrid = models.BooleanField(default=False)
