@@ -21,13 +21,15 @@ class StripeCheckoutSessionView(APIView):
     def post(self, request):
         success_url = request.build_absolute_uri(reverse("success"))
         cancel_url = request.build_absolute_uri(reverse("cancel"))
-        product_id = self.kwargs.get("pk", None)
-        company_id = self.kwargs.get("company_id", None)
+
+        data = self.request.data
+        product_id = data.get("product_id", None)
+        company_id = data.get("company_id", None)
 
         if product_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        product = Product.objects.get(product_id)
+        product = Product.objects.get(id=product_id)
         if product.type == "NEW_OFFER" and company_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -43,26 +45,27 @@ class StripeCheckoutSessionView(APIView):
             metadata={
                 "company_id": company_id,
                 "type": product.type,
+                "value": product.value,
                 "product_id": product.id,
                 "user_id": request.user.id
             },
             success_url=success_url,
             cancel_url=cancel_url,
         )
-        return Response({"id": checkout_session.id})
+        return Response({"id": checkout_session.url})
 
 
 def increment_num_of_available_companies(session, value):
     user_id = session.metadata["user_id"]
     user = UserAccount.objects.get(id=user_id)
-    user.num_of_available_companies += value
+    user.num_of_available_companies += int(value)
     user.save()
 
 
 def increment_num_of_available_offers(session, value):
-    company_id = session.metada["company_id"]
+    company_id = session.metadata["company_id"]
     company = Company.objects.get(id=company_id)
-    company.num_of_available_offers += value
+    company.num_of_offers_to_add += int(value)
     company.save()
 
 
@@ -88,7 +91,7 @@ def stripe_webhook(request):
         # Todo customer_email = session.customer_details["email"], send_email
 
         purchase_type = session.metadata["type"]
-        value = session.metadata["session"]
+        value = session.metadata["value"]
 
         if purchase_type == "NEW_COMPANY":
             increment_num_of_available_companies(session, value)
