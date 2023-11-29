@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404
 
 
 class FavouriteView(ViewSet):
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated, ]
 
     def list(self, request):
         favourites = Favourite.objects.filter(user=request.user)
