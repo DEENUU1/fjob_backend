@@ -15,6 +15,19 @@ from offer.serializers import (
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import View
+from users.models import UserAccount
+
+
+class UserCanMakeCompanyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = self.request.user
+        user_object = UserAccount.objects.get(id=user.id)
+        if user_object.num_of_available_companies > 0:
+            return Response({"info": "true"})
+        else:
+            return Response({"info": "false"})
 
 
 class CompanyOfferListView(View):

@@ -8,6 +8,16 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView
 )
+from rest_framework.permissions import IsAuthenticated
+
+
+class GetUserNumOfAvailableCompaniesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        num_of_available_companies = user.available_companies.count()
+        return Response({'num_of_available_companies': num_of_available_companies}, status=status.HTTP_200_OK)
 
 
 class CustomProviderAuthView(ProviderAuthView):
