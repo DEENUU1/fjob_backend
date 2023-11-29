@@ -6,6 +6,7 @@ from .serializers import CandidateSerializer
 from offer.models import JobOffer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 
 class SendApplicationView(ViewSet):
@@ -49,3 +50,22 @@ class CandidateListView(generics.ListAPIView):
             return Candidate.objects.filter(offer_id=offer_id)
         else:
             return Candidate.objects.none()
+
+
+#     path('candidates/<int:candidate_id>/change-status/<str:new_status>/', ChangeCandidateStatus.as_view(), name='change-candidate-status'),
+class ChangeCandidateStatus(APIView):
+    def patch(self, request, candidate_id, new_status):
+        try:
+            candidate = Candidate.objects.get(pk=candidate_id)
+        except Candidate.DoesNotExist:
+            return Response({'error': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        valid_statuses = [s[0] for s in Candidate.STATUS]
+        if new_status not in valid_statuses:
+            return Response({'error': 'Invalid status'}, status=status.HTTP_400_BAD_REQUEST)
+
+        candidate.status = new_status
+        candidate.save()
+
+        serializer = CandidateSerializer(candidate)
+        return Response(serializer.data)
