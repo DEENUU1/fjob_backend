@@ -4,6 +4,8 @@ from rest_framework import status
 from .models import Candidate
 from .serializers import CandidateSerializer
 from offer.models import JobOffer
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
 
 class SendApplicationView(ViewSet):
@@ -26,7 +28,24 @@ class SendApplicationView(ViewSet):
 
 
 class UserApplicationsView(ViewSet):
+    permission_classes = [IsAuthenticated]
+
     def list(self, request):
         candidate = Candidate.objects.filter(user=request.user)
         serializer = CandidateSerializer(candidate, many=True)
         return Response(serializer.data)
+
+
+class CandidateListView(generics.ListAPIView):
+    serializer_class = CandidateSerializer
+    permission_classes = [IsAuthenticated]
+
+    #     path('job-offers/<int:offer_id>/candidates/', CandidateListView.as_view(), name='candidate-list'),
+    def get_queryset(self):
+        offer_id = self.kwargs['offer_id']
+        user = self.request.user
+
+        if user.company.joboffer_set.filter(id=offer_id).exists():
+            return Candidate.objects.filter(offer_id=offer_id)
+        else:
+            return Candidate.objects.none()
