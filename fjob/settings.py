@@ -46,12 +46,11 @@ INSTALLED_APPS = [
     'users',
     'location',
     'offer',
-    'report',
     'favourite',
-    'contact',
     'company',
     'candidate',
     'payment',
+    'support',
 
     # packages
     'rest_framework',

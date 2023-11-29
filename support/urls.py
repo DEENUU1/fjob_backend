@@ -5,6 +5,7 @@ from .views import (
 
 
 router = DefaultRouter()
-router.register("", ContactViewUser, basename="contact_post")
+router.register("contact", ContactViewUser, basename="contact_post")
+router.register("report", ReportCreateView, basename="report_user")
 
 urlpatterns = router.urls
