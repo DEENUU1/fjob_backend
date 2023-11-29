@@ -14,19 +14,33 @@ from offer.serializers import (
 )
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import View
+
+
+class CompanyOfferListView(View):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        company = Company.objects.get(user=request.user)
+
+        if company.user != self.request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        queryset = JobOffer.objects.all()
+        serializer = JobOfferSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CompanyOfferView(ViewSet):
     permission_classes = [IsAuthenticated, ]
 
-    def list(self):
-        queryset = JobOffer.objects.all()
-        serializer = JobOfferSerializer(queryset, many=True)
-        return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = JobOffer.objects.all()
         offer = get_object_or_404(queryset, pk=pk)
+        if offer.user != self.request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         serializer = JobOfferSerializer(offer)
         return Response(serializer.data)
 
@@ -63,7 +77,7 @@ class CompanyOfferView(ViewSet):
         return Response(serializer.data)
 
 
-class UserCheckHasCompanyView(APIView):
+class UserHasCompanyView(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
@@ -73,7 +87,7 @@ class UserCheckHasCompanyView(APIView):
             company = Company.objects.get(user=user)
             if company:
                 return Response(status=status.HTTP_200_OK)
-        except Exception as e:
+        except Exception:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
