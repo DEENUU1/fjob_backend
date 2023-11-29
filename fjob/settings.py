@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'favourite',
     'contact',
     'company',
+    'candidate',
 
     # packages
     'rest_framework',
