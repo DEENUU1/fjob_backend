@@ -103,6 +103,10 @@ CORS_ALLOWED_ORIGINS = os.getenv(
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
+### STRIPE
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+NEW_COMPANY_PRICE_ID = os.getenv("NEW_COMPANY_PRICE_ID")
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
