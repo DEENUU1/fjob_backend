@@ -75,7 +75,7 @@ class CompanyOfferListView(APIView):
         return Response(serializer.data)
 
 
-class UserCheckCompanyView(APIView):
+class UserCheckHasCompanyView(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
@@ -113,9 +113,6 @@ class CompanyUserView(ViewSet):
         return Response(serializer.data)
 
     def create(self, request):
-        # Check if user has Company
-        # In the future I'll move this code because it's going to be more complex
-        # Because user will be able to pay for creating more companies
         user_companies = Company.objects.filter(user=self.request.user).count()
         if request.user.num_of_available_companies == user_companies:
             return Response(
@@ -130,6 +127,9 @@ class CompanyUserView(ViewSet):
 
     def partial_update(self, request, pk=None):
         company = Company.objects.get(pk=pk)
+        if company.user != self.request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         serializer = CompanySerializer(company, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -137,6 +137,9 @@ class CompanyUserView(ViewSet):
 
     def destroy(self, request, pk=None):
         company = Company.objects.get(pk=pk)
+        if company.user != self.request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         company.is_active = False
         company.save()
         return Response(status=status.HTTP_204_NO_CONTENT)

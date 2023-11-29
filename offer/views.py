@@ -79,7 +79,7 @@ class OfferListView(ListAPIView):
         "salary__salary_to",
     ]
     # Job offer fields by which objects can be searched
-    # @ allows to run Full-text search
+    # @ allows to run Full-text search, works only with PostgreSQL
     search_fields = ["@title", "@description", "@skills"]
 
     # Job offer fields by which objects can be filtered
