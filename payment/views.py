@@ -7,13 +7,18 @@ from django.conf import settings
 from users.models import UserAccount
 from django.urls import reverse
 from rest_framework.permissions import IsAuthenticated
-from .models import UserPayment
+from .models import UserPayment, Package
 from django.views.decorators.csrf import csrf_exempt
 import json
-
+from .serializers import PackageSerializer
 from django.http import HttpResponse
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+class PackageListView(APIView):
+    def get(self, request):
+        pass
 
 
 class NewCompanyCheckoutSessionView(APIView):

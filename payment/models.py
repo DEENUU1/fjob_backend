@@ -1,7 +1,6 @@
 from django.db import models
 from users.models import UserAccount
-from django.dispatch import receiver
-from django.db.models.signals import post_save
+from company.models import Company
 
 
 class UserPayment(models.Model):
@@ -24,8 +23,18 @@ class Package(models.Model):
     has_bumps = models.BooleanField(default=False)
     num_of_bumps = models.IntegerField(default=0)
     num_of_days_available = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
 
+class PackagePurchase(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
+    is_available = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.company} {self.package} {self.is_available}"
