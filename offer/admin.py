@@ -12,7 +12,7 @@ class JobOfferAdmin(admin.ModelAdmin):
     list_display = ('title', 'company', 'created_at', 'is_active', 'is_archived')
     list_filter = ('is_active', 'is_archived', 'is_remote', 'is_hybrid', 'work_type', 'employment_type', 'experience')
     search_fields = ('title', 'description', 'company__name', 'skills', 'company_name')
-    filter_horizontal = ('adresses', 'salary', 'experience', 'work_type', 'employment_type')
+    filter_horizontal = ('addresses', 'salary', 'experience', 'work_type', 'employment_type')
     list_editable = ('is_active', 'is_archived')
 
 

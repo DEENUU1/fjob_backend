@@ -55,7 +55,7 @@ class JobOffer(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=5000, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
-    adresses = models.ManyToManyField(Address, blank=True)
+    addresses = models.ManyToManyField(Address, blank=True)
     is_remote = models.BooleanField(default=False)
     is_hybrid = models.BooleanField(default=False)
     days_until_expiration = models.IntegerField(default=30)
