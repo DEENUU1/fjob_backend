@@ -5,7 +5,7 @@ from users.models import UserAccount
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
-    # logo = # Todo implement later with s3 bucket
+    logo = models.FileField(null=True, blank=True)
     company_size = models.CharField(max_length=255, default=1)
     description = models.TextField(null=True, blank=True)
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
