@@ -1,11 +1,21 @@
 from django.db import models
 from location.models import Address
 from users.models import UserAccount
+from django.core.validators import FileExtensionValidator, MaxValueValidator
 
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
-    logo = models.FileField(null=True, blank=True)
+    logo = models.FileField(
+        validators=[
+            FileExtensionValidator(
+                allowed_extensions=['png', 'jpg', 'jpeg'],
+                message="Only png, jpg, jpeg files are allowed"
+            ),
+        ],
+        null=True,
+        blank=True
+    )
     company_size = models.CharField(max_length=255, default=1)
     description = models.TextField(null=True, blank=True)
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
