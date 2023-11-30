@@ -88,7 +88,7 @@ class OfferListView(ListAPIView):
     filterset_fields = [
         "is_remote",
         "is_hybrid",
-        "adresses__country",
+        # "adresses__country",
         "experience",
         "work_type",
         "employment_type"

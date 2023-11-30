@@ -19,8 +19,8 @@ class SendApplicationView(ViewSet):
         if not offer:
             return Response({"info": "Wrong offer id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if offer.apply_form is not None:
-            return Response({"info": "You can't apply for this offer"}, status=status.HTTP_400_BAD_REQUEST)
+        # if offer.apply_form is not None:
+        #     return Response({"info": "You can't apply for this offer"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = CandidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

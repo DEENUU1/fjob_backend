@@ -16,7 +16,7 @@ class Candidate(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, null=True, blank=True)
     offer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
     address = models.ManyToManyField(Address, blank=True)
-    # resume = ...
+    resume = models.FileField()
     message = models.TextField(max_length=5000, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS)
