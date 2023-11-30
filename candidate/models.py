@@ -3,6 +3,14 @@ from offer.models import JobOffer
 from users.models import UserAccount
 from location.models import Address
 from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
+
+
+def validate_file_size(value):
+    filesize = value.size
+
+    if filesize > (5 * 1024 * 1024):
+        raise ValidationError(f"Max file size is 5 MB")
 
 
 class Candidate(models.Model):
@@ -23,6 +31,7 @@ class Candidate(models.Model):
                 allowed_extensions=['pdf'],
                 message="Only PDF files are allowed"
             ),
+            validate_file_size,
         ],
     )
     message = models.TextField(max_length=5000, null=True, blank=True)

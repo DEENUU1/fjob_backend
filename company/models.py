@@ -1,7 +1,15 @@
 from django.db import models
 from location.models import Address
 from users.models import UserAccount
-from django.core.validators import FileExtensionValidator, MaxValueValidator
+from django.core.validators import FileExtensionValidator
+from django.core.exceptions import ValidationError
+
+
+def validate_file_size(value):
+    filesize = value.size
+
+    if filesize > (3 * 1024 * 1024):
+        raise ValidationError(f"Max file size is 5 MB")
 
 
 class Company(models.Model):
@@ -12,6 +20,7 @@ class Company(models.Model):
                 allowed_extensions=['png', 'jpg', 'jpeg'],
                 message="Only png, jpg, jpeg files are allowed"
             ),
+            validate_file_size
         ],
         null=True,
         blank=True
