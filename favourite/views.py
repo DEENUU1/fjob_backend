@@ -9,6 +9,16 @@ from .serializers import (
 )
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
+
+
+class FavouriteCountAPIView(APIView):
+    def get(self, request, offer_id):
+        try:
+            favourite_count = Favourite.objects.filter(offer__id=offer_id).count()
+            return Response(favourite_count)
+        except Exception:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class FavouriteView(ViewSet):
