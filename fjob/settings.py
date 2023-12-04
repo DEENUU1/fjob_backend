@@ -28,9 +28,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 APP_DOMAIN = os.getenv("APP_DOMAIN", "http://localhost:8000")
+WORKING_MODE = str(os.getenv("WORKING_MODE"))
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if WORKING_MODE == "dev":
+    DEBUG = True
+elif WORKING_MODE == "prod":
+    DEBUG = False
+
 
 ALLOWED_HOSTS = []
 
@@ -166,13 +170,24 @@ WSGI_APPLICATION = 'fjob.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if WORKING_MODE == "dev":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+elif WORKING_MODE == "prod":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'fjob1',
+            'USER': 'postgre',
+            'PASSWORD': 'U4boD8sTn5tS6LAKmDvf',
+            'HOST': '<database_endpoint>',
+            'PORT': '3306',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -196,11 +211,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
