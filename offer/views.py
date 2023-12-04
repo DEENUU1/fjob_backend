@@ -21,6 +21,7 @@ from .serializers import (
 )
 from django.shortcuts import get_object_or_404
 from company.models import Company
+from rest_framework.throttling import UserRateThrottle
 
 
 class WorkTypeView(ViewSet):
@@ -69,6 +70,7 @@ class OfferListView(ListAPIView):
     serializer_class = JobOfferSerializer
     pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
+    throttle_classes = [UserRateThrottle]
 
     # JobOffer fields by which objects can be ordered
     # Currently there is a ordering by created time (from newest/oldest) and salary (from lowest/highest)
