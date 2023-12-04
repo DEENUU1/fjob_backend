@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from django.core.management.utils import get_random_secret_key
+import sentry_sdk
+
 
 load_dotenv()
 
@@ -215,3 +217,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.UserAccount'
+
+
+# Sentry
+
+sentry_sdk.init(
+    dsn=str(os.getenv("SENTRY")),
+    traces_sample_rate=1.0,
+    profiles_sample_rate=1.0,
+)
