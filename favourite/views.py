@@ -30,6 +30,15 @@ class FavouriteView(ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
+        existing_favourite = Favourite.objects.filter(
+            user=request.user,
+            object_id=request.data.get('object_id')
+        ).first()
+
+        if existing_favourite:
+            return Response({"info": "Job Offer is already saved to Favourite"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         serializer = FavouriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
