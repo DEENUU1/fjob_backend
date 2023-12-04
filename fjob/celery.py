@@ -17,4 +17,12 @@ app.conf.beat_schedule = {
         "task": "offer.task.delete_offers_after_year",
         "schedule": 86400,  # Every 24H
     },
+    "delete-contact-after-year": {
+        "task": "support.task.delete_contact_after_year",
+        "schedule": 86400,  # Every 24H
+    },
+    "delete-report-after-year": {
+        "task": "support.task.delete_report_after_year",
+        "schedule": 86400,  # Every 24H
+    }
 }
