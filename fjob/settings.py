@@ -243,9 +243,9 @@ AUTH_USER_MODEL = 'users.UserAccount'
 
 
 # Sentry
-
-sentry_sdk.init(
-    dsn=str(os.getenv("SENTRY")),
-    traces_sample_rate=1.0,
-    profiles_sample_rate=1.0,
-)
+if WORKING_MODE == "prod":
+    sentry_sdk.init(
+        dsn=str(os.getenv("SENTRY")),
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+    )
