@@ -9,6 +9,7 @@ __pycache__/
 # Project
 .idea/
 db.sqlite3
+data/
 
 # Distribution / packaging
 .Python

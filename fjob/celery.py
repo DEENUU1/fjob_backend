@@ -3,8 +3,8 @@ import os
 from celery import Celery
 from django.conf import settings
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "offer.settings")
-app = Celery("fjob_backend")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fjob.settings")
+app = Celery("fjob")
 app.config_from_object(settings, namespace="CELERY")
 app.autodiscover_tasks()
 
