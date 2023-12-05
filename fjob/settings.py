@@ -192,7 +192,13 @@ elif WORKING_MODE == "prod":
             'PORT': '3306',
         }
     }
-
+elif WORKING_MODE == "test":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
