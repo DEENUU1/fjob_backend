@@ -1,7 +1,7 @@
 import pytest
-from tests.fixtures import user, job_offer, job_offer_with_company, company, user_second
+from tests.fixtures import user, job_offer, job_offer_with_company, user_second, company
 from rest_framework.test import force_authenticate, APIRequestFactory
-from candidate.views import CandidateViewSet, CandidateListView, ChangeCandidateStatus
+from candidate.views import CandidateViewSet, CandidateListView
 import json
 from candidate.models import Candidate
 
