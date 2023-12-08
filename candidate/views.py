@@ -24,7 +24,7 @@ class SendApplicationView(ViewSet):
 
         candidate = Candidate.objects.filter(offer_id=offer_id, user=request.user).exists()
         if candidate:
-            return Response({"info": "You already applied for this offer"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"info": "You have already applied for this job offer"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = CandidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

@@ -33,6 +33,7 @@ class Candidate(models.Model):
             ),
             validate_file_size,
         ],
+        blank=True,
     )
     message = models.TextField(max_length=5000, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
