@@ -4,7 +4,6 @@ from rest_framework import status
 from .models import Candidate
 from .serializers import CandidateSerializer
 from offer.models import JobOffer
-from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
@@ -37,11 +36,11 @@ class CandidateViewSet(ViewSet):
         return Response(serializer.data)
 
 
-class CandidateListView(generics.ListAPIView):
+class CandidateListView(APIView):
     serializer_class = CandidateSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
         user = self.request.user
         offer_id = self.kwargs.get("offer_id")
 
@@ -56,7 +55,8 @@ class CandidateListView(generics.ListAPIView):
             return Response({"info": "You are not authorized to view this offer"}, status=status.HTTP_401_UNAUTHORIZED)
 
         candidates = Candidate.objects.filter(offer_id=offer_id).all()
-        return candidates
+        serializer = CandidateSerializer(candidates, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ChangeCandidateStatus(APIView):
