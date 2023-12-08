@@ -10,7 +10,7 @@ router = DefaultRouter()
 router.register("", FavouriteView, basename="favourite")
 
 urlpatterns = [
-    path("couter/<int:offer_id>/", FavouriteCountAPIView.as_view(), name="favourite-count"),
+    path("counter/<int:offer_id>/", FavouriteCountAPIView.as_view(), name="favourite-count"),
 ]
 
 urlpatterns += router.urls

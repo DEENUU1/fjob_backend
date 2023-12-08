@@ -6,5 +6,5 @@ urlpatterns = [
     path("success/", SuccessView.as_view(), name="success"),
     path("cancel/", CancelView.as_view(), name="cancel"),
     path("webhook/", stripe_webhook, name="new_company_webhook"),
-    path("intent/<pk>/company_id/", StripeIntentView.as_view(), name="create_payment_intent")
+    path("intent/<int:pk>/company_id/", StripeIntentView.as_view(), name="create_payment_intent")
 ]

@@ -41,7 +41,6 @@ class CandidateListView(generics.ListAPIView):
     serializer_class = CandidateSerializer
     permission_classes = [IsAuthenticated]
 
-    #     path('job-offers/<int:offer_id>/candidates/', CandidateListView.as_view(), name='candidate-list'),
     def get_queryset(self):
         offer_id = self.kwargs['offer_id']
         user = self.request.user
@@ -52,7 +51,6 @@ class CandidateListView(generics.ListAPIView):
             return Candidate.objects.none()
 
 
-#     path('candidates/<int:candidate_id>/change-status/<str:new_status>/', ChangeCandidateStatus.as_view(), name='change-candidate-status'),
 class ChangeCandidateStatus(APIView):
     def patch(self, request, candidate_id, new_status):
         try:
