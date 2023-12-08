@@ -10,17 +10,21 @@ from rest_framework.views import APIView
 
 
 class SendApplicationView(ViewSet):
+    permission_classes = [IsAuthenticated]
+
     def create(self, request):
         offer_id = request.data.get("offer_id")
-        if offer_id is None:
-            return Response({"info": "Wrong offer id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        offer = JobOffer.objects.filter(pk=offer_id)
+        if offer_id is None:
+            return Response({"info": "Offer id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        offer = JobOffer.objects.filter(pk=offer_id).first()
         if not offer:
             return Response({"info": "Wrong offer id"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # if offer.apply_form is not None:
-        #     return Response({"info": "You can't apply for this offer"}, status=status.HTTP_400_BAD_REQUEST)
+        candidate = Candidate.objects.filter(offer_id=offer_id, user=request.user).exists()
+        if candidate:
+            return Response({"info": "You already applied for this offer"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = CandidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -42,25 +46,33 @@ class CandidateListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        offer_id = self.kwargs['offer_id']
         user = self.request.user
+        offer_id = self.kwargs.get("offer_id")
 
-        if user.company.joboffer_set.filter(id=offer_id).exists():
-            return Candidate.objects.filter(offer_id=offer_id)
-        else:
-            return Candidate.objects.none()
+        if not offer_id:
+            return Response({"info": "Offer id is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        offer = JobOffer.objects.filter(pk=offer_id).first()
+        if not offer:
+            return Response({"info": "Job offer does not exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if offer.company.user != user:
+            return Response({"info": "You are not authorized to view this offer"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        candidates = Candidate.objects.filter(offer_id=offer_id).all()
+        return candidates
 
 
 class ChangeCandidateStatus(APIView):
     def patch(self, request, candidate_id, new_status):
-        try:
-            candidate = Candidate.objects.get(pk=candidate_id)
-        except Candidate.DoesNotExist:
-            return Response({'error': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
+        candidate = Candidate.objects.get(pk=candidate_id).first()
+
+        if not candidate:
+            return Response({"error": "Candidate not found"}, status=status.HTTP_404_NOT_FOUND)
 
         valid_statuses = [s[0] for s in Candidate.STATUS]
         if new_status not in valid_statuses:
-            return Response({'error': 'Invalid status'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
 
         candidate.status = new_status
         candidate.save()
