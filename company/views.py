@@ -102,9 +102,9 @@ class UserHasCompanyView(APIView):
         try:
             company = Company.objects.get(user=user)
             if company:
-                return Response(status=status.HTTP_200_OK)
+                return Response({"info": "true"}, status=status.HTTP_200_OK)
         except Exception:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response({"info": "false"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CompanyPublicView(ViewSet):
