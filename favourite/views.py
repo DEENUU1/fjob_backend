@@ -16,7 +16,7 @@ class FavouriteCountAPIView(APIView):
     def get(self, request, offer_id):
         try:
             favourite_count = Favourite.objects.filter(offer__id=offer_id).count()
-            return Response(favourite_count)
+            return Response({"counter": favourite_count}, status=status.HTTP_200_OK)
         except Exception:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
