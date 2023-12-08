@@ -30,10 +30,10 @@ class UserCanMakeCompanyView(APIView):
             return Response({"info": "false"})
 
 
-class CompanyOfferListView(View):
+class CompanyOfferListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def list(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         company = Company.objects.get(user=request.user)
 
         if company.user != self.request.user:
