@@ -129,7 +129,7 @@ class CompanyUserView(ViewSet):
         serializer = CompanySerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrive(self, request, pk=None):
+    def retrieve(self, request, pk=None):
         queryset = Company.objects.filter(user=request.user)
         company = get_object_or_404(queryset, pk=pk)
         serializer = CompanySerializer(company)
