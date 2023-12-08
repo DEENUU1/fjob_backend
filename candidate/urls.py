@@ -1,7 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from .views import (
-    SendApplicationView,
-    UserApplicationsView,
+    CandidateViewSet,
     CandidateListView,
     ChangeCandidateStatus
 )
@@ -9,8 +8,7 @@ from django.urls import path
 
 
 router = DefaultRouter()
-router.register("", SendApplicationView, basename="send_application")
-router.register("user", UserApplicationsView, basename="list_of_application_for_user")
+router.register("", CandidateViewSet, basename="send_application")
 
 
 urlpatterns = [

@@ -1,7 +1,7 @@
 import pytest
 from tests.fixtures import user, job_offer
 from rest_framework.test import force_authenticate, APIRequestFactory
-from candidate.views import SendApplicationView
+from candidate.views import CandidateViewSet
 import json
 from candidate.models import Candidate
 
@@ -22,9 +22,9 @@ def application_data(user, job_offer):
 
 
 @pytest.mark.django_db
-def test_send_application_success(user, job_offer):
+def test_success_send_application_create_candidate_object(user, job_offer):
     data = application_data(user, job_offer)
-    view = SendApplicationView.as_view({"post": "create"})
+    view = CandidateViewSet.as_view({"post": "create"})
     request = factory.post(
         "/api/candidate/",
         data,
@@ -45,9 +45,9 @@ def test_send_application_success(user, job_offer):
 
 
 @pytest.mark.django_db
-def test_send_application_unauthenticated(user, job_offer):
+def test_error_send_application_return_unauthenticated_info(user, job_offer):
     data = application_data(user, job_offer)
-    view = SendApplicationView.as_view({"post": "create"})
+    view = CandidateViewSet.as_view({"post": "create"})
     request = factory.post(
         "/api/candidate/",
         data,
@@ -59,12 +59,12 @@ def test_send_application_unauthenticated(user, job_offer):
 
 
 @pytest.mark.django_db
-def test_send_application_no_offer_id(user, job_offer):
+def test_error_send_application_return_wrong_offer_id(user, job_offer):
     data = application_data(user, job_offer)
     data = json.loads(data)
     data.pop("offer_id")
     data = json.dumps(data)
-    view = SendApplicationView.as_view({"post": "create"})
+    view = CandidateViewSet.as_view({"post": "create"})
     request = factory.post(
         "/api/candidate/",
         data,
@@ -78,11 +78,11 @@ def test_send_application_no_offer_id(user, job_offer):
 
 
 @pytest.mark.django_db
-def test_send_application_user_already_applied_for_job_offer(user, job_offer):
+def test_success_send_application_user_already_applied_for_job_offer(user, job_offer):
     Candidate.objects.create(user=user, offer=job_offer)
 
     data = application_data(user, job_offer)
-    view = SendApplicationView.as_view({"post": "create"})
+    view = CandidateViewSet.as_view({"post": "create"})
     request = factory.post(
         "/api/candidate/",
         data,
@@ -93,3 +93,25 @@ def test_send_application_user_already_applied_for_job_offer(user, job_offer):
 
     assert response.status_code == 400
     assert response.data["info"] == "You have already applied for this job offer"
+
+
+@pytest.mark.django_db
+def test_success_user_application_list_view_return_list_of_sent_applications(user, job_offer):
+    Candidate.objects.create(user=user, offer=job_offer)
+
+    view = CandidateViewSet.as_view({"get": "list"})
+    request = factory.get("/api/candidate/")
+    force_authenticate(request, user)
+    response = view(request)
+
+    assert response.status_code == 200
+    assert len(response.data) == 1
+
+
+@pytest.mark.django_db
+def test_error_user_aplication_list_view_return_unauthenticated_info(user, job_offer):
+    view = CandidateViewSet.as_view({"get": "list"})
+    request = factory.get("/api/candidate/")
+    response = view(request)
+
+    assert response.status_code == 401

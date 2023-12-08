@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 
-class SendApplicationView(ViewSet):
+class CandidateViewSet(ViewSet):
     permission_classes = [IsAuthenticated]
 
     def create(self, request):
@@ -30,10 +30,6 @@ class SendApplicationView(ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-class UserApplicationsView(ViewSet):
-    permission_classes = [IsAuthenticated]
 
     def list(self, request):
         candidate = Candidate.objects.filter(user=request.user)
