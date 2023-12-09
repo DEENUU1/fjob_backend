@@ -23,5 +23,3 @@ def send_success_application_notification(sender, instance, **kwargs):
     subject = "Thank you for applying!"
     message = f"Thank you for applying to {instance.offer.title}. We will contact you soon!"
     send_email.delay(subject, message, [instance.email])
-
-
