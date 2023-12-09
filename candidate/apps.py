@@ -4,3 +4,7 @@ from django.apps import AppConfig
 class CandidateConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'candidate'
+
+    def ready(self):
+        import candidate.signals
+        print("Signals connected")

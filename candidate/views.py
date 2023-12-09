@@ -28,6 +28,7 @@ class CandidateViewSet(ViewSet):
         serializer = CandidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
@@ -69,6 +70,8 @@ class ChangeCandidateStatus(APIView):
         valid_statuses = [s[0] for s in Candidate.STATUS]
         if new_status not in valid_statuses:
             return Response({"error": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
+
+        candidate._previous_status = candidate.status
 
         candidate.status = new_status
         candidate.save()
