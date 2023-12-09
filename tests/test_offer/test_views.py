@@ -19,3 +19,15 @@ def test_success_return_list_of_work_type():
     response = view(request)
     assert response.status_code == 200
     assert len(response.data) == 2
+
+
+@pytest.mark.django_db
+def test_success_return_list_of_employment_type():
+    EmploymentType.objects.create(name='test_employment_type_1')
+    EmploymentType.objects.create(name='test_employment_type_2')
+
+    request = factory.get('/offer/employment_type/')
+    view = EmploymentTypeView.as_view({"get": "list"})
+    response = view(request)
+    assert response.status_code == 200
+    assert len(response.data) == 2
