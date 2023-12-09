@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'candidate',
     'payment',
     'support',
+    'stats',
 
     # packages
     'rest_framework',
