@@ -31,3 +31,15 @@ def test_success_return_list_of_employment_type():
     response = view(request)
     assert response.status_code == 200
     assert len(response.data) == 2
+
+
+@pytest.mark.django_db
+def test_success_return_list_of_experience():
+    Experience.objects.create(name='test_experience_1')
+    Experience.objects.create(name='test_experience_2')
+
+    request = factory.get('/offer/experience/')
+    view = ExperienceView.as_view({"get": "list"})
+    response = view(request)
+    assert response.status_code == 200
+    assert len(response.data) == 2
