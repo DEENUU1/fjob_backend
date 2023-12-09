@@ -31,4 +31,3 @@ def test_create_candidate_success():
     assert candidate.offer == job_offer
     assert candidate.resume == "path/to/cv.pdf"
     assert candidate.message == "Hello"
-
