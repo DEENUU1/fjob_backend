@@ -59,7 +59,7 @@ class JobOffer(models.Model):
         ("EXPIRED", "EXPIRED"),
     )
 
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     addresses = models.ManyToManyField(Address, blank=True)
