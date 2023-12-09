@@ -73,9 +73,6 @@ class CompanyOfferView(ViewSet):
 
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-            # elif
-
-
             else:
                 return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -86,6 +83,15 @@ class CompanyOfferView(ViewSet):
 
         if offer.is_expired:
             return Response({"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        new_status = request.data.get("status", None)
+        if new_status and offer.status == "EXPIRED":
+            return Response(
+                {
+                    "info": "You can't change the status for this job offer, it's already expired"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         serializer = JobOfferSerializer(offer, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
