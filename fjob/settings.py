@@ -28,8 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 APP_DOMAIN = os.getenv("APP_DOMAIN", "http://localhost:8000")
-WORKING_MODE = str(os.getenv("WORKING_MODE"))
-
+# WORKING_MODE = str(os.getenv("WORKING_MODE"))
+WORKING_MODE = "xxx"
 if WORKING_MODE == "dev" or WORKING_MODE == "test":
     DEBUG = True
 elif WORKING_MODE == "prod":
@@ -200,7 +200,13 @@ elif WORKING_MODE == "test":
             'NAME': ':memory:',
         }
     }
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
