@@ -28,8 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 APP_DOMAIN = os.getenv("APP_DOMAIN", "http://localhost:8000")
-# WORKING_MODE = str(os.getenv("WORKING_MODE"))
-WORKING_MODE = "xxx"
+WORKING_MODE = str(os.getenv("WORKING_MODE"))
+
 if WORKING_MODE == "dev" or WORKING_MODE == "test":
     DEBUG = True
 elif WORKING_MODE == "prod":
@@ -114,6 +114,15 @@ CORS_ALLOW_CREDENTIALS = True
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 NEW_COMPANY_PRICE_ID = os.getenv("NEW_COMPANY_PRICE_ID")
+
+
+# GMAIL
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD_HOST_USER")
 
 
 # AWS S3
