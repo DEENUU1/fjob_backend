@@ -66,7 +66,7 @@ class SalaryView(APIView):
 
 
 class OfferListView(ListAPIView):
-    queryset = JobOffer.objects.filter(is_active=True)
+    queryset = JobOffer.objects.filter(status="ACTIVE")
     serializer_class = JobOfferSerializer
     pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
@@ -114,6 +114,6 @@ class CompanyOfferListView(APIView):
     def get(self, request, *args, **kwargs):
         company_id = kwargs.get("company_id")
         company = Company.objects.get(pk=company_id)
-        offers = JobOffer.objects.filter(company=company, is_active=True)
+        offers = JobOffer.objects.filter(company=company, status="ACTIVE")
         serializer = JobOfferSerializer(offers, many=True)
         return Response(serializer.data)

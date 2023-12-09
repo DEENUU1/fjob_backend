@@ -52,6 +52,13 @@ class Salary(models.Model):
 
 
 class JobOffer(models.Model):
+    STATUS = (
+        ("DRAFT", "DRAFT"),
+        ("PENDING", "PENDING"),
+        ("ACTIVE", "ACTIVE"),
+        ("EXPIRED", "EXPIRED"),
+    )
+
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=5000, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
@@ -67,7 +74,7 @@ class JobOffer(models.Model):
     employment_type = models.ManyToManyField(EmploymentType, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
+    status = models.CharField(max_length=10, choices=STATUS, default="DRAFT")
 
     # This fields are only used for job offers that are scraped from other websites
     # It shouldn't display for company when the user is trying to add a new offer

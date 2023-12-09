@@ -36,4 +36,4 @@ def test_create_job_offer_success():
     assert joboffer.is_remote == False
     assert joboffer.is_hybrid == False
     assert joboffer.days_until_expiration == 30
-    assert joboffer.is_active == True
+    assert joboffer.status == "DRAFT"
