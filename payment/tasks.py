@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 
 
 @shared_task()
-def send_email_task(email, subject, message):
+def send_email(email, subject, message):
     send_mail(
         subject,
         message,
