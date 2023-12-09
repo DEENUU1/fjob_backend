@@ -60,6 +60,7 @@ def test_error_create_favourite_job_offer_for_not_authenticated_user(user, job_o
     response = view(request)
     assert response.status_code == 401
 
+
 @pytest.mark.django_db
 def test_error_create_favourite_job_offer_already_saved(user, job_offer):
     view = FavouriteView.as_view({"post": "create"})
