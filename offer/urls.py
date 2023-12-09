@@ -22,6 +22,6 @@ router.register("offer/", JobOfferView, basename="job_offer")
 urlpatterns = [
     path("salary/", SalaryView.as_view(), name="salary_stats"),
     path("offer/", OfferListView.as_view(), name="offer_list"),
-    path("offer/<int:company_id>/company/", CompanyOfferListView.as_view(), name="company_offer_list"),
+    path("offer/company/<int:company_id>", CompanyOfferListView.as_view(), name="company_offer_list"),
 ]
 urlpatterns += router.urls

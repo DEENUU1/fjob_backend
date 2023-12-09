@@ -1,10 +1,10 @@
 import pytest
-from tests.fixtures import user, job_offer, job_offer_with_company, user_second, company
-from rest_framework.test import force_authenticate, APIRequestFactory
-from offer.views import CompanyOfferListView, OfferListView, SalaryView, ExperienceView, EmploymentTypeView, \
+from tests.fixtures import user, job_offer, job_offer_with_company, company
+from rest_framework.test import APIRequestFactory
+from offer.views import  OfferListView, SalaryView, ExperienceView, EmploymentTypeView, \
     WorkTypeView, JobOfferView
-import json
-from offer.models import JobOffer, WorkType, EmploymentType, Experience, Salary
+from offer.models import WorkType, EmploymentType, Experience, Salary
+
 
 factory = APIRequestFactory()
 
