@@ -70,6 +70,9 @@ class ChangeCandidateStatus(APIView):
         if new_status not in valid_statuses:
             return Response({"error": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Store the original status before changing
+        candidate._original_status = candidate.status
+
         candidate.status = new_status
         candidate.save()
 
