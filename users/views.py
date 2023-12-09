@@ -16,7 +16,7 @@ class GetUserNumOfAvailableCompaniesView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        num_of_available_companies = user.available_companies.count()
+        num_of_available_companies = user.num_of_available_companies
         return Response({'num_of_available_companies': num_of_available_companies}, status=status.HTTP_200_OK)
 
 
