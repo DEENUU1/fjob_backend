@@ -2,7 +2,7 @@ import pytest
 from tests.fixtures import user, job_offer, job_offer_with_company, user_second, company
 from rest_framework.test import force_authenticate, APIRequestFactory
 from offer.views import CompanyOfferListView, OfferListView, SalaryView, ExperienceView, EmploymentTypeView, \
-    WorkTypeView
+    WorkTypeView, JobOfferView
 import json
 from offer.models import JobOffer, WorkType, EmploymentType, Experience, Salary
 
@@ -67,3 +67,23 @@ def test_success_return_min_max_salary_empty():
 
     assert response.status_code == 204
     assert response.data is None
+
+
+@pytest.mark.django_db
+def test_success_return_list_of_job_offers(user, job_offer, job_offer_with_company, company):
+    request = factory.get('/offer/')
+    view = OfferListView.as_view()
+    response = view(request)
+
+    assert response.status_code == 200
+    assert len(response.data) == 4
+
+
+@pytest.mark.django_db
+def test_success_return_job_offer_by_id(job_offer, user):
+    request = factory.get(f'/offer/{job_offer.id}/')
+    view = JobOfferView.as_view({"get": "retrieve"})
+    response = view(request, job_offer.id)
+
+    assert response.status_code == 200
+    assert response.data["id"] == job_offer.id

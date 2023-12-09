@@ -41,7 +41,7 @@ class JobOfferSerializer(ModelSerializer):
     work_type = WorkTypeSerializer(many=True)
     employment_type = EmploymentTypeSerializer(many=True)
     company = CompanySerializer()
-    adresses = AddressSerializer(many=True)
+    addresses = AddressSerializer(many=True)
     is_new = serializers.ReadOnlyField()
     is_expired = serializers.ReadOnlyField()
     days_until_expiration_str = serializers.ReadOnlyField()
