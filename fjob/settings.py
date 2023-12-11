@@ -34,7 +34,11 @@ if WORKING_MODE == "dev" or WORKING_MODE == "test":
     DEBUG = True
 elif WORKING_MODE == "prod":
     DEBUG = False
-    ALLOWED_HOSTS = []
+
+if WORKING_MODE == "prod":
+    ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+else:
+    ALLOWED_HOSTS = ["*"]
 
 
 INSTALLED_APPS = [
