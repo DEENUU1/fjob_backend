@@ -9,4 +9,7 @@ def contact_sent_notification(sender, instance, created, **kwargs):
     if created:
         subject = f"FJOB | Thank you for contacting with us."
         message = f"Thank you for contacting us, we will try to answer your question as soon as possible"
-        send_email(subject=subject, message=message, email=instance.email)
+        try:
+            send_email(subject=subject, message=message, email=instance.email)
+        except Exception as e:
+            pass

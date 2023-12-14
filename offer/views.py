@@ -83,7 +83,8 @@ class OfferListView(ListAPIView):
     ]
     # Job offer fields by which objects can be searched
     # @ allows to run Full-text search, works only with PostgreSQL
-    search_fields = ["@title", "@description", "@skills"]
+    # todo change this to in production 
+    search_fields = ["title", "description", "skills"]
 
     # Job offer fields by which objects can be filtered
     # Todo add filtering by city and region

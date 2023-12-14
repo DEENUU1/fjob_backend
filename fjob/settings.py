@@ -30,10 +30,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 APP_DOMAIN = os.getenv("APP_DOMAIN", "http://localhost:8000")
 WORKING_MODE = str(os.getenv("WORKING_MODE"))
 
-if WORKING_MODE == "dev" or WORKING_MODE == "test":
-    DEBUG = True
-elif WORKING_MODE == "prod":
+if WORKING_MODE == "prod":
     DEBUG = False
+else:
+    DEBUG = True
 
 if WORKING_MODE == "prod":
     ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
