@@ -30,7 +30,7 @@ class FavouriteView(ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
-        offer_id = request.data.get('offer_id')
+        offer_id = request.data.get('offer')
         existing_favourite = Favourite.objects.filter(
             user=request.user,
             offer=offer_id,
