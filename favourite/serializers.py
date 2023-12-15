@@ -10,8 +10,16 @@ class JobOfferSerializer(ModelSerializer):
 
 
 class FavouriteSerializer(ModelSerializer):
+    class Meta:
+        model = Favourite
+        fields = "__all__"
+
+
+class FavouriteSerializerList(ModelSerializer):
     offer = JobOfferSerializer()
 
     class Meta:
         model = Favourite
         fields = ["id", "user", "offer"]
+
+

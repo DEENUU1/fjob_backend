@@ -6,6 +6,8 @@ from .models import (
 )
 from .serializers import (
     FavouriteSerializer,
+    FavouriteSerializerList
+
 )
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
@@ -26,7 +28,7 @@ class FavouriteView(ViewSet):
 
     def list(self, request):
         favourites = Favourite.objects.filter(user=request.user)
-        serializer = FavouriteSerializer(favourites, many=True)
+        serializer = FavouriteSerializerList(favourites, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
