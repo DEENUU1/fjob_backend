@@ -22,6 +22,7 @@ from .serializers import (
 from django.shortcuts import get_object_or_404
 from company.models import Company
 from rest_framework.throttling import UserRateThrottle
+from django.conf import settings
 
 
 class WorkTypeView(ViewSet):
@@ -83,9 +84,10 @@ class OfferListView(ListAPIView):
     ]
     # Job offer fields by which objects can be searched
     # @ allows to run Full-text search, works only with PostgreSQL
-    # todo change this to in production 
-    search_fields = ["title", "description", "skills"]
-
+    if settings.WORKING_MODE == "prod":
+        search_fields = ["@title", "@description", "@skills"]
+    else:
+        search_fields = ["title", "description", "skills"]
     # Job offer fields by which objects can be filtered
     # Todo add filtering by city and region
     filterset_fields = [
