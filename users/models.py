@@ -40,22 +40,22 @@ class UserAccountManager(BaseUserManager):
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
-    ACCOUNT_TYPE = (
-        ("USER", "USER"),
-        ("COMPANY", "COMPANY")
-    )
+    ACCOUNT_TYPE = [
+        [1, "USER"],
+        [2, "COMPANY"]
+    ]
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
 
-    account_type = models.CharField(choices=ACCOUNT_TYPE, max_length=10, default='USER')
+    account_type = models.CharField(choices=ACCOUNT_TYPE, max_length=20)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    num_of_available_companies = models.IntegerField(default=1)
+    num_of_available_companies = models.PositiveIntegerField(choices=ACCOUNT_TYPE, default=1)
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
