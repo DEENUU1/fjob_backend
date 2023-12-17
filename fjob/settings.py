@@ -79,8 +79,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '10/minute',
-        'user': '20/minute'
+        'anon': '5/second',
+        'user': '15/second'
     }
 }
 
