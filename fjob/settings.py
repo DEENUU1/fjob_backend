@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'rest_framework_swagger',
     'django_filters',
     'social_django',
+    'corsheaders',
 
 ]
 
@@ -83,6 +84,7 @@ REST_FRAMEWORK = {
         'user': '15/second'
     }
 }
+
 
 
 # Authentication
@@ -124,11 +126,9 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'email, first_name, last_name'
 }
 
-CORS_ALLOWED_ORIGINS = os.getenv(
-    'CORS_ALLOWED_ORIGINS',
-    'http://localhost:3000,http://127.0.0.1:3000'
-).split(',')
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # STRIPE
@@ -170,6 +170,7 @@ CELERY_RESULT_SERIALIZER = "json"
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
