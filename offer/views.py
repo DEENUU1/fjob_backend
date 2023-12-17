@@ -105,9 +105,9 @@ class OfferListView(ListAPIView):
 
 class JobOfferView(ViewSet):
 
-    def retrieve(self, request, pk: int=None):
+    def retrieve(self, request, slug: str = None):
         queryset = JobOffer.objects.all()
-        offer = get_object_or_404(queryset, pk=pk)
+        offer = get_object_or_404(queryset, slug=slug)
         serializer = JobOfferSerializer(offer)
         return Response(serializer.data)
 

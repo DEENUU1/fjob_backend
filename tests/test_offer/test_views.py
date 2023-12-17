@@ -80,10 +80,10 @@ def test_success_return_list_of_job_offers(user, job_offer, job_offer_with_compa
 
 
 @pytest.mark.django_db
-def test_success_return_job_offer_by_id(job_offer, user):
-    request = factory.get(f'/offer/{job_offer.id}/')
+def test_success_return_job_offer_by_slug(job_offer, user):
+    request = factory.get(f'/offer/{job_offer.slug}/')
     view = JobOfferView.as_view({"get": "retrieve"})
-    response = view(request, job_offer.id)
+    response = view(request, job_offer.slug)
 
     assert response.status_code == 200
     assert response.data["id"] == job_offer.id
