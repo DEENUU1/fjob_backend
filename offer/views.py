@@ -104,6 +104,7 @@ class OfferListView(ListAPIView):
 
 
 class JobOfferView(ViewSet):
+    lookup_field = 'slug'
 
     def retrieve(self, request, slug: str = None):
         queryset = JobOffer.objects.all()
