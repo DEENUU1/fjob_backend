@@ -5,6 +5,8 @@ from location.models import Address
 from company.models import Company
 
 from datetime import timedelta
+import string
+import random
 
 
 class WorkType(models.Model):
@@ -60,6 +62,7 @@ class JobOffer(models.Model):
     )
 
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = models.TextField(max_length=5000, null=True, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     addresses = models.ManyToManyField(Address, blank=True)
@@ -100,3 +103,13 @@ class JobOffer(models.Model):
     def __str__(self):
         return self.title
 
+    @staticmethod
+    def get_random_string(length=20):
+        characters = string.ascii_lowercase + string.digits
+        return ''.join(random.choice(characters) for _ in range(length))
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            random_str = self.get_random_string()
+            self.slug = f"{self.title}{random_str}"
+        super().save(*args, **kwargs)

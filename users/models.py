@@ -40,16 +40,16 @@ class UserAccountManager(BaseUserManager):
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
-    ACCOUNT_TYPE = [
-        [1, "USER"],
-        [2, "COMPANY"]
-    ]
+    ACCOUNT_TYPE = (
+        ("USER", "USER"),
+        ("USER", "COMPANY")
+    )
 
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
 
-    account_type = models.CharField(choices=ACCOUNT_TYPE, max_length=20)
+    account_type = models.CharField(choices=ACCOUNT_TYPE, max_length=20, default="USER")
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
