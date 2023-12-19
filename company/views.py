@@ -127,6 +127,16 @@ class CompanyPublicView(ViewSet):
         return Response(serializer.data)
 
 
+class UserCompanyView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        company = Company.objects.get(user=user)
+        serializer = CompanySerializer(company)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class CompanyUserView(ViewSet):
     permission_classes = [IsAuthenticated, ]
 
@@ -135,11 +145,11 @@ class CompanyUserView(ViewSet):
     #     serializer = CompanySerializer(queryset, many=True)
     #     return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
-        queryset = Company.objects.filter(user=request.user)
-        company = get_object_or_404(queryset, pk=pk)
-        serializer = CompanySerializer(company)
-        return Response(serializer.data)
+    # def retrieve(self, request, pk=None):
+    #     queryset = Company.objects.filter(user=request.user)
+    #     company = get_object_or_404(queryset, pk=pk)
+    #     serializer = CompanySerializer(company)
+    #     return Response(serializer.data)
 
     # def create(self, request):
     #     user_companies = Company.objects.filter(user=self.request.user).count()
