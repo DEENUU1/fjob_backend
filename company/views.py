@@ -132,7 +132,7 @@ class UserCompanyView(APIView):
 
     def get(self, request, *args, **kwargs):
         user = self.request.user
-        company = Company.objects.get(user=user)
+        company = Company.objects.filter(user=user).first()
         serializer = CompanySerializer(company)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

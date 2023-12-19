@@ -7,7 +7,7 @@ from users.models import UserAccount
 @receiver(post_save, sender=UserAccount)
 def create_company(sender, instance, created, **kwargs):
     if created:
-        if instance.account_type == 2:
+        if instance.account_type == "COMPANY":
             Company.objects.create(name=f"{hash(instance.email)}", user=instance)
 
 
