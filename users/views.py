@@ -1,23 +1,13 @@
 from django.conf import settings
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from djoser.social.views import ProviderAuthView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView
 )
-from rest_framework.permissions import IsAuthenticated
-
-
-class GetUserNumOfAvailableCompaniesView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        user = self.request.user
-        num_of_available_companies = user.num_of_available_companies
-        return Response({'num_of_available_companies': num_of_available_companies}, status=status.HTTP_200_OK)
 
 
 class CustomProviderAuthView(ProviderAuthView):

@@ -1,7 +1,8 @@
-from users.models import UserAccount
 import pytest
-from offer.models import JobOffer
+
 from company.models import Company
+from offer.models import JobOffer
+from users.models import UserAccount
 
 
 @pytest.fixture

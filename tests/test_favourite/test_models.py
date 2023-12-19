@@ -1,7 +1,8 @@
 import pytest
+
 from favourite.models import Favourite
-from tests.test_company.test_models import user_data
 from offer.models import JobOffer
+from tests.test_company.test_models import user_data
 
 
 @pytest.fixture

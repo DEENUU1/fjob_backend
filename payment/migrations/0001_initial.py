@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -25,7 +24,8 @@ class Migration(migrations.Migration):
             name='Product',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(choices=[('NEW_COMPANY', 'NEW_COMPANY'), ('NEW_OFFER', 'NEW_OFFER')], max_length=20)),
+                ('type',
+                 models.CharField(choices=[('NEW_COMPANY', 'NEW_COMPANY'), ('NEW_OFFER', 'NEW_OFFER')], max_length=20)),
                 ('name', models.CharField(max_length=50)),
                 ('value', models.IntegerField(default=1)),
                 ('price_euro', models.DecimalField(decimal_places=2, max_digits=10)),

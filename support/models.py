@@ -1,8 +1,10 @@
+from datetime import timedelta
+
 from django.db import models
 from django.utils import timezone
-from datetime import timedelta
-from users.models import UserAccount
+
 from offer.models import JobOffer
+from users.models import UserAccount
 
 
 class Contact(models.Model):

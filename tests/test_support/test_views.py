@@ -1,9 +1,11 @@
-import pytest
-from tests.fixtures import user, job_offer, job_offer_with_company, user_second, company
-from rest_framework.test import force_authenticate, APIRequestFactory
-from support.views import ContactViewUser, ReportCreateView
 import json
+
+import pytest
+from rest_framework.test import force_authenticate, APIRequestFactory
+
 from support.models import Contact, Report
+from support.views import ContactViewUser, ReportCreateView
+from tests.fixtures import user, job_offer
 
 factory = APIRequestFactory()
 

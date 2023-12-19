@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -34,8 +33,11 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('salary_from', models.FloatField()),
                 ('salary_to', models.FloatField()),
-                ('currency', models.CharField(choices=[('PLN', 'PLN'), ('EURO', 'EURO'), ('USD', 'USD')], max_length=10)),
-                ('schedule', models.CharField(choices=[('MONTHLY', 'MONTHLY'), ('YEARLY', 'YEARLY'), ('WEEKLY', 'WEEKLY'), ('DAILY', 'DAILY'), ('HOURLY', 'HOURLY')], max_length=10)),
+                ('currency',
+                 models.CharField(choices=[('PLN', 'PLN'), ('EURO', 'EURO'), ('USD', 'USD')], max_length=10)),
+                ('schedule', models.CharField(
+                    choices=[('MONTHLY', 'MONTHLY'), ('YEARLY', 'YEARLY'), ('WEEKLY', 'WEEKLY'), ('DAILY', 'DAILY'),
+                             ('HOURLY', 'HOURLY')], max_length=10)),
             ],
         ),
         migrations.CreateModel(
@@ -64,7 +66,8 @@ class Migration(migrations.Migration):
                 ('is_scraped', models.BooleanField(default=True)),
                 ('company_name', models.CharField(blank=True, max_length=50, null=True)),
                 ('addresses', models.ManyToManyField(blank=True, to='location.address')),
-                ('company', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='company.company')),
+                ('company', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                              to='company.company')),
                 ('employment_type', models.ManyToManyField(blank=True, to='offer.employmenttype')),
                 ('experience', models.ManyToManyField(blank=True, to='offer.experience')),
                 ('salary', models.ManyToManyField(blank=True, to='offer.salary')),

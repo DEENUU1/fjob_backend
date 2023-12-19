@@ -1,17 +1,19 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.generics import ListAPIView
-from rest_framework import status
+import json
+
 import stripe
 from django.conf import settings
-from users.models import UserAccount
-from django.urls import reverse
-from rest_framework.permissions import IsAuthenticated
-from .models import Product
-from django.views.decorators.csrf import csrf_exempt
-import json
 from django.http import HttpResponse
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from company.models import Company
+from users.models import UserAccount
+from .models import Product
 from .serializers import ProductSerializer
 
 stripe.api_key = settings.STRIPE_SECRET_KEY

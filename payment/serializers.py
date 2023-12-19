@@ -1,5 +1,6 @@
-from .models import PaymentInfo, Product
 from rest_framework.serializers import ModelSerializer
+
+from .models import PaymentInfo, Product
 
 
 class PaymentInfoSerializer(ModelSerializer):
@@ -12,4 +13,3 @@ class ProductSerializer(ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
-

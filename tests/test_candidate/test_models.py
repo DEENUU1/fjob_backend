@@ -1,7 +1,8 @@
 import pytest
+
 from candidate.models import Candidate
-from users.models import UserAccount
 from offer.models import JobOffer
+from users.models import UserAccount
 
 
 @pytest.mark.django_db

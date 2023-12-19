@@ -1,11 +1,9 @@
 import pytest
-from tests.fixtures import user, user_no_available_companies, company, user_second
 from rest_framework.test import force_authenticate, APIRequestFactory
-from company.views import CompanyOfferListView,CompanyPublicView, CompanyUserView
-from users.models import UserAccount
-from company.models import Company
-import json
 
+from company.models import Company
+from company.views import CompanyOfferListView, CompanyPublicView, CompanyUserView
+from tests.fixtures import user, company
 
 factory = APIRequestFactory()
 
@@ -159,4 +157,3 @@ def test_success_destroy_company(user, company):
 
     assert response.status_code == 204
     assert not Company.objects.filter(id=company.id, is_active=True).exists()
-

@@ -1,7 +1,8 @@
+from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from .models import Candidate
 from .tasks import send_email
-from django.db.models.signals import post_save
 
 
 @receiver(post_save, sender=Candidate)

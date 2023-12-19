@@ -1,7 +1,8 @@
 import pytest
+
+from offer.models import JobOffer
 from support.models import Contact, Report
 from tests.test_company.test_models import user_data
-from offer.models import JobOffer
 
 
 @pytest.mark.django_db

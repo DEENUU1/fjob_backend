@@ -1,4 +1,8 @@
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
+
+from company.serializers import CompanySerializer
+from location.serializers import AddressSerializer
 from .models import (
     WorkType,
     EmploymentType,
@@ -6,9 +10,6 @@ from .models import (
     Salary,
     JobOffer
 )
-from company.serializers import CompanySerializer
-from location.serializers import AddressSerializer
-from rest_framework import serializers
 
 
 class WorkTypeSerializer(ModelSerializer):

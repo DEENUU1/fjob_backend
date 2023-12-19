@@ -1,6 +1,7 @@
 from django.db import models
-from users.models import UserAccount
+
 from company.models import Company
+from users.models import UserAccount
 
 
 class Product(models.Model):

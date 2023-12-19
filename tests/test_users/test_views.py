@@ -1,12 +1,6 @@
-import pytest
-from tests.fixtures import user, job_offer, job_offer_with_company, user_second, company
-from rest_framework.test import force_authenticate, APIRequestFactory
-from users.views import GetUserNumOfAvailableCompaniesView
-import json
-from users.models import UserAccount
+from rest_framework.test import APIRequestFactory
 
 factory = APIRequestFactory()
-
 
 # @pytest.mark.django_db
 # def test_success_return_number_of_available_companies_user_can_create(user):

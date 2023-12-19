@@ -1,9 +1,10 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
+
+from location.models import Address
 from offer.models import JobOffer
 from users.models import UserAccount
-from location.models import Address
-from django.core.validators import FileExtensionValidator
-from django.core.exceptions import ValidationError
 
 
 def validate_file_size(value):

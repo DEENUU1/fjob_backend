@@ -1,8 +1,9 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
+
 from location.models import Address
 from users.models import UserAccount
-from django.core.validators import FileExtensionValidator
-from django.core.exceptions import ValidationError
 
 
 def validate_file_size(value):
@@ -41,4 +42,3 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
-

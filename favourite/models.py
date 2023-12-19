@@ -1,6 +1,7 @@
 from django.db import models
-from users.models import UserAccount
+
 from offer.models import JobOffer
+from users.models import UserAccount
 
 
 class Favourite(models.Model):
@@ -9,5 +10,3 @@ class Favourite(models.Model):
 
     def __str__(self):
         return f"{self.user} {self.offer}"
-
-

@@ -1,9 +1,11 @@
+import json
+
 import pytest
 from rest_framework.test import force_authenticate, APIRequestFactory
-from tests.fixtures import job_offer, user
+
 from favourite.models import Favourite
 from favourite.views import FavouriteCountAPIView, FavouriteView
-import json
+from tests.fixtures import job_offer, user
 
 factory = APIRequestFactory()
 

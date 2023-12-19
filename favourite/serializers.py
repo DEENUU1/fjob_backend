@@ -1,6 +1,7 @@
-from .models import Favourite
 from rest_framework.serializers import ModelSerializer
+
 from offer.models import JobOffer
+from .models import Favourite
 
 
 class JobOfferSerializer(ModelSerializer):
@@ -21,5 +22,3 @@ class FavouriteSerializerList(ModelSerializer):
     class Meta:
         model = Favourite
         fields = ["id", "user", "offer"]
-
-

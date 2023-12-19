@@ -1,4 +1,5 @@
 import pytest
+
 from location.models import Country, Region, City, Address
 
 

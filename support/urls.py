@@ -1,9 +1,9 @@
 from rest_framework.routers import DefaultRouter
+
 from .views import (
     ContactViewUser,
     ReportCreateView
 )
-
 
 router = DefaultRouter()
 router.register("contact", ContactViewUser, basename="contact_post")

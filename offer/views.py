@@ -1,10 +1,15 @@
+from django.conf import settings
+from django.shortcuts import get_object_or_404
+from django_filters import rest_framework as filters
+from rest_framework import status
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-from rest_framework.response import Response
-from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework import status
-from rest_framework.generics import ListAPIView
-from django_filters import rest_framework as filters
+
+from company.models import Company
 from fjob.pagination import CustomPagination
 from .models import (
     WorkType,
@@ -19,10 +24,6 @@ from .serializers import (
     ExperienceSerializer,
     JobOfferSerializer
 )
-from django.shortcuts import get_object_or_404
-from company.models import Company
-from rest_framework.throttling import UserRateThrottle
-from django.conf import settings
 
 
 class WorkTypeView(ViewSet):

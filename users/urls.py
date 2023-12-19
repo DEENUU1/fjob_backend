@@ -1,11 +1,11 @@
 from django.urls import path, re_path
+
 from .views import (
     CustomProviderAuthView,
     CustomTokenObtainPairView,
     CustomTokenRefreshView,
     CustomTokenVerifyView,
     LogoutView,
-    GetUserNumOfAvailableCompaniesView
 )
 
 urlpatterns = [
@@ -18,5 +18,4 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
-    path('user/num_of_available_companies/', GetUserNumOfAvailableCompaniesView.as_view()),
 ]

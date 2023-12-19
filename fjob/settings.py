@@ -10,12 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-from pathlib import Path
 import os
-from dotenv import load_dotenv
-from django.core.management.utils import get_random_secret_key
-import sentry_sdk
+from pathlib import Path
 
+import sentry_sdk
+from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -39,7 +39,6 @@ if WORKING_MODE == "prod":
     ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 else:
     ALLOWED_HOSTS = ["*"]
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -85,8 +84,6 @@ REST_FRAMEWORK = {
     }
 }
 
-
-
 # Authentication
 
 AUTHENTICATION_BACKENDS = [
@@ -130,12 +127,10 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 # STRIPE
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 NEW_COMPANY_PRICE_ID = os.getenv("NEW_COMPANY_PRICE_ID")
-
 
 # GMAIL
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -144,7 +139,6 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD_HOST_USER")
-
 
 # AWS S3
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", None)
@@ -160,14 +154,12 @@ if WORKING_MODE == "dev" or WORKING_MODE == "prod":
 elif WORKING_MODE == "test":
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
-
 # Celery
 CELERY_BROKER_URL = "redis://redis:6379/0"
 CELERY_RESULT_BACKEND = "redis://redis:6379/0"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -272,13 +264,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.UserAccount'
-
 
 # Sentry
 if WORKING_MODE == "prod":

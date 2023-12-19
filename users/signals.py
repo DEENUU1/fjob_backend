@@ -1,6 +1,7 @@
-from company.models import Company
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from company.models import Company
 from users.models import UserAccount
 
 

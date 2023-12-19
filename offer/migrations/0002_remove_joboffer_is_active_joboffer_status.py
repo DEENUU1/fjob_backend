@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('offer', '0001_initial'),
     ]
@@ -17,6 +16,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='joboffer',
             name='status',
-            field=models.CharField(choices=[('DRAFT', 'DRAFT'), ('PENDING', 'PENDING'), ('ACTIVE', 'ACTIVE'), ('EXPIRED', 'EXPIRED')], default='DRAFT', max_length=10),
+            field=models.CharField(
+                choices=[('DRAFT', 'DRAFT'), ('PENDING', 'PENDING'), ('ACTIVE', 'ACTIVE'), ('EXPIRED', 'EXPIRED')],
+                default='DRAFT', max_length=10),
         ),
     ]

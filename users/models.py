@@ -1,9 +1,10 @@
-from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager,
     AbstractBaseUser,
     PermissionsMixin
 )
+from django.db import models
+
 from location.models import Address
 
 
@@ -55,7 +56,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
-    # num_of_available_companies = models.PositiveIntegerField(choices=ACCOUNT_TYPE, default=1)
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'

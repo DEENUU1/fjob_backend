@@ -1,12 +1,12 @@
+import random
+import string
+from datetime import timedelta
+
 from django.db import models
 from django.utils import timezone
 
-from location.models import Address
 from company.models import Company
-
-from datetime import timedelta
-import string
-import random
+from location.models import Address
 
 
 class WorkType(models.Model):

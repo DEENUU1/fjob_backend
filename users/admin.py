@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+
 from .models import UserAccount
 
 
@@ -14,7 +15,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal Info', {'fields': ('first_name', 'last_name')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'num_of_available_companies')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )
 
     add_fieldsets = (
@@ -25,7 +26,6 @@ class CustomUserAdmin(UserAdmin):
     )
 
     def get_form(self, request, obj=None, **kwargs):
-        # Exclude 'date_joined' and 'username' fields from the form
         kwargs['exclude'] = ('date_joined', 'username')
         return super().get_form(request, obj, **kwargs)
 

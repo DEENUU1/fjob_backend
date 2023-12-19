@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -34,8 +33,10 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('latitude', models.FloatField(blank=True, null=True)),
                 ('longitude', models.FloatField(blank=True, null=True)),
-                ('country', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='location.country')),
-                ('region', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='location.region')),
+                ('country', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                              to='location.country')),
+                ('region', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                             to='location.region')),
             ],
         ),
         migrations.CreateModel(
@@ -45,7 +46,8 @@ class Migration(migrations.Migration):
                 ('street', models.CharField(max_length=255)),
                 ('city', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='location.city')),
                 ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='location.country')),
-                ('region', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='location.region')),
+                ('region', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                             to='location.region')),
             ],
         ),
     ]

@@ -1,6 +1,7 @@
-from rest_framework.serializers import ModelSerializer
-from .models import Contact, Report
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+
+from .models import Contact, Report
 
 
 class ContactSerializer(ModelSerializer):

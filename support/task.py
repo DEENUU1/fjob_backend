@@ -1,6 +1,7 @@
-from .models import Contact, Report
 from datetime import datetime
 from datetime import timedelta
+
+from .models import Contact, Report
 
 
 def delete_contact_after_year():

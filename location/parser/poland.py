@@ -1,4 +1,5 @@
 import json
+
 from ..models import Country, City, Region
 
 
@@ -28,7 +29,3 @@ class LoadPoland:
                     latitude=data.get("Latitude"),
                     longitude=data.get("Longitude")
                 )
-
-
-
-

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('offer', '0002_remove_joboffer_is_active_joboffer_status'),
     ]

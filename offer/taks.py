@@ -1,6 +1,7 @@
-from .models import JobOffer
 from datetime import datetime
 from datetime import timedelta
+
+from .models import JobOffer
 
 
 def delete_scraped_offers_after_30_days():

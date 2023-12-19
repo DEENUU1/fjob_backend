@@ -1,4 +1,5 @@
 import pytest
+
 from company.models import Company
 from users.models import UserAccount
 

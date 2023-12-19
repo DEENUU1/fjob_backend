@@ -1,4 +1,5 @@
 import pytest
+
 from offer.models import WorkType, EmploymentType, Experience, Salary, JobOffer
 
 

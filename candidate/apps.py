@@ -6,5 +6,4 @@ class CandidateConfig(AppConfig):
     name = 'candidate'
 
     def ready(self):
-        import candidate.signals
         print("Signals connected")

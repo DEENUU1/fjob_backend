@@ -1,10 +1,10 @@
+from django.urls import path
+from rest_framework.routers import DefaultRouter
+
 from .views import (
     FavouriteView,
     FavouriteCountAPIView,
 )
-from rest_framework.routers import DefaultRouter
-from django.urls import path
-
 
 router = DefaultRouter()
 router.register("", FavouriteView, basename="favourite")
@@ -14,4 +14,3 @@ urlpatterns = [
 ]
 
 urlpatterns += router.urls
-
