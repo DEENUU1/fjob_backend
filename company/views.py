@@ -18,16 +18,16 @@ from rest_framework.views import View
 from users.models import UserAccount
 
 
-class UserCanMakeCompanyView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = self.request.user
-        user_object = UserAccount.objects.get(id=user.id)
-        if user_object.num_of_available_companies > 0:
-            return Response({"info": "true"})
-        else:
-            return Response({"info": "false"})
+# class UserCanMakeCompanyView(APIView):
+#     permission_classes = [IsAuthenticated]
+#
+#     def get(self, request):
+#         user = self.request.user
+#         user_object = UserAccount.objects.get(id=user.id)
+#         if user_object.num_of_available_companies > 0:
+#             return Response({"info": "true"})
+#         else:
+#             return Response({"info": "false"})
 
 
 class CompanyOfferListView(APIView):
@@ -99,18 +99,18 @@ class CompanyOfferView(ViewSet):
         return Response(serializer.data)
 
 
-class UserHasCompanyView(APIView):
-    permission_classes = [IsAuthenticated, ]
-
-    def get(self, request, *args, **kwargs):
-        user = self.request.user
-
-        try:
-            company = Company.objects.get(user=user)
-            if company:
-                return Response({"info": "true"}, status=status.HTTP_200_OK)
-        except Exception:
-            return Response({"info": "false"}, status=status.HTTP_404_NOT_FOUND)
+# class UserHasCompanyView(APIView):
+#     permission_classes = [IsAuthenticated, ]
+#
+#     def get(self, request, *args, **kwargs):
+#         user = self.request.user
+#
+#         try:
+#             company = Company.objects.get(user=user)
+#             if company:
+#                 return Response({"info": "true"}, status=status.HTTP_200_OK)
+#         except Exception:
+#             return Response({"info": "false"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class CompanyPublicView(ViewSet):
@@ -130,10 +130,10 @@ class CompanyPublicView(ViewSet):
 class CompanyUserView(ViewSet):
     permission_classes = [IsAuthenticated, ]
 
-    def list(self, request, *args, **kwargs):
-        queryset = Company.objects.filter(user=self.request.user)
-        serializer = CompanySerializer(queryset, many=True)
-        return Response(serializer.data)
+    # def list(self, request, *args, **kwargs):
+    #     queryset = Company.objects.filter(user=self.request.user)
+    #     serializer = CompanySerializer(queryset, many=True)
+    #     return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = Company.objects.filter(user=request.user)
@@ -141,18 +141,18 @@ class CompanyUserView(ViewSet):
         serializer = CompanySerializer(company)
         return Response(serializer.data)
 
-    def create(self, request):
-        user_companies = Company.objects.filter(user=self.request.user).count()
-        if request.user.num_of_available_companies == user_companies:
-            return Response(
-                {"info": "You have reached the limit of Companies. Pay to make more"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = CompanySerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    # def create(self, request):
+    #     user_companies = Company.objects.filter(user=self.request.user).count()
+    #     if request.user.num_of_available_companies == user_companies:
+    #         return Response(
+    #             {"info": "You have reached the limit of Companies. Pay to make more"},
+    #             status=status.HTTP_400_BAD_REQUEST
+    #         )
+    #
+    #     serializer = CompanySerializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     serializer.save(user=request.user)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, pk=None):
         company = Company.objects.get(pk=pk)
