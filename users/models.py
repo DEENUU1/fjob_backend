@@ -42,7 +42,7 @@ class UserAccountManager(BaseUserManager):
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     ACCOUNT_TYPE = (
         ("USER", "USER"),
-        ("USER", "COMPANY")
+        ("COMPANY", "COMPANY")
     )
 
     first_name = models.CharField(max_length=255)
