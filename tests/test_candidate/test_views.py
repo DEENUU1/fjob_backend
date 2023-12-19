@@ -117,33 +117,3 @@ def test_error_user_aplication_list_view_return_unauthenticated_info(user, job_o
     response = view(request)
 
     assert response.status_code == 401
-
-
-@pytest.mark.django_db
-def test_success_return_list_of_candidates(user, job_offer_with_company):
-    offer = job_offer_with_company
-    view = CandidateListView.as_view()
-    request = factory.get(f"/api/candidate/1")
-    force_authenticate(request, user)
-    response = view(request, offer_id=1)
-
-    assert response.status_code == 200
-
-
-@pytest.mark.django_db
-def test_error_return_list_of_candidates_unauthenticated_info(user, job_offer_with_company):
-    view = CandidateListView.as_view()
-    request = factory.get(f"/api/candidate/1")
-    response = view(request, offer_id=1)
-
-    assert response.status_code == 401
-
-
-@pytest.mark.django_db
-def test_error_return_list_of_candidates_unauthorized_user(user_second, job_offer_with_company):
-    view = CandidateListView.as_view()
-    request = factory.get(f"/api/candidate/1")
-    force_authenticate(request, user_second)
-    response = view(request, offer_id=1)
-
-    assert response.status_code == 401

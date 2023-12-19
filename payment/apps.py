@@ -6,4 +6,5 @@ class PaymentConfig(AppConfig):
     name = 'payment'
 
     def ready(self):
+        import payment.signals
         print("Signals connected")

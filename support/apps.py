@@ -6,4 +6,5 @@ class SupportConfig(AppConfig):
     name = 'support'
 
     def ready(self):
+        import support.signals
         print("Signals connected")
