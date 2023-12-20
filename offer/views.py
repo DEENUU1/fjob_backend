@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-
+from rest_framework.permissions import IsAuthenticated
 from company.models import Company
 from fjob.pagination import CustomPagination
 from .models import (
@@ -122,3 +122,59 @@ class CompanyOfferListView(APIView):
         offers = JobOffer.objects.filter(company=company, status="ACTIVE")
         serializer = JobOfferSerializer(offers, many=True)
         return Response(serializer.data)
+
+
+class OfferViewSet(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def create(self, request):
+        company_id = request.data.get("company_id")
+        company = Company.objects.get(pk=company_id)
+
+        if company.user != request.user:
+            return Response({"info": "You do not have permission to create an offer for this company"},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        if company.num_of_offers_to_add > 0:
+            serializer = JobOfferSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, pk=None):
+        offer = JobOffer.objects.get(pk=pk)
+
+        if offer.company.user != request.user:
+            return Response({"info": "You do not have permission to update this offer"},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        if offer.is_expired:
+            return Response({"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        new_status = request.data.get("status", None)
+        if new_status and offer.status == "EXPIRED":
+            return Response(
+                {
+                    "info": "You can't change the status for this job offer, it's already expired"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = JobOfferSerializer(offer, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def delete(self, request, pk=None):
+        offer = JobOffer.objects.get(pk=pk)
+
+        if offer.company.user != request.user:
+            return Response({"info": "You do not have permission to delete this offer"},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        offer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
