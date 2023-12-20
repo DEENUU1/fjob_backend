@@ -10,13 +10,14 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register("management", CompanyUserView, basename="company_user")
+# router.register("management", CompanyUserView, basename="company_user")
 router.register("", CompanyPublicView, basename="company_public")
 router.register("offer", CompanyOfferView, basename="manage_company")
 
 urlpatterns = [
     path("offer/", CompanyOfferListView.as_view(), name="list_of_company_offers_private"),
     path("company/", UserCompanyView.as_view(), name="user_company_private"),
+    path("management/", CompanyUserView.as_view(), name="user_company_management"),
 ]
 
 urlpatterns += router.urls

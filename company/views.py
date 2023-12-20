@@ -69,10 +69,10 @@ class UserCompanyView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CompanyUserView(ViewSet):
-    permission_classes = [IsAuthenticated, ]
+class CompanyUserView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def update(self, request):
+    def put(self, request):
         company_id = request.data.get("company_id")
         company = Company.objects.get(pk=company_id)
 
@@ -84,7 +84,7 @@ class CompanyUserView(ViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def destroy(self, request):
+    def delete(self, request):
         company_id = request.data.get("company_id")
         company = Company.objects.get(pk=company_id)
 
