@@ -145,6 +145,21 @@ class OfferViewSet(ViewSet):
         else:
             return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
 
+    def update(self, request, pk=None):
+        offer = JobOffer.objects.get(pk=pk)
+
+        if offer.company.user != request.user:
+            return Response({"info": "You do not have permission to update this offer"},
+                            status=status.HTTP_403_FORBIDDEN)
+
+        if offer.is_expired:
+            return Response({"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = JobOfferSerializerCreate(offer, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
     def partial_update(self, request, pk=None):
         offer = JobOffer.objects.get(pk=pk)
 

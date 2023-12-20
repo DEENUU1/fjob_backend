@@ -93,7 +93,7 @@ class JobOffer(models.Model):
 
     @property
     def is_expired(self):
-        return (timezone.now() - self.created_at) < timedelta(days=self.days_until_expiration)
+        return (timezone.now() - self.created_at) >= timedelta(days=self.days_until_expiration)
 
     @property
     def days_until_expiration_str(self):
