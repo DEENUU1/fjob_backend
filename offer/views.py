@@ -160,30 +160,6 @@ class OfferViewSet(ViewSet):
         serializer.save()
         return Response(serializer.data)
 
-    def partial_update(self, request, pk=None):
-        offer = JobOffer.objects.get(pk=pk)
-
-        if offer.company.user != request.user:
-            return Response({"info": "You do not have permission to update this offer"},
-                            status=status.HTTP_403_FORBIDDEN)
-
-        if offer.is_expired:
-            return Response({"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST)
-
-        new_status = request.data.get("status", None)
-        if new_status and offer.status == "EXPIRED":
-            return Response(
-                {
-                    "info": "You can't change the status for this job offer, it's already expired"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        serializer = JobOfferSerializer(offer, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
     def destroy(self, request, pk=None):
         offer = JobOffer.objects.get(pk=pk)
 
