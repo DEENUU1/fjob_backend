@@ -22,7 +22,8 @@ from .serializers import (
     WorkTypeSerializer,
     EmploymentTypeSerializer,
     ExperienceSerializer,
-    JobOfferSerializer
+    JobOfferSerializer,
+    JobOfferSerializerCreate
 )
 
 
@@ -124,7 +125,7 @@ class CompanyOfferListView(APIView):
         return Response(serializer.data)
 
 
-class OfferViewSet(APIView):
+class OfferViewSet(ViewSet):
     permission_classes = [IsAuthenticated, ]
 
     def create(self, request):
@@ -136,7 +137,7 @@ class OfferViewSet(APIView):
                             status=status.HTTP_403_FORBIDDEN)
 
         if company.num_of_offers_to_add > 0:
-            serializer = JobOfferSerializer(data=request.data)
+            serializer = JobOfferSerializerCreate(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
@@ -168,7 +169,7 @@ class OfferViewSet(APIView):
         serializer.save()
         return Response(serializer.data)
 
-    def delete(self, request, pk=None):
+    def destroy(self, request, pk=None):
         offer = JobOffer.objects.get(pk=pk)
 
         if offer.company.user != request.user:

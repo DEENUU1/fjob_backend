@@ -50,3 +50,9 @@ class JobOfferSerializer(ModelSerializer):
     class Meta:
         model = JobOffer
         fields = '__all__'
+
+
+class JobOfferSerializerCreate(ModelSerializer):
+    class Meta:
+        model = JobOffer
+        fields = "__all__"

@@ -6,11 +6,11 @@ from .models import UserAccount
 
 class CustomUserAdmin(UserAdmin):
     model = UserAccount
-    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser')
+    list_display = ('email', 'first_name', 'last_name', 'is_active', 'is_staff', 'is_superuser', 'account_type')
     list_filter = ('is_active', 'is_staff', 'is_superuser')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
-    list_editable = ('is_active', 'is_staff', 'is_superuser')
+    list_editable = ('is_active', 'is_staff', 'is_superuser', 'account_type')
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
