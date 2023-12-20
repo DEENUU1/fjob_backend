@@ -72,8 +72,10 @@ class UserCompanyView(APIView):
 class CompanyUserView(ViewSet):
     permission_classes = [IsAuthenticated, ]
 
-    def partial_update(self, request, pk=None):
-        company = Company.objects.get(pk=pk)
+    def update(self, request):
+        company_id = request.data.get("company_id")
+        company = Company.objects.get(pk=company_id)
+
         if company.user != self.request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
@@ -82,8 +84,10 @@ class CompanyUserView(ViewSet):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def destroy(self, request, pk=None):
-        company = Company.objects.get(pk=pk)
+    def destroy(self, request):
+        company_id = request.data.get("company_id")
+        company = Company.objects.get(pk=company_id)
+
         if company.user != self.request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
