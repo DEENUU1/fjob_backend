@@ -49,15 +49,3 @@ services:
         depends_on:
             - db
             - redis
-
-#    celery_beat:
-#        build:
-#            context: .
-#            dockerfile: ./Dockerfile
-#        container_name: fjob-celery-beat-dev
-#        command: celery -A fjob.celery beat -l info
-#        volumes:
-#            - .:/app/
-#        depends_on:
-#            - db
-#            - redis

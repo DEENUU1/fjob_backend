@@ -48,13 +48,13 @@ def test_error_company_public_return_company_by_id_not_found(company):
 
 @pytest.mark.django_db
 def test_success_partial_update_company(user, company):
-    view = CompanyUserView.as_view({'patch': 'partial_update'})
+    view = CompanyUserView.as_view()
 
-    data = {'description': 'Updated description'}
+    data = {'description': 'Updated description', "company_id": 1}
 
-    request = factory.patch('/api/company/management/1/', data)
+    request = factory.put('/api/company/management/', data)
     force_authenticate(request, user=user)
-    response = view(request, pk=company.id)
+    response = view(request)
 
     assert response.status_code == 200
     assert response.data['description'] == 'Updated description'
@@ -62,11 +62,11 @@ def test_success_partial_update_company(user, company):
 
 @pytest.mark.django_db
 def test_success_destroy_company(user, company):
-    view = CompanyUserView.as_view({'delete': 'destroy'})
+    view = CompanyUserView.as_view()
 
-    request = factory.delete('/api/company/management/1/')
+    request = factory.delete('/api/company/management/', {"company_id": 1})
     force_authenticate(request, user=user)
-    response = view(request, pk=company.id)
+    response = view(request)
 
     assert response.status_code == 204
     assert not Company.objects.filter(id=company.id, is_active=True).exists()
