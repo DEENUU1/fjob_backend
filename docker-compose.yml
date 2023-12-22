@@ -1,32 +1,18 @@
 version: "3"
 
 services:
-#    db:
-#        hostname: db
-#        image: postgres:15
-#        container_name: fjob-db-dev
-#        volumes:
-#            - ./data/db:/var/lib/postgresql/data
-#        environment:
-#            - POSTGRES_DB=fjob
-#            - POSTGRES_USER=fjob
-#            - POSTGRES_PASSWORD=fjob123
-#        ports:
-#            - "5432:5432"
-
     web:
         hostname: web
         build:
             context: .
             dockerfile: ./Dockerfile
         container_name: fjob-web-dev
-        command: python manage.py runserver 0.0.0.0:8000
+        command: gunicorn fjob.wsgi:application -w 4 -b 0.0.0.0:8000
         volumes:
             - .:/app
         ports:
             - "8000:8000"
         depends_on:
-            - db
             - redis
             - celery
         env_file:
@@ -47,5 +33,4 @@ services:
         volumes:
             - .:/app/
         depends_on:
-            - db
             - redis
