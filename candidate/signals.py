@@ -13,8 +13,14 @@ def applied_email_notification(sender, instance, created, **kwargs):
         send_email(subject=subject, message=message, email=instance.email)
 
 
+post_save.connect(applied_email_notification, sender=Candidate)
+
+
 @receiver(post_save, sender=Candidate)
 def status_updated_notification(sender, instance, created, **kwargs):
     subject = f"FJOB | Your application status has changed."
     message = f"Your application status has been updated to {instance.status}"
     send_email(subject=subject, message=message, email=instance.email)
+
+
+post_save.connect(status_updated_notification, sender=Candidate)

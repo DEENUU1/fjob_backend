@@ -69,12 +69,6 @@ class StripeCheckoutSessionView(APIView):
         return Response({"id": checkout_session.url})
 
 
-def increment_num_of_available_companies(session, value):
-    user_id = session.metadata["user_id"]
-    user = UserAccount.objects.get(id=user_id)
-    user.num_of_available_companies += int(value)
-    user.save()
-
 
 def increment_num_of_available_offers(session, value):
     company_id = session.metadata["company_id"]
@@ -107,9 +101,7 @@ def stripe_webhook(request):
         purchase_type = session.metadata["type"]
         value = session.metadata["value"]
 
-        if purchase_type == "NEW_COMPANY":
-            increment_num_of_available_companies(session, value)
-        elif purchase_type == "NEW_OFFER":
+        if purchase_type == "NEW_OFFER":
             increment_num_of_available_offers(session, value)
 
     return HttpResponse(status=status.HTTP_200_OK)

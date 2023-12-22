@@ -7,6 +7,11 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["-name"]
+        verbose_name = "Country"
+        verbose_name_plural = "Countries"
+
 
 class Region(models.Model):
     name = models.CharField(max_length=255)
@@ -14,6 +19,11 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ["-name"]
+        verbose_name = "Region"
+        verbose_name_plural = "Regions"
 
 
 class City(models.Model):
@@ -26,6 +36,11 @@ class City(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ["-name"]
+        verbose_name = "City"
+        verbose_name_plural = "Cities"
+
 
 class Address(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
@@ -35,3 +50,8 @@ class Address(models.Model):
 
     def __str__(self):
         return self.street
+
+    class Meta:
+        ordering = ["-country"]
+        verbose_name = "Address"
+        verbose_name_plural = "Addresses"

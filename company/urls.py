@@ -10,7 +10,6 @@ from .views import (
 )
 
 router = DefaultRouter()
-# router.register("management", CompanyUserView, basename="company_user")
 router.register("", CompanyPublicView, basename="company_public")
 router.register("offer", CompanyOfferView, basename="manage_company")
 

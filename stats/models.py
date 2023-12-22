@@ -7,3 +7,8 @@ class Statistics(models.Model):
 
     def __str__(self):
         return f"{self.model_type} - {self.created_at}"
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Statistics"
+        verbose_name_plural = "Statistics"

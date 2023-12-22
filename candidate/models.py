@@ -39,6 +39,13 @@ class Candidate(models.Model):
     message = models.TextField(max_length=5000, null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS, default="Pending")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.full_name
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Candidate'
+        verbose_name_plural = 'Candidates'

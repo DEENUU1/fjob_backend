@@ -44,7 +44,6 @@ class CompanyOfferView(ViewSet):
         return Response(serializer.data)
 
 
-
 class CompanyPublicView(ViewSet):
 
     def list(self, request):

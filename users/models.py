@@ -61,5 +61,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'account_type']
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.email
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'

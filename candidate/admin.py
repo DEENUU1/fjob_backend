@@ -5,8 +5,8 @@ from .models import Candidate
 
 class CandidateAdmin(admin.ModelAdmin):
     list_display = ['full_name', 'email', 'phone', 'status']
-    search_fields = ['full_name', 'email', 'phone']
-    list_filter = ['full_name', 'email', 'phone']
+    search_fields = ['email', 'phone']
+    list_filter = ['email', 'phone']
     list_editable = ['status']
 
 

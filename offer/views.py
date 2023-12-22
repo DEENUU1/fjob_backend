@@ -64,7 +64,7 @@ class SalaryView(APIView):
             "min": min_salary,
             "max": max_salary,
         }
-
+        
         return Response(result)
 
 

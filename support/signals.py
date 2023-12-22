@@ -14,3 +14,6 @@ def contact_sent_notification(sender, instance, created, **kwargs):
             send_email(subject=subject, message=message, email=instance.email)
         except Exception as e:
             pass
+
+
+post_save.connect(contact_sent_notification, sender=Contact)
