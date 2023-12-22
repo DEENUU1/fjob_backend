@@ -1,18 +1,18 @@
 version: "3"
 
 services:
-    db:
-        hostname: db
-        image: postgres:15
-        container_name: fjob-db-dev
-        volumes:
-            - ./data/db:/var/lib/postgresql/data
-        environment:
-            - POSTGRES_DB=fjob
-            - POSTGRES_USER=fjob
-            - POSTGRES_PASSWORD=fjob123
-        ports:
-            - "5432:5432"
+#    db:
+#        hostname: db
+#        image: postgres:15
+#        container_name: fjob-db-dev
+#        volumes:
+#            - ./data/db:/var/lib/postgresql/data
+#        environment:
+#            - POSTGRES_DB=fjob
+#            - POSTGRES_USER=fjob
+#            - POSTGRES_PASSWORD=fjob123
+#        ports:
+#            - "5432:5432"
 
     web:
         hostname: web

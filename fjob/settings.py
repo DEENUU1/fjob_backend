@@ -36,7 +36,7 @@ else:
     DEBUG = True
 
 if WORKING_MODE == "prod":
-    ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+    ALLOWED_HOSTS = ["*"]
 else:
     ALLOWED_HOSTS = ["*"]
 
@@ -208,12 +208,11 @@ if WORKING_MODE == "dev":
 elif WORKING_MODE == "prod":
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'fjob1',
-            'USER': 'postgre',
-            'PASSWORD': 'U4boD8sTn5tS6LAKmDvf',
-            'HOST': '<database_endpoint>',
-            'PORT': '3306',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv("GC_SQL_NAME"),
+            'USER': os.getenv("GC_SQL_USER"),
+            'PASSWORD': os.getenv("GC_SQL_PASSWORD"),
+            'HOST': os.getenv("GC_SQL_HOST"),
         }
     }
 elif WORKING_MODE == "test":
