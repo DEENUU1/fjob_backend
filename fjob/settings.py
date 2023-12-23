@@ -92,6 +92,11 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+if not WORKING_MODE == "test":
+    REDIRECT_URLS = os.getenv('REDIRECT_URLS').split(',')
+else:
+    REDIRECT_URLS = []
+
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': False,  # Todo change to True
@@ -99,7 +104,7 @@ DJOSER = {
     'USER_CREATE_PASSWORD_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'TOKEN_MODEL': None,
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': os.getenv('REDIRECT_URLS').split(',')
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': REDIRECT_URLS
 }
 
 AUTH_COOKIE = 'access'
