@@ -1,6 +1,5 @@
 name: Continuous Integration
 
-
 on:
   push:
     branches:
@@ -20,18 +19,18 @@ jobs:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
           SSH_HOST: ${{secrets.SSH_HOST}}
           SSH_USER: ${{secrets.SSH_USER}}
-        run:
+        run: |
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/github
           chmod 600 ~/.ssh/github
-          cat >>~/.ssh/config <<END
+          cat <<EOF >> ~/.ssh/config
           Host target
             HostName $SSH_HOST
             User $SSH_USER
             IdentityFile ~/.ssh/github
             LogLevel ERROR
             StrictHostKeyChecking no
-          END
+          EOF
       - name: Run deploy
         run: |
-          ssh target "cd fjob_backend/" && docker-compose down && git pull && docker-compose build && docker-compose up -d --force-recreate"
+          ssh target "cd fjob_backend/ && docker-compose down && git pull && docker-compose build && docker-compose up -d --force-recreate"
