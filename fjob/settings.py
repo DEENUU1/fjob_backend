@@ -157,9 +157,9 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 AWS_S3_VERIFY = True
 
-if WORKING_MODE == "dev" or WORKING_MODE == "prod":
+if WORKING_MODE == "prod":
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-elif WORKING_MODE == "test":
+else:
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 # Celery
@@ -266,11 +266,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+if WORKING_MODE == "prod":
+    STATIC_URL = 'https://fjobgeneral.s3.amazonaws.com/static/'
+    MEDIA_URL = 'https://fjobgeneral.s3.amazonaws.com/media/'
+else:
+    STATIC_URL = '/static/'
+    MEDIA_URL = "/media/"
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-ADMIN_MEDIA_PREFIX = '/static/admin/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
