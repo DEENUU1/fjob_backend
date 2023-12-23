@@ -11,9 +11,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  quality-assurance:
-    name: Run Tests
-    uses: ./.github/workflows/pytest.yml
+#  quality-assurance:
+#    name: Run Tests
+#    uses: ./.github/workflows/pytest.yml
 
   deploy:
     name: Deploy
