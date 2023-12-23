@@ -7,9 +7,13 @@ services:
             context: .
             dockerfile: ./Dockerfile
         container_name: fjob-web-dev
-        command: gunicorn fjob.wsgi:application -w 4 -b 0.0.0.0:8000
+        command: >
+            bash -c "
+                $RUN_MANAGE_PY collectstatic --no-input &&
+                $RUN_MANAGE_PY migrate --no-input &&
+                gunicorn fjob.wsgi:application -w 4 -b 0.0.0.0:8000"
         volumes:
-            - .:/app
+            - .:/appi mea
         ports:
             - "8000:8000"
         depends_on:
