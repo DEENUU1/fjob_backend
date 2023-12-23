@@ -92,10 +92,13 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-if not WORKING_MODE == "test":
-    REDIRECT_URLS = os.getenv('REDIRECT_URLS').split(',')
-else:
+if WORKING_MODE == "test":
     REDIRECT_URLS = []
+else:
+    try:
+        REDIRECT_URLS = os.getenv('REDIRECT_URLS').split(',')
+    except:
+        pass
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
@@ -154,6 +157,7 @@ AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", None)
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 AWS_S3_VERIFY = True
+
 if WORKING_MODE == "dev" or WORKING_MODE == "prod":
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 elif WORKING_MODE == "test":
@@ -267,7 +271,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
+ADMIN_MEDIA_PREFIX = '/static/admin/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
