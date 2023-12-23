@@ -17,12 +17,14 @@ services:
             - celery
         env_file:
             - .env
+        restart: always
 
     redis:
         image: redis:latest
         container_name: fjob-redis-dev
         ports:
             - "6379:6379"
+        restart: always
 
     celery:
         build:
@@ -34,3 +36,14 @@ services:
             - .:/app/
         depends_on:
             - redis
+        restart: always
+
+    cloudsqlproxy:
+        container_name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
+        volumes:
+            - ./creds.json:/secrets/cloudsql/creds.json
+        ports:
+            - 127.0.0.1:5432:5432
+        command: /cloud_sql_proxy -instances="django-cloudrun-project:us-east1:django-dev-db"=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/creds.json
+        restart: always
