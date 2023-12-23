@@ -11,13 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-#  quality-assurance:
-#    name: Run Tests
-#    uses: ./.github/workflows/pytest.yml
-
   deploy:
     name: Deploy
-    needs: quality-assurance
     runs-on: ubuntu-latest
     steps:
       - name: Configure SSH
