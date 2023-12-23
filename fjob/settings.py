@@ -92,13 +92,12 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-if WORKING_MODE == "test":
-    REDIRECT_URLS = []
-else:
-    try:
-        REDIRECT_URLS = os.getenv('REDIRECT_URLS').split(',')
-    except:
-        pass
+REDIRECT_URLS = []
+
+try:
+    REDIRECT_URLS = os.getenv('REDIRECT_URLS').split(',')
+except:
+    pass
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
