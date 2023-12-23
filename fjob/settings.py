@@ -266,13 +266,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-if WORKING_MODE == "prod":
-    STATIC_URL = 'https://fjobgeneral.s3.amazonaws.com/static/'
-    MEDIA_URL = 'https://fjobgeneral.s3.amazonaws.com/media/'
-else:
-    STATIC_URL = '/static/'
-    MEDIA_URL = "/media/"
 
+STATIC_URL = '/static/'
+MEDIA_URL = "/media/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
