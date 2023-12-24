@@ -267,7 +267,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 if WORKING_MODE == "prod":
-    STATIC_URL = '/app/static'
+    STATIC_URL = '/app/static/'
 else:
     STATIC_URL = '/static/'
 MEDIA_URL = "/media/"
