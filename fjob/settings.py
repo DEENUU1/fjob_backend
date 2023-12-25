@@ -93,7 +93,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 REDIRECT_URLS = []
-
 try:
     REDIRECT_URLS = os.getenv('REDIRECT_URLS').split(',')
 except:
@@ -130,9 +129,10 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'email, first_name, last_name'
 }
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+# CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # STRIPE
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
