@@ -59,10 +59,10 @@ class Salary(models.Model):
         ('HOURLY', 'HOURLY'),
     )
 
-    salary_from = models.FloatField()
-    salary_to = models.FloatField()
-    currency = models.CharField(max_length=10, choices=CURRENCIES)
-    schedule = models.CharField(max_length=10, choices=SCHEDULES)
+    salary_from = models.FloatField(null=True, blank=True)
+    salary_to = models.FloatField(null=True, blank=True)
+    currency = models.CharField(max_length=10, choices=CURRENCIES, null=True, blank=True)
+    schedule = models.CharField(max_length=10, choices=SCHEDULES, null=True, blank=True)
 
     def __str__(self):
         return f'{self.salary_from} - {self.salary_to} {self.currency} {self.schedule}'

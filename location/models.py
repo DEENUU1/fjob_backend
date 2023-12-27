@@ -49,7 +49,7 @@ class Address(models.Model):
     street = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return self.street
+        return f"{self.country} {self.city} {self.region} {self.street}"
 
     class Meta:
         ordering = ["-country"]
