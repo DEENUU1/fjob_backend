@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     'payment',
     'support',
     'stats',
-    'scraper',
 
     # packages
     'rest_framework',

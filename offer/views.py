@@ -4,11 +4,12 @@ from django_filters import rest_framework as filters
 from rest_framework import status
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-from rest_framework.permissions import IsAuthenticated
+
 from company.models import Company
 from fjob.pagination import CustomPagination
 from .models import (
@@ -18,12 +19,14 @@ from .models import (
     Salary,
     JobOffer
 )
+from .save_scraped import save_scraped
 from .serializers import (
     WorkTypeSerializer,
     EmploymentTypeSerializer,
     ExperienceSerializer,
     JobOfferSerializer,
-    JobOfferSerializerCreate
+    JobOfferSerializerCreate,
+    ScrapedDataSerializer,
 )
 
 
@@ -64,7 +67,7 @@ class SalaryView(APIView):
             "min": min_salary,
             "max": max_salary,
         }
-        
+
         return Response(result)
 
 
@@ -170,3 +173,16 @@ class OfferViewSet(ViewSet):
         offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class ScrapedDataView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = ScrapedDataSerializer(data=request.data, many=True)
+
+        if serializer.is_valid():
+            data = serializer.validated_data
+            for item in data:
+                save_scraped(item)
+
+            return Response({"message": "Data saved successfully"}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
