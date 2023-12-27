@@ -21,7 +21,6 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class ProductListView(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -66,7 +65,6 @@ class StripeCheckoutSessionView(APIView):
             cancel_url=cancel_url,
         )
         return Response({"id": checkout_session.url})
-
 
 
 def increment_num_of_available_offers(session, value):
