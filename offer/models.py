@@ -136,5 +136,10 @@ class JobOffer(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             random_str = self.get_random_string()
-            self.slug = f"{self.title}{random_str}"
+            transformed_title = self.transform_title(self.title)
+            self.slug = f"{transformed_title}{random_str}"
         super().save(*args, **kwargs)
+
+    @staticmethod
+    def transform_title(title: str) -> str:
+        return title.replace(" ", "-").lower()
