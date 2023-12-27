@@ -56,3 +56,20 @@ class JobOfferSerializerCreate(ModelSerializer):
     class Meta:
         model = JobOffer
         fields = "__all__"
+
+
+class ScrapedDataSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    description = serializers.CharField(allow_null=True, required=False)
+    is_remote = serializers.BooleanField()
+    is_hybrid = serializers.BooleanField()
+    apply_form = serializers.URLField()
+    skills = serializers.CharField()
+    salary = serializers.ListField(child=serializers.DictField())
+    experience = serializers.ListField(child=serializers.CharField())
+    work_type = serializers.CharField(allow_null=True, required=False)
+    employment_type = serializers.ListField(child=serializers.CharField(allow_null=True, required=False))
+    company_logo = serializers.URLField()
+    url = serializers.URLField()
+    company_name = serializers.CharField()
+    addresses = serializers.ListField(child=serializers.DictField())
