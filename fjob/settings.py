@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'offer',
     'favourite',
     'company',
-    'candidate',
     'payment',
     'support',
     'stats',

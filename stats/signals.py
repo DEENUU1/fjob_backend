@@ -13,22 +13,13 @@ def stats_user_account(sender, instance, created, **kwargs):
 post_save(stats_user_account, sender="users.UserAccount")
 
 
-@receiver(post_save, sender='candidate.Candidate')
-def stats_candidate(sender, instance, created, **kwargs):
-    if created:
-        Statistics.objects.create(model_type="Candidate")
-
-
-post_save(stats_candidate, sender="candidate.Candidate")
-
-
 @receiver(post_save, sender='company.Company')
-def stats_candidate(sender, instance, created, **kwargs):
+def stats_company(sender, instance, created, **kwargs):
     if created:
         Statistics.objects.create(model_type="Company")
 
 
-post_save(stats_candidate, sender="company.Company")
+post_save(stats_company, sender="company.Company")
 
 
 @receiver(post_save, sender='offer.JobOffer')
