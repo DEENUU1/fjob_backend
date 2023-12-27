@@ -43,10 +43,10 @@ class City(models.Model):
 
 
 class Address(models.Model):
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True, blank=True)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True)
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True, blank=True)
-    street = models.CharField(max_length=255)
+    street = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.street

@@ -20,6 +20,7 @@ class WorkType(models.Model):
         verbose_name = 'Work Type'
         verbose_name_plural = 'Work Types'
 
+
 class EmploymentType(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -31,6 +32,7 @@ class EmploymentType(models.Model):
         verbose_name = 'Employment Type'
         verbose_name_plural = 'Employment Types'
 
+
 class Experience(models.Model):
     name = models.CharField(max_length=50, unique=True)
 
@@ -41,6 +43,7 @@ class Experience(models.Model):
         ordering = ['-name']
         verbose_name = 'Experience'
         verbose_name_plural = 'Experiences'
+
 
 class Salary(models.Model):
     CURRENCIES = (
@@ -64,11 +67,11 @@ class Salary(models.Model):
     def __str__(self):
         return f'{self.salary_from} - {self.salary_to} {self.currency} {self.schedule}'
 
-
     class Meta:
         ordering = ['-salary_from']
         verbose_name = 'Salary'
         verbose_name_plural = 'Salaries'
+
 
 class JobOffer(models.Model):
     STATUS = (
