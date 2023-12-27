@@ -139,9 +139,9 @@ CSRF_TRUSTED_ORIGINS = ["https://kwlodarczyk.pro"]
 # STRIPE
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
-PRICE_BASIC = os.getenv("PRICE_BASIC")
-PRICE_STANDARD = os.getenv("PRICE_STANDARD")
-PRICE_ADVANCED = os.getenv("PRICE_ADVANCED")
+PRICE_BASIC = os.getenv("STRIPE_BASIC")
+PRICE_STANDARD = os.getenv("STRIPE_STANDARD")
+PRICE_ADVANCED = os.getenv("STRIPE_ADVANCED")
 
 # GMAIL
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
