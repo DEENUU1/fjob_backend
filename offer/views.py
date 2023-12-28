@@ -28,6 +28,7 @@ from .serializers import (
     JobOfferSerializerCreate,
     ScrapedDataSerializer,
 )
+from company.permissions import IsCompanyUser
 
 
 class WorkTypeView(ViewSet):
@@ -129,7 +130,7 @@ class CompanyOfferListView(APIView):
 
 
 class OfferViewSet(ViewSet):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def create(self, request):
         company_id = request.data.get("company_id")
