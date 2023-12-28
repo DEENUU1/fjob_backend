@@ -5,6 +5,7 @@ from offer.models import JobOffer, EmploymentType, WorkType, Experience, Salary
 
 
 def save_scraped(data: Dict[str, Any]) -> None:
+    # Process and create objects based on given data from scrapers
     title = data.get("title")
     description = data.get("description")
     is_remote = data.get("is_remote")

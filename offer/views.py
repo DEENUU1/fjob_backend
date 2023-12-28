@@ -31,6 +31,7 @@ from .serializers import (
 from company.permissions import IsCompanyUser
 
 
+# Return list of WorkType
 class WorkTypeView(ViewSet):
 
     def list(self, request):
@@ -39,6 +40,7 @@ class WorkTypeView(ViewSet):
         return Response(serializer.data)
 
 
+# Return list of EmploymentType
 class EmploymentTypeView(ViewSet):
 
     def list(self, request):
@@ -47,6 +49,7 @@ class EmploymentTypeView(ViewSet):
         return Response(serializer.data)
 
 
+# Return list of Experience
 class ExperienceView(ViewSet):
     def list(self, request):
         experiences = Experience.objects.all()
@@ -54,6 +57,7 @@ class ExperienceView(ViewSet):
         return Response(serializer.data)
 
 
+# Return lowest and highest salary
 class SalaryView(APIView):
     def get(self, requests):
         salaries = Salary.objects.all()
@@ -72,6 +76,7 @@ class SalaryView(APIView):
         return Response(result)
 
 
+# Return list of JobOffer with status "ACTIVE"
 class OfferListView(ListAPIView):
     queryset = JobOffer.objects.filter(status="ACTIVE")
     serializer_class = JobOfferSerializer
@@ -109,6 +114,7 @@ class OfferListView(ListAPIView):
         return super().get(*args, **kwargs)
 
 
+# Return details for specified JobOffer based on slug
 class JobOfferView(ViewSet):
     lookup_field = 'slug'
 
@@ -119,6 +125,7 @@ class JobOfferView(ViewSet):
         return Response(serializer.data)
 
 
+# Return list of JobOffer with status "ACTIVE" for specified company
 class CompanyOfferListView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -129,16 +136,13 @@ class CompanyOfferListView(APIView):
         return Response(serializer.data)
 
 
+# Set of endpoints for Company to create, update and delete JobOffer
 class OfferViewSet(ViewSet):
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def create(self, request):
         company_id = request.data.get("company_id")
         company = Company.objects.get(pk=company_id)
-
-        if company.user != request.user:
-            return Response({"info": "You do not have permission to create an offer for this company"},
-                            status=status.HTTP_403_FORBIDDEN)
 
         if company.num_of_offers_to_add > 0:
             serializer = JobOfferSerializerCreate(data=request.data)
@@ -152,10 +156,7 @@ class OfferViewSet(ViewSet):
     def update(self, request, pk=None):
         offer = JobOffer.objects.get(pk=pk)
 
-        if offer.company.user != request.user:
-            return Response({"info": "You do not have permission to update this offer"},
-                            status=status.HTTP_403_FORBIDDEN)
-
+        # If offer is expired user can't edit it
         if offer.is_expired:
             return Response({"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -166,15 +167,12 @@ class OfferViewSet(ViewSet):
 
     def destroy(self, request, pk=None):
         offer = JobOffer.objects.get(pk=pk)
-
-        if offer.company.user != request.user:
-            return Response({"info": "You do not have permission to delete this offer"},
-                            status=status.HTTP_403_FORBIDDEN)
-
         offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# Endpoint which allows to POST scraped data and save to database
+# It's a bridge between Lambda functions and Google Cloud SQL
 class ScrapedDataView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = ScrapedDataSerializer(data=request.data, many=True)
@@ -185,5 +183,4 @@ class ScrapedDataView(APIView):
                 save_scraped(item)
 
             return Response({"message": "Data saved successfully"}, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

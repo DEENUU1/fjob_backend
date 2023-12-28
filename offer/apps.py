@@ -7,4 +7,4 @@ class OfferConfig(AppConfig):
 
     def ready(self):
         import offer.signals
-        print("Signal connected")
+        print("Offer Signal Connected")

@@ -122,7 +122,6 @@ class JobOffer(models.Model):
 
     @property
     def days_until_expiration_str(self):
-        # Count based on days_until_expiration and created_at fields
         return self.days_until_expiration - (timezone.now() - self.created_at).days
 
     def __str__(self):
