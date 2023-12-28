@@ -12,34 +12,28 @@ from offer.serializers import (
     JobOfferSerializer
 )
 from .models import Company
+from .permissions import IsCompanyUser
 from .serializers import (
     CompanySerializer,
 )
 
 
 class CompanyOfferListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def get(self, request, *args, **kwargs):
         company = Company.objects.get(user=request.user)
-
-        if company.user != self.request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
         queryset = JobOffer.objects.filter(company=company)
         serializer = JobOfferSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
 class CompanyOfferView(ViewSet):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def retrieve(self, request, pk=None):
         queryset = JobOffer.objects.all()
         offer = get_object_or_404(queryset, pk=pk)
-        if offer.user != self.request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
         serializer = JobOfferSerializer(offer)
         return Response(serializer.data)
 
@@ -69,15 +63,11 @@ class UserCompanyView(APIView):
 
 
 class CompanyUserView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def put(self, request):
         company_id = request.data.get("company_id")
         company = Company.objects.get(pk=company_id)
-
-        if company.user != self.request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
         serializer = CompanySerializer(company, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -86,10 +76,6 @@ class CompanyUserView(APIView):
     def delete(self, request):
         company_id = request.data.get("company_id")
         company = Company.objects.get(pk=company_id)
-
-        if company.user != self.request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
         company.is_active = False
         company.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
