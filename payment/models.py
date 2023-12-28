@@ -21,7 +21,7 @@ class Product(models.Model):
         return f"{self.name} {self.value}"
 
     class Meta:
-        ordering = ["-created_at"]
+        ordering = ["price_euro"]
         verbose_name = "Product"
         verbose_name_plural = "Products"
 
