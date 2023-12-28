@@ -27,11 +27,11 @@ class Contact(models.Model):
         threshold_days = 90
         return (timezone.now() - self.created_at) > timedelta(days=threshold_days)
 
-
     class Meta:
         ordering = ['-created_at']
         verbose_name = 'Contact'
         verbose_name_plural = 'Contacts'
+
 
 class Report(models.Model):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
@@ -47,7 +47,6 @@ class Report(models.Model):
     def is_new(self):
         threshold_days = 1
         return (timezone.now() - self.created_at) < timedelta(days=threshold_days)
-
 
     class Meta:
         ordering = ['-created_at']
