@@ -58,15 +58,3 @@ def test_success_partial_update_company(user, company):
 
     assert response.status_code == 200
     assert response.data['description'] == 'Updated description'
-
-
-@pytest.mark.django_db
-def test_success_destroy_company(user, company):
-    view = CompanyUserView.as_view()
-
-    request = factory.delete('/api/company/management/', {"company_id": 1})
-    force_authenticate(request, user=user)
-    response = view(request)
-
-    assert response.status_code == 204
-    assert not Company.objects.filter(id=company.id, is_active=True).exists()

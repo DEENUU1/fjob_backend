@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'company',
     'payment',
     'support',
-    'stats',
 
     # packages
     'rest_framework',
