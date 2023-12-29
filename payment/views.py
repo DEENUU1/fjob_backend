@@ -19,6 +19,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class ProductListView(ListAPIView):
+    # Return list of available products
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -31,9 +32,11 @@ class StripeCheckoutSessionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        # Get success and cancel endpoints
         success_url = request.build_absolute_uri(reverse("success"))
         cancel_url = request.build_absolute_uri(reverse("cancel"))
 
+        # Get product_id and company_id
         data = self.request.data
         product_id = data.get("product_id", None)
         company_id = data.get("company_id", None)
@@ -42,9 +45,11 @@ class StripeCheckoutSessionView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         product = Product.objects.get(id=product_id)
+        # If product type is "NEW_OFFER" but company_id is None it should return bad request
         if product.type == "NEW_OFFER" and company_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        # Create checkout session
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             line_items=[
@@ -78,26 +83,22 @@ def increment_num_of_available_offers(session, value):
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
-    event = None
 
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
-    except ValueError as e:
-        print(e)
+    except ValueError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    except stripe.error.SignatureVerificationError as e:
-        print(e)
+    except stripe.error.SignatureVerificationError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if event["type"] == "checkout.session.completed" or event["type"] == "payment_intent.succeeded":
         session = event["data"]["object"]
-        # Todo customer_email = session.customer_details["email"], send_email
-
         purchase_type = session.metadata["type"]
         value = session.metadata["value"]
 
+        # If payment is success increment number of available offers with a given value
         if purchase_type == "NEW_OFFER":
             increment_num_of_available_offers(session, value)
 
@@ -125,5 +126,5 @@ class StripeIntentView(APIView):
                 customer=customer["id"],
             )
             return Response({"client_secret": intent["client_secret"]})
-        except Exception as e:
+        except:
             return Response({"error": "Something went wrong"})
