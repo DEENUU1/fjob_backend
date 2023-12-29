@@ -19,6 +19,7 @@ from .serializers import (
 
 
 class CompanyOfferListView(APIView):
+    # Return list of offer for specified Company, only users for whom company belongs can use it
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def get(self, request, *args, **kwargs):
@@ -29,6 +30,7 @@ class CompanyOfferListView(APIView):
 
 
 class CompanyOfferView(ViewSet):
+    # Return details for specified offer for specified Company, only users for whom company belongs can use it
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def retrieve(self, request, pk=None):
@@ -39,6 +41,7 @@ class CompanyOfferView(ViewSet):
 
 
 class CompanyPublicView(ViewSet):
+    # Return list and details of Company models
 
     def list(self, request):
         companies = Company.objects.filter(is_active=True)
@@ -53,6 +56,7 @@ class CompanyPublicView(ViewSet):
 
 
 class UserCompanyView(APIView):
+    # Return Company object for specified user object
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request, *args, **kwargs):
@@ -63,6 +67,7 @@ class UserCompanyView(APIView):
 
 
 class CompanyUserView(APIView):
+    # Allow user to edit or delete Company
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def put(self, request):
