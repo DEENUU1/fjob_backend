@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 
 from company.models import Company
+from company.permissions import IsCompanyUser
 from fjob.pagination import CustomPagination
 from .models import (
     WorkType,
@@ -28,11 +29,10 @@ from .serializers import (
     JobOfferSerializerCreate,
     ScrapedDataSerializer,
 )
-from company.permissions import IsCompanyUser
 
 
-# Return list of WorkType
 class WorkTypeView(ViewSet):
+    # Return list of WorkType
 
     def list(self, request):
         work_types = WorkType.objects.all()
@@ -40,8 +40,8 @@ class WorkTypeView(ViewSet):
         return Response(serializer.data)
 
 
-# Return list of EmploymentType
 class EmploymentTypeView(ViewSet):
+    # Return list of EmploymentType
 
     def list(self, request):
         employment_types = EmploymentType.objects.all()
@@ -49,16 +49,18 @@ class EmploymentTypeView(ViewSet):
         return Response(serializer.data)
 
 
-# Return list of Experience
 class ExperienceView(ViewSet):
+    # Return list of Experience
+
     def list(self, request):
         experiences = Experience.objects.all()
         serializer = ExperienceSerializer(experiences, many=True)
         return Response(serializer.data)
 
 
-# Return lowest and highest salary
 class SalaryView(APIView):
+    # Return lowest and highest salary
+
     def get(self, requests):
         salaries = Salary.objects.all()
 
@@ -76,8 +78,9 @@ class SalaryView(APIView):
         return Response(result)
 
 
-# Return list of JobOffer with status "ACTIVE"
 class OfferListView(ListAPIView):
+    # Return list of JobOffer with status "ACTIVE"
+
     queryset = JobOffer.objects.filter(status="ACTIVE")
     serializer_class = JobOfferSerializer
     pagination_class = CustomPagination
@@ -114,8 +117,8 @@ class OfferListView(ListAPIView):
         return super().get(*args, **kwargs)
 
 
-# Return details for specified JobOffer based on slug
 class JobOfferView(ViewSet):
+    # Return details for specified JobOffer based on slug
     lookup_field = 'slug'
 
     def retrieve(self, request, slug: str = None):
@@ -125,24 +128,23 @@ class JobOfferView(ViewSet):
         return Response(serializer.data)
 
 
-# Return list of JobOffer with status "ACTIVE" for specified company
 class CompanyOfferListView(APIView):
-
+    # Return list of offer (with status "ACTIVE") for specified Company
     def get(self, request, *args, **kwargs):
         company_id = kwargs.get("company_id")
-        company = Company.objects.get(pk=company_id)
+        company = get_object_or_404(Company, pk=company_id)
         offers = JobOffer.objects.filter(company=company, status="ACTIVE")
         serializer = JobOfferSerializer(offers, many=True)
         return Response(serializer.data)
 
 
-# Set of endpoints for Company to create, update and delete JobOffer
 class OfferViewSet(ViewSet):
+    # Set of endpoints for Company to create, update and delete JobOffer
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def create(self, request):
         company_id = request.data.get("company_id")
-        company = Company.objects.get(pk=company_id)
+        company = get_object_or_404(Company, pk=company_id)
 
         if company.num_of_offers_to_add > 0:
             serializer = JobOfferSerializerCreate(data=request.data)
@@ -151,14 +153,18 @@ class OfferViewSet(ViewSet):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({"info": "You have reached the limit of offers"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"info": "You have reached the limit of offers"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def update(self, request, pk=None):
-        offer = JobOffer.objects.get(pk=pk)
+        offer = get_object_or_404(JobOffer, pk=pk)
 
-        # If offer is expired user can't edit it
         if offer.is_expired:
-            return Response({"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         serializer = JobOfferSerializerCreate(offer, data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -166,14 +172,15 @@ class OfferViewSet(ViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
-        offer = JobOffer.objects.get(pk=pk)
+        offer = get_object_or_404(JobOffer, pk=pk)
         offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# Endpoint which allows to POST scraped data and save to database
-# It's a bridge between Lambda functions and Google Cloud SQL
 class ScrapedDataView(APIView):
+    # Endpoint which allows to POST scraped data and save to database
+    # It's a bridge between Lambda functions and Google Cloud SQL
+
     def post(self, request, *args, **kwargs):
         serializer = ScrapedDataSerializer(data=request.data, many=True)
 
