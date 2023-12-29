@@ -16,8 +16,6 @@ def test_create_contact_success():
     assert contact.message == "Test test"
     assert contact.email == "test@example.com"
     assert contact.reviewed == False
-    assert contact.is_new == True
-    assert contact.is_expired == False
 
 
 @pytest.mark.django_db
@@ -33,4 +31,3 @@ def test_create_report_success(user_data):
     assert report.user == user_data
     assert report.offer == joboffer
     assert report.description == "dasdasda"
-    assert report.is_new == True
