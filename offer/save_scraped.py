@@ -58,26 +58,35 @@ def save_scraped(data: Dict[str, Any]) -> None:
 
         addresses_objects = []
         if addresses:
-            for address in addresses:
-                country = address.get("country")
-                region = address.get("region")
-                city = address.get("city")
-                street = address.get("street")
+            for address_data in addresses:
+                country_name = address_data.get("country")
+                region_name = address_data.get("region")
+                city_name = address_data.get("city")
+                street = address_data.get("street")
 
-                country_obj, region_obj, city_obj = None, None, None
+                city_obj, created_city = City.objects.get_or_create(name=city_name)
 
-                if country:
-                    country_obj, created = Country.objects.get_or_create(name=country)
+                if not created_city:
+                    region_obj = city_obj.region
+                    country_obj = city_obj.country
+                else:
+                    region_obj, country_obj = None, None
 
-                if region:
-                    region_obj, created = Region.objects.get_or_create(name=region, country=country_obj)
+                region_obj, created_region = Region.objects.get_or_create(name=region_name, country=country_obj)
 
-                if city:
-                    city_obj, created = City.objects.get_or_create(name=city, region=region_obj,
-                                                                   country=country_obj)
+                if not created_region:
+                    country_obj = region_obj.country
+                else:
+                    country_obj = None
 
-                address_obj, created = Address.objects.get_or_create(country=country_obj, region=region_obj,
-                                                                     city=city_obj, street=street)
+                country_obj, created_country = Country.objects.get_or_create(name=country_name)
+
+                address_obj, created = Address.objects.get_or_create(
+                    country=country_obj,
+                    region=region_obj,
+                    city=city_obj,
+                    street=street
+                )
 
                 addresses_objects.append(address_obj)
 
