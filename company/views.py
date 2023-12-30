@@ -15,6 +15,8 @@ from .models import Company
 from .permissions import IsCompanyUser
 from .serializers import (
     CompanySerializer,
+    CompanyListSerializer,
+    CompanyDetailsSerializer,
 )
 
 
@@ -40,19 +42,18 @@ class CompanyOfferView(ViewSet):
         return Response(serializer.data)
 
 
-
 class CompanyPublicView(ViewSet):
     # Return a list and details of active Company models
 
     def list(self, request):
         companies = Company.objects.filter(is_active=True)
-        serializer = CompanySerializer(companies, many=True)
+        serializer = CompanyListSerializer(companies, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = Company.objects.filter(is_active=True)
         company = get_object_or_404(queryset, pk=pk)
-        serializer = CompanySerializer(company)
+        serializer = CompanyDetailsSerializer(company)
         return Response(serializer.data)
 
 
@@ -81,4 +82,3 @@ class CompanyUserView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
-
