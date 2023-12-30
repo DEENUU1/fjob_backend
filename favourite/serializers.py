@@ -4,7 +4,6 @@ from offer.serializers import JobOfferHelperSerializer
 from .models import Favourite
 
 
-
 class FavouriteSerializer(ModelSerializer):
     class Meta:
         model = Favourite

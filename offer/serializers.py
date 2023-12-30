@@ -49,13 +49,34 @@ class JobOfferSerializer(ModelSerializer):
 
     class Meta:
         model = JobOffer
-        fields = '__all__'
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "description",
+            "company",
+            "addresses",
+            "is_remote",
+            "is_hybrid",
+            "apply_form",
+            "skills",
+            "salary",
+            "experience",
+            "work_type",
+            "employment_type",
+            "created_at",
+            "status",
+            "company_logo",
+            "url",
+            "is_scraped",
+            "company_name"
+        ]
 
 
 class JobOfferHelperSerializer(ModelSerializer):
     class Meta:
         model = JobOffer
-        fields = ("id", "title",)
+        fields = ["id", "title"]
 
 
 class JobOfferSerializerCreate(ModelSerializer):

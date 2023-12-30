@@ -122,7 +122,7 @@ class JobOfferView(ViewSet):
     lookup_field = 'slug'
 
     def retrieve(self, request, slug: str = None):
-        queryset = JobOffer.objects.all()
+        queryset = JobOffer.objects.filter(status="ACTIVE")
         offer = get_object_or_404(queryset, slug=slug)
         serializer = JobOfferSerializer(offer)
         return Response(serializer.data)
