@@ -32,7 +32,8 @@ class CompanyOfferListView(APIView):
 
 
 class CompanyOfferView(ViewSet):
-    # Return details for the specified offer for the specified Company; only users to whom the company belongs can use it
+    # Return details for the specified offer for the specified Company
+    # only users to whom the company belongs can use it
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def retrieve(self, request, pk=None):
@@ -46,7 +47,7 @@ class CompanyPublicView(ViewSet):
     # Return a list and details of active Company models
 
     def list(self, request):
-        companies = Company.objects.filter(is_active=True)
+        companies = Company.objects.filter(is_active=True).order_by("company_size")
         serializer = CompanyListSerializer(companies, many=True)
         return Response(serializer.data)
 
