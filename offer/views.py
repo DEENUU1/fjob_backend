@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-
+from rest_framework.authentication import TokenAuthentication
 from company.models import Company
 from company.permissions import IsCompanyUser
 from fjob.pagination import CustomPagination
@@ -171,6 +171,8 @@ class OfferViewSet(ViewSet):
 class ScrapedDataView(APIView):
     # Endpoint which allows to POST scraped data and save to database
     # It's a bridge between Lambda functions and Google Cloud SQL
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = ScrapedDataSerializer(data=request.data, many=True)

@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'django_filters',
     'social_django',
     'corsheaders',
+    'rest_framework.authtoken',
 
 ]
 
