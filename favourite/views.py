@@ -23,27 +23,10 @@ class FavouriteView(ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
-        offer_id = request.data.get('offer')
-
-        # Check if Favourite object already exists for the current user and offer
-        existing_favourite = Favourite.objects.filter(
-            user=request.user,
-            offer=offer_id,
-        ).first()
-
-        if existing_favourite:
-            return Response(
-                {"info": "Job Offer is already saved to Favourite"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        serializer = FavouriteSerializer(data=request.data)
-        try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        serializer = FavouriteSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, pk):
         favourite = get_object_or_404(Favourite, pk=pk)
