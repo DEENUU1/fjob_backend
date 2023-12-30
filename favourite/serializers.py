@@ -1,13 +1,8 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 
-from offer.models import JobOffer
+from offer.serializers import JobOfferHelperSerializer
 from .models import Favourite
 
-
-class JobOfferSerializer(ModelSerializer):
-    class Meta:
-        model = JobOffer
-        fields = ("id", "title",)
 
 
 class FavouriteSerializer(ModelSerializer):
@@ -32,7 +27,7 @@ class FavouriteSerializer(ModelSerializer):
 
 
 class FavouriteSerializerList(ModelSerializer):
-    offer = JobOfferSerializer()
+    offer = JobOfferHelperSerializer()
 
     class Meta:
         model = Favourite

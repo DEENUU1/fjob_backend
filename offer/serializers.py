@@ -52,6 +52,12 @@ class JobOfferSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class JobOfferHelperSerializer(ModelSerializer):
+    class Meta:
+        model = JobOffer
+        fields = ("id", "title",)
+
+
 class JobOfferSerializerCreate(ModelSerializer):
     class Meta:
         model = JobOffer
