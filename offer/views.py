@@ -143,20 +143,11 @@ class OfferViewSet(ViewSet):
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
     def create(self, request):
-        company_id = request.data.get("company_id")
-        company = get_object_or_404(Company, pk=company_id)
+        serializer = JobOfferSerializerCreate(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-        if company.num_of_offers_to_add > 0:
-            serializer = JobOfferSerializerCreate(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(
-                {"info": "You have reached the limit of offers"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None):
         offer = get_object_or_404(JobOffer, pk=pk)

@@ -82,7 +82,27 @@ class JobOfferHelperSerializer(ModelSerializer):
 class JobOfferSerializerCreate(ModelSerializer):
     class Meta:
         model = JobOffer
-        fields = "__all__"
+        fields = [
+            "id",
+            "title",
+            "description",
+            "company",
+            "addresses",
+            "is_remote",
+            "is_hybrid",
+            "apply_form",
+            "skills",
+            "salary",
+            "experience"
+            "work_type",
+            "employment_type",
+            "status"
+        ]
+
+    def validate_company(self, value):
+        if value.num_of_offers_to_add <= 0:
+            raise serializers.ValidationError("You have reached the limit of offers.")
+        return value
 
 
 class ScrapedDataSerializer(serializers.Serializer):
