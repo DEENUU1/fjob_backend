@@ -10,8 +10,9 @@ class SalaryAdmin(admin.ModelAdmin):
 
 
 class JobOfferAdmin(admin.ModelAdmin):
-    list_display = ('title', 'company', 'created_at', 'status')
-    list_filter = ('status', 'is_remote', 'is_hybrid', 'work_type', 'employment_type', 'experience')
+    list_display = ('title', 'company', 'company_name', 'is_scraped', 'is_new', 'created_at', 'status')
+    list_filter = (
+        'status', 'is_remote', 'is_hybrid', 'work_type', 'employment_type', 'experience')
     search_fields = ('title', 'description', 'company__name', 'skills', 'company_name')
     filter_horizontal = ('addresses', 'salary', 'experience', 'work_type', 'employment_type')
     list_editable = ('status',)
