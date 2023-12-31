@@ -4,7 +4,7 @@ from rest_framework.test import APIRequestFactory
 from offer.models import WorkType, EmploymentType, Experience, Salary
 from offer.views import OfferListView, SalaryView, ExperienceView, EmploymentTypeView, \
     WorkTypeView, JobOfferView
-from tests.fixtures import user, job_offer, job_offer_with_company, company
+from tests.fixtures import user, job_offer, job_offer_with_company, company, job_offer_draft
 
 factory = APIRequestFactory()
 
@@ -87,3 +87,13 @@ def test_success_return_job_offer_by_slug(job_offer, user):
 
     assert response.status_code == 200
     assert response.data["id"] == job_offer.id
+
+
+@pytest.mark.django_db
+def test_error_return_job_offer_draft_status_by_slug(job_offer_draft, user):
+    request = factory.get(f'/offer/{job_offer_draft.slug}/')
+    view = JobOfferView.as_view({"get": "retrieve"})
+    response = view(request, job_offer_draft.slug)
+    # Should return 404 because JobOffer has status "DRAFT" which means
+    # that it's not allow to the public access
+    assert response.status_code == 404

@@ -41,8 +41,17 @@ def job_offer(user):
     return JobOffer.objects.create(
         title="Test Job Offer",
         description="Test Job Offer Description",
+        status="ACTIVE"
     )
 
+
+@pytest.fixture
+def job_offer_draft(user):
+    return JobOffer.objects.create(
+        title="Test Draft",
+        description="xyz",
+        status="DRAFT"
+    )
 
 @pytest.fixture
 def company(user):

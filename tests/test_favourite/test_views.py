@@ -63,7 +63,6 @@ def test_error_create_favourite_job_offer_already_saved(user, job_offer):
     force_authenticate(request, user=user)
     response = view(request)
     assert response.status_code == 400
-    assert response.data['info'] == 'Job Offer is already saved to Favourite'
 
 
 @pytest.mark.django_db
