@@ -69,7 +69,10 @@ class JobOfferSerializer(ModelSerializer):
             "company_logo",
             "url",
             "is_scraped",
-            "company_name"
+            "company_name",
+            "days_until_expiration_str",
+            "is_expired",
+            "is_new",
         ]
 
 
@@ -97,7 +100,9 @@ class JobOfferSerializerCreate(ModelSerializer):
             "work_type",
             "employment_type",
             "status",
-            "days_until_expiration"
+            "days_until_expiration",
+            "is_expired",
+            "is_new",
         ]
 
     def validate_company(self, value):
