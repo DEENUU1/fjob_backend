@@ -3,13 +3,13 @@ from rest_framework.serializers import ModelSerializer
 from .models import Contact, Report
 
 
-class ContactSerializer(ModelSerializer):
+class ContactCreateSerializer(ModelSerializer):
     class Meta:
         model = Contact
-        fields = "__all__"
+        fields = ["id", "subject", "message", "email"]
 
 
-class ReportSerializer(ModelSerializer):
+class ReportCreateSerializer(ModelSerializer):
     class Meta:
         model = Report
-        fields = "__all__"
+        fields = ["id", "user", "offer", "description"]
