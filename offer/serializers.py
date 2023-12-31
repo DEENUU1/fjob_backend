@@ -96,7 +96,8 @@ class JobOfferSerializerCreate(ModelSerializer):
             "experience"
             "work_type",
             "employment_type",
-            "status"
+            "status",
+            "days_until_expiration"
         ]
 
     def validate_company(self, value):
