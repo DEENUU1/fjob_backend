@@ -17,6 +17,7 @@ from .serializers import (
     CompanySerializer,
     CompanyListSerializer,
     CompanyDetailsSerializer,
+    CompanyEditSerializer,
 )
 
 
@@ -79,7 +80,7 @@ class CompanyUserView(APIView):
     def put(self, request):
         company_id = request.data.get("company_id")
         company = get_object_or_404(Company, pk=company_id)
-        serializer = CompanySerializer(company, data=request.data, partial=True)
+        serializer = CompanyEditSerializer(company, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
