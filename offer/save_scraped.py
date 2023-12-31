@@ -26,17 +26,19 @@ def save_scraped(data: Dict[str, Any]) -> None:
         employment_type_objects = []
         if employment_type:
             for et in employment_type:
-                employment_type_objects.append(EmploymentType.objects.get_or_create(name=et))
-
+                employment_obj, created = EmploymentType.objects.get_or_create(name=et)
+                employment_type_objects.append(employment_obj)
         work_type_objects = []
         if work_type:
             for wt in work_type:
-                work_type_objects.append(WorkType.objects.get_or_create(name=wt))
+                work_obj, created = WorkType.objects.get_or_create(name=wt)
+                work_type_objects.append(work_obj)
 
         experience_objects = []
         if experience:
             for exp in experience:
-                experience_objects.append(Experience.objects.get_or_create(name=exp))
+                exp_obj, created = Experience.objects.get_or_create(name=exp)
+                experience_objects.append(exp_obj)
 
         salary_objects = []
         if salaries:
@@ -58,35 +60,45 @@ def save_scraped(data: Dict[str, Any]) -> None:
 
         addresses_objects = []
         if addresses:
-            for address_data in addresses:
-                country_name = address_data.get("country")
-                region_name = address_data.get("region")
-                city_name = address_data.get("city")
-                street = address_data.get("street")
+            for address in addresses:
+                country = address.get("country")
+                region = address.get("region")
+                city = address.get("city")
+                street = address.get("street")
 
-                city_obj, created_city = City.objects.get_or_create(name=city_name)
+                country_existing = Country.objects.filter(name=country).first() if country else None
+                region_existing = Region.objects.filter(name=region).first() if region else None
+                city_existing = City.objects.filter(name=city).first() if city else None
 
-                if not created_city:
-                    region_obj = city_obj.region
-                    country_obj = city_obj.country
+                country_obj, region_obj, city_obj = None, None, None
+
+                if country_existing:
+                    country_obj = country_existing
                 else:
-                    region_obj, country_obj = None, None
+                    if country:
+                        country_obj = Country.objects.create(name=country)
 
-                region_obj, created_region = Region.objects.get_or_create(name=region_name, country=country_obj)
-
-                if not created_region:
-                    country_obj = region_obj.country
+                if region_existing:
+                    region_obj = region_existing
+                    country_obj = region_existing.country
                 else:
-                    country_obj = None
+                    if region:
+                        region_obj = Region.objects.create(name=region, country=country_obj)
 
-                country_obj, created_country = Country.objects.get_or_create(name=country_name)
+                if city_existing:
+                    city_obj = city_existing
+                    region_obj = city_existing.region
+                    country_obj = city_existing.country
+                else:
+                    if city:
+                        city_obj = City.objects.create(
+                            name=city,
+                            region=region_obj,
+                            country=country_obj
+                        )
 
-                address_obj, created = Address.objects.get_or_create(
-                    country=country_obj,
-                    region=region_obj,
-                    city=city_obj,
-                    street=street
-                )
+                address_obj, created = Address.objects.get_or_create(country=country_obj, region=region_obj,
+                                                                     city=city_obj, street=street)
 
                 addresses_objects.append(address_obj)
 
