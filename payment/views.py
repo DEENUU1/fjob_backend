@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 from company.models import Company
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductListSerializer
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -21,7 +21,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 class ProductListView(ListAPIView):
     # Return list of available products
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductListSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
