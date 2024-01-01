@@ -12,4 +12,14 @@ def update_num_of_offers(sender, instance, created, **kwargs):
         instance.company.save()
 
 
+@receiver(post_save, sender=JobOffer)
+def create_slug(sender, instance, created, **kwargs):
+    # Create slug for JobOffer object based on title and id
+    if created:
+        transformed_title = instance.transform_title(instance.title)
+        instance.slug = f"{instance.id}-{transformed_title}"
+        instance.save()
+
+
 post_save.connect(update_num_of_offers, sender=JobOffer)
+post_save.connect(create_slug, sender=JobOffer)

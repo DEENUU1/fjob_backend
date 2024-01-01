@@ -128,17 +128,5 @@ class JobOffer(models.Model):
         return self.title
 
     @staticmethod
-    def get_random_string(length=20):
-        characters = string.ascii_lowercase + string.digits
-        return ''.join(random.choice(characters) for _ in range(length))
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            random_str = self.get_random_string()
-            transformed_title = self.transform_title(self.title)
-            self.slug = f"{transformed_title}{random_str}"
-        super().save(*args, **kwargs)
-
-    @staticmethod
     def transform_title(title: str) -> str:
         return title.replace(" ", "-").lower()
