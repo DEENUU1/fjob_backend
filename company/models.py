@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
 from location.models import Address
 from users.models import UserAccount
-from django.conf import settings
 
 
 def validate_file_size(value):
@@ -16,6 +16,7 @@ def validate_file_size(value):
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     logo = models.FileField(
         validators=[
             FileExtensionValidator(
@@ -48,3 +49,7 @@ class Company(models.Model):
         ordering = ['-created_at']
         verbose_name = "Company"
         verbose_name_plural = "Companies"
+
+    @staticmethod
+    def transform_name(title: str) -> str:
+        return title.replace(" ", "-").lower()
