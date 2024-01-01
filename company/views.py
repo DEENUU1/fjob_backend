@@ -46,6 +46,7 @@ class CompanyOfferView(ViewSet):
 
 class CompanyPublicView(ViewSet):
     # Return a list and details of active Company models
+    lookup_field = 'slug'
 
     def list(self, request):
         companies = Company.objects.filter(is_active=True).order_by("company_size")
