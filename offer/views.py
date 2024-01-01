@@ -130,9 +130,11 @@ class JobOfferView(ViewSet):
 
 class CompanyOfferListView(APIView):
     # Return list of offer (with status "ACTIVE") for specified Company
+    lookup_field = 'slug'
+
     def get(self, request, *args, **kwargs):
         # Get company_id from url param
-        company_id = kwargs.get("company_id")
+        company_id = kwargs.get("slug")
         company = get_object_or_404(Company, pk=company_id)
         offers = JobOffer.objects.filter(company=company, status="ACTIVE")
         serializer = JobOfferSerializer(offers, many=True)

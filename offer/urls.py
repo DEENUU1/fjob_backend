@@ -23,7 +23,7 @@ router.register("company", OfferViewSet, basename="company_crud")
 urlpatterns = [
     path("salary/", SalaryView.as_view(), name="salary_stats"),
     path("offer/", OfferListView.as_view(), name="offer_list"),
-    path("offer/company/<int:company_id>", CompanyOfferListView.as_view(), name="company_offer_list"),
+    path("offer/company/<str:slug>", CompanyOfferListView.as_view(), name="company_offer_list"),
     path("scrape/", ScrapedDataView.as_view(), name="save_scraped_data"),
 ]
 urlpatterns += router.urls
