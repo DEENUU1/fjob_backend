@@ -24,7 +24,7 @@ class CompanyEditSerializer(ModelSerializer):
 class CompanyListSerializer(ModelSerializer):
     class Meta:
         model = Company
-        fields = ["id", "name", "logo"]
+        fields = ["id", "name", "slug", "logo"]
 
 
 class CompanyDetailsSerializer(ModelSerializer):
@@ -32,6 +32,7 @@ class CompanyDetailsSerializer(ModelSerializer):
         model = Company
         fields = [
             "id",
+            "slug",
             "name",
             "logo",
             "company_size",

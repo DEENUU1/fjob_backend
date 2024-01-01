@@ -52,9 +52,9 @@ class CompanyPublicView(ViewSet):
         serializer = CompanyListSerializer(companies, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, slug=None):
         queryset = Company.objects.filter(is_active=True)
-        company = get_object_or_404(queryset, pk=pk)
+        company = get_object_or_404(queryset, slug=slug)
         serializer = CompanyDetailsSerializer(company)
         return Response(serializer.data)
 
