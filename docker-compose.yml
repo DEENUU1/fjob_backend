@@ -9,7 +9,6 @@ services:
         container_name: fjob-web-dev
         command: >
             bash -c "
-                python manage.py collectstatic --no-input &&
                 python manage.py migrate --no-input &&
                 gunicorn fjob.wsgi:application -w 4 -b 0.0.0.0:8000"
         volumes:
