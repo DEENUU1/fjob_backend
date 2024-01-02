@@ -32,13 +32,11 @@ WORKING_MODE = str(os.getenv("WORKING_MODE"))
 
 if WORKING_MODE == "prod":
     DEBUG = False
+    ALLOWED_HOSTS = ["*"]
 else:
     DEBUG = True
+    ALLOWED_HOSTS = ["*"]
 
-if WORKING_MODE == "prod":
-    ALLOWED_HOSTS = ["*"]
-else:
-    ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -66,6 +64,7 @@ INSTALLED_APPS = [
     'social_django',
     'corsheaders',
     'rest_framework.authtoken',
+    'storages'
 
 ]
 
@@ -255,35 +254,34 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 # AWS S3
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", None)
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", None)
-AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", None)
-AWS_S3_SIGNATURE_VERSION = 's3v4'
-AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", None)
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-AWS_S3_VERIFY = True
-AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+if WORKING_MODE == "prod":
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", None)
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", None)
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", None)
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", None)
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    AWS_S3_VERIFY = True
 
-# AWS_LOCATION = "static"
+    # Static files
+    AWS_LOCATION = "static"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # Public media files
+    PUBLIC_MEDIA_LOCATION = "media"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
+    DEFAULT_FILE_STORAGE = 'fjob.storage_backend.PublicMediaStorage'
 
-# if WORKING_MODE == "prod":
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = 'static/'
 
+    MEDIA_URL = "media/"
+    MEDIA_ROOT = "media/"
 
-# else:
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app/static'),
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    #
-    # MEDIA_URL = "/media/"
-    # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-    # DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
 ALLOWED_IMAGE_FORMATS = ['png', 'jpg', 'jpeg']
