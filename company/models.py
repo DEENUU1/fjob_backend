@@ -18,6 +18,7 @@ class Company(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     logo = models.FileField(
+        upload_to="logo",
         validators=[
             FileExtensionValidator(
                 allowed_extensions=settings.ALLOWED_IMAGE_FORMATS,
