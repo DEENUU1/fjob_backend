@@ -274,8 +274,9 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 # else:
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+print(STATIC_ROOT)
     # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
     #
     # MEDIA_URL = "/media/"
