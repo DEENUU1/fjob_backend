@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from utils.slug_transformer import SlugTransformer
 from .models import JobOffer
 
 
@@ -16,7 +16,7 @@ def update_num_of_offers(sender, instance, created, **kwargs):
 def create_slug(sender, instance, created, **kwargs):
     # Create slug for JobOffer object based on title and id
     if created:
-        transformed_title = instance.transform_title(instance.title)
+        transformed_title = SlugTransformer.transform(instance.title)
         instance.slug = f"{instance.id}-{transformed_title}"
         instance.save()
 

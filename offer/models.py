@@ -126,7 +126,3 @@ class JobOffer(models.Model):
 
     def __str__(self):
         return self.title
-
-    @staticmethod
-    def transform_title(title: str) -> str:
-        return title.replace(" ", "-").lower()

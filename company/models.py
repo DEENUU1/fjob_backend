@@ -49,7 +49,3 @@ class Company(models.Model):
         ordering = ['-created_at']
         verbose_name = "Company"
         verbose_name_plural = "Companies"
-
-    @staticmethod
-    def transform_name(title: str) -> str:
-        return title.replace(" ", "-").lower()
