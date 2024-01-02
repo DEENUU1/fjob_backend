@@ -15,5 +15,3 @@ RUN pip install -r requirements.txt
 RUN addgroup --system app && adduser --system --group app
 
 COPY . /app/
-
-#ENTRYPOINT ["/app/entrypoints.sh"]
