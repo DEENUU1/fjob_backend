@@ -135,7 +135,7 @@ class CompanyOfferListView(APIView):
     def get(self, request, *args, **kwargs):
         # Get company_id from url param
         company_id = kwargs.get("slug")
-        company = get_object_or_404(Company, pk=company_id)
+        company = get_object_or_404(Company, slug=company_id)
         offers = JobOffer.objects.filter(company=company, status="ACTIVE")
         serializer = JobOfferSerializer(offers, many=True)
         return Response(serializer.data)
