@@ -10,6 +10,7 @@ __pycache__/
 .idea/
 db.sqlite3
 data/
+media/
 
 # Distribution / packaging
 .Python
