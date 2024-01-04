@@ -190,6 +190,12 @@ Upload default cities and regions for Poland
 python manage.py poland 
 ```
 
+### Stripe 
+To run stripe locally use this command to run a webhook
+```bash
+stripe listen --forward-to localhost:8000/api/payment/new_company/webhook
+```
+
 ## Frontend locally
 
 #### Installation
