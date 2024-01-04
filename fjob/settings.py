@@ -276,7 +276,7 @@ else:
     MEDIA_ROOT = "media/"
 
 
-
+ALLOWED_RESUME_FORMATS = ["pdf"]
 ALLOWED_IMAGE_FORMATS = ['png', 'jpg', 'jpeg']
 MAX_IMAGE_SIZE = (5 * 1024 * 1024)
 
