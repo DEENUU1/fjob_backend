@@ -178,7 +178,6 @@ class ScrapedDataView(APIView):
 
     def post(self, request, *args, **kwargs):
         serializer = ScrapedDataSerializer(data=request.data, many=True)
-
         if serializer.is_valid():
             data = serializer.validated_data
             for item in data:

@@ -119,7 +119,7 @@ class ScrapedDataSerializer(serializers.Serializer):
     skills = serializers.CharField(allow_null=True, required=False)
     salary = serializers.ListField(child=serializers.DictField(allow_null=True, required=False))
     experience = serializers.ListField(child=serializers.CharField(allow_null=True, required=False))
-    work_type = serializers.CharField(allow_null=True, required=False)
+    work_type = serializers.ListField(allow_null=True, child=serializers.CharField(required=False))
     employment_type = serializers.ListField(allow_null=True, child=serializers.CharField(required=False))
     company_logo = serializers.URLField(allow_null=True, required=False)
     url = serializers.URLField()
