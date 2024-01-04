@@ -4,13 +4,12 @@ from django_filters import rest_framework as filters
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.filters import OrderingFilter, SearchFilter
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-
 from company.models import Company
 from company.permissions import IsCompanyUser
 from fjob.pagination import CustomPagination
@@ -32,31 +31,22 @@ from .serializers import (
 )
 
 
-class WorkTypeView(ViewSet):
-    # Return list of WorkType
-
-    def list(self, request):
-        work_types = WorkType.objects.all()
-        serializer = WorkTypeSerializer(work_types, many=True)
-        return Response(serializer.data)
+class WorkTypeListAPIView(ListAPIView):
+    # Return list of WorkType objects
+    queryset = WorkType.objects.all()
+    serializer_class = WorkTypeSerializer
 
 
-class EmploymentTypeView(ViewSet):
-    # Return list of EmploymentType
-
-    def list(self, request):
-        employment_types = EmploymentType.objects.all()
-        serializer = EmploymentTypeSerializer(employment_types, many=True)
-        return Response(serializer.data)
+class EmploymentTypeListAPIView(ListAPIView):
+    # Return list of EmploymentType objects
+    queryset = EmploymentType.objects.all()
+    serializer_class = EmploymentTypeSerializer
 
 
-class ExperienceView(ViewSet):
-    # Return list of Experience
-
-    def list(self, request):
-        experiences = Experience.objects.all()
-        serializer = ExperienceSerializer(experiences, many=True)
-        return Response(serializer.data)
+class ExperienceListAPIView(ListAPIView):
+    # Return list of Experience objects
+    queryset = Experience.objects.all()
+    serializer_class = ExperienceSerializer
 
 
 class SalaryView(APIView):
@@ -118,33 +108,41 @@ class OfferListView(ListAPIView):
         return super().get(*args, **kwargs)
 
 
-class JobOfferView(ViewSet):
+class JobOfferRetrieveAPIView(RetrieveAPIView):
     # Return details for specified JobOffer based on slug
     lookup_field = 'slug'
-
-    def retrieve(self, request, slug: str = None):
-        queryset = JobOffer.objects.filter(status="ACTIVE")
-        offer = get_object_or_404(queryset, slug=slug)
-        serializer = JobOfferSerializer(offer)
-        return Response(serializer.data)
+    queryset = JobOffer.objects.filter(status="ACTIVE")
+    serializer_class = JobOfferSerializer
+    throttle_classes = [UserRateThrottle]
 
 
-class CompanyOfferListView(APIView):
+class CompanyPublicOfferListView(ListAPIView):
     # Return list of offer (with status "ACTIVE") for specified Company
+    serializer_class = JobOfferSerializer
     lookup_field = 'slug'
 
-    def get(self, request, *args, **kwargs):
-        # Get company_id from url param
-        company_id = kwargs.get("slug")
+    def get_queryset(self):
+        # Get company_id from URL param
+        company_id = self.kwargs.get("slug")
         company = get_object_or_404(Company, slug=company_id)
-        offers = JobOffer.objects.filter(company=company, status="ACTIVE")
-        serializer = JobOfferSerializer(offers, many=True)
+        # Filter offers with status "ACTIVE" for the specified company
+        return JobOffer.objects.filter(company=company, status="ACTIVE")
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
-class OfferViewSet(ViewSet):
+class OfferPrivateCompanyViewSet(ViewSet):
     # Set of endpoints for Company to create, update and delete JobOffer
     permission_classes = [IsAuthenticated, IsCompanyUser]
+
+    def list(self, request):
+        company = get_object_or_404(Company, user=request.user)
+        queryset = JobOffer.objects.filter(company=company)
+        serializer = JobOfferSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         serializer = JobOfferSerializerCreate(data=request.data)
@@ -188,14 +186,3 @@ class ScrapedDataView(APIView):
 
             return Response({"message": "Data saved successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class CompanyPrivateOfferListView(APIView):
-    # Return list of offers for the specified Company; only users to whom the company belongs can use it
-    permission_classes = [IsAuthenticated, IsCompanyUser]
-
-    def get(self, request, *args, **kwargs):
-        company = get_object_or_404(Company, user=request.user)
-        queryset = JobOffer.objects.filter(company=company)
-        serializer = JobOfferSerializer(queryset, many=True)
-        return Response(serializer.data)

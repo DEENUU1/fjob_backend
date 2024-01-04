@@ -2,31 +2,28 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from .views import (
-    WorkTypeView,
-    EmploymentTypeView,
-    ExperienceView,
+    WorkTypeListAPIView,
+    EmploymentTypeListAPIView,
+    ExperienceListAPIView,
     SalaryView,
     OfferListView,
-    JobOfferView,
-    CompanyOfferListView,
-    OfferViewSet,
+    JobOfferRetrieveAPIView,
+    CompanyPublicOfferListView,
+    OfferPrivateCompanyViewSet,
     ScrapedDataView,
-    CompanyPrivateOfferListView
 )
 
 router = DefaultRouter()
-router.register("work", WorkTypeView, basename="work_type")
-router.register("employment", EmploymentTypeView, basename="employment_type")
-router.register("experience", ExperienceView, basename="experience_type")
-router.register("offer", JobOfferView, basename="job_offer")
-router.register("company", OfferViewSet, basename="company_crud")
+router.register("company", OfferPrivateCompanyViewSet, basename="company_crud")
 
 urlpatterns = [
     path("salary/", SalaryView.as_view(), name="salary_stats"),
     path("offer/", OfferListView.as_view(), name="offer_list"),
-    path("offer/company/<str:slug>", CompanyOfferListView.as_view(), name="company_offer_list"),
+    path("offer/company/<str:slug>/", CompanyPublicOfferListView.as_view(), name="company_offer_list"),
     path("scrape/", ScrapedDataView.as_view(), name="save_scraped_data"),
-    path("offer/company/", CompanyPrivateOfferListView.as_view(), name="company_private_offer_list"),
-
+    path("employment/", EmploymentTypeListAPIView.as_view(),  name="employment_type_list"),
+    path("work/", WorkTypeListAPIView.as_view(), name="work_type_list"),
+    path("experience/", ExperienceListAPIView.as_view(), name="experience_type_list"),
+    path("offer/<str:slug>/", JobOfferRetrieveAPIView.as_view(), name="job_offer_detail",)
 ]
 urlpatterns += router.urls
