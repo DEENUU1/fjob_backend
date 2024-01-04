@@ -4,7 +4,7 @@ import pytest
 from rest_framework.test import force_authenticate, APIRequestFactory
 
 from support.models import Contact, Report
-from support.views import ContactViewUser, ReportCreateView
+from support.views import ContactCreateAPIView, ReportCreateAPIView
 from tests.fixtures import user, job_offer
 
 factory = APIRequestFactory()
@@ -21,7 +21,7 @@ def test_success_create_contact_object():
         }),
         content_type='application/json'
     )
-    view = ContactViewUser.as_view({"post": "create"})
+    view = ContactCreateAPIView.as_view()
     response = view(request)
 
     assert response.status_code == 201
@@ -40,7 +40,7 @@ def test_success_create_report_object(user, job_offer):
         content_type='application/json'
     )
     force_authenticate(request, user=user)
-    view = ReportCreateView.as_view({"post": "create"})
+    view = ReportCreateAPIView.as_view()
     response = view(request)
 
     assert response.status_code == 201
@@ -59,7 +59,7 @@ def test_error_create_report_object_not_authenticated(user, job_offer):
         content_type='application/json'
     )
 
-    view = ReportCreateView.as_view({"post": "create"})
+    view = ReportCreateAPIView.as_view()
     response = view(request)
 
     assert response.status_code == 401
