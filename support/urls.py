@@ -1,12 +1,12 @@
-from rest_framework.routers import DefaultRouter
-
 from .views import (
-    ContactViewUser,
-    ReportCreateView
+    ContactCreateAPIView,
+    ReportCreateAPIView
 )
 
-router = DefaultRouter()
-router.register("contact", ContactViewUser, basename="contact_post")
-router.register("report", ReportCreateView, basename="report_user")
+from django.urls import path
 
-urlpatterns = router.urls
+
+urlpatterns = [
+    path("contact/",  ContactCreateAPIView.as_view(), name="create_contact_object"),
+    path("report/", ReportCreateAPIView.as_view(), name="create_report_object"),
+]
