@@ -40,7 +40,7 @@ class CandidateCompanyListSerializer(ModelSerializer):
         ]
 
 
-class CandidateCompanyUpdate(ModelSerializer):
+class CandidateCompanyUpdateSerializer(ModelSerializer):
     class Meta:
         model = Candidate
         fields = [
