@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'company',
     'payment',
     'support',
+    'candidates',
 
     # packages
     'rest_framework',
@@ -140,14 +141,6 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 PRICE_BASIC = os.getenv("STRIPE_BASIC")
 PRICE_STANDARD = os.getenv("STRIPE_STANDARD")
 PRICE_ADVANCED = os.getenv("STRIPE_ADVANCED")
-
-# GMAIL
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD_HOST_USER")
 
 # Celery
 CELERY_BROKER_URL = "redis://redis:6379/0"
