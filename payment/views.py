@@ -23,13 +23,9 @@ class ProductListView(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductListSerializer
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset
-
 
 class StripeCheckoutSessionView(APIView):
-    #Create checkout session
+    # Create checkout session
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -106,16 +102,6 @@ def stripe_webhook(request):
     return HttpResponse(status=status.HTTP_200_OK)
 
 
-class SuccessView(APIView):
-    def get(self, request):
-        return Response({"info": "Success!"})
-
-
-class CancelView(APIView):
-    def get(self, request):
-        return Response({"info": "Cancel!"})
-
-
 class StripeIntentView(APIView):
     def post(self, request, *args, **kwargs):
         try:
@@ -129,3 +115,13 @@ class StripeIntentView(APIView):
             return Response({"client_secret": intent["client_secret"]})
         except:
             return Response({"error": "Something went wrong"})
+
+
+class SuccessView(APIView):
+    def get(self, request):
+        return Response({"info": "Success!"})
+
+
+class CancelView(APIView):
+    def get(self, request):
+        return Response({"info": "Cancel!"})
