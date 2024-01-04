@@ -2,6 +2,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -9,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-from rest_framework.authentication import TokenAuthentication
+
 from company.models import Company
 from company.permissions import IsCompanyUser
 from fjob.pagination import CustomPagination
@@ -187,3 +188,14 @@ class ScrapedDataView(APIView):
 
             return Response({"message": "Data saved successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CompanyPrivateOfferListView(APIView):
+    # Return list of offers for the specified Company; only users to whom the company belongs can use it
+    permission_classes = [IsAuthenticated, IsCompanyUser]
+
+    def get(self, request, *args, **kwargs):
+        company = get_object_or_404(Company, user=request.user)
+        queryset = JobOffer.objects.filter(company=company)
+        serializer = JobOfferSerializer(queryset, many=True)
+        return Response(serializer.data)

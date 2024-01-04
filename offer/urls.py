@@ -11,6 +11,7 @@ from .views import (
     CompanyOfferListView,
     OfferViewSet,
     ScrapedDataView,
+    CompanyPrivateOfferListView
 )
 
 router = DefaultRouter()
@@ -25,5 +26,7 @@ urlpatterns = [
     path("offer/", OfferListView.as_view(), name="offer_list"),
     path("offer/company/<str:slug>", CompanyOfferListView.as_view(), name="company_offer_list"),
     path("scrape/", ScrapedDataView.as_view(), name="save_scraped_data"),
+    path("offer/company/", CompanyPrivateOfferListView.as_view(), name="company_private_offer_list"),
+
 ]
 urlpatterns += router.urls

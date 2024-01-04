@@ -4,13 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-
-from offer.models import (
-    JobOffer,
-)
-from offer.serializers import (
-    JobOfferSerializer
-)
 from .models import Company
 from .permissions import IsCompanyUser
 from .serializers import (
@@ -21,41 +14,17 @@ from .serializers import (
 )
 
 
-class CompanyOfferListView(APIView):
-    # Return list of offers for the specified Company; only users to whom the company belongs can use it
-    permission_classes = [IsAuthenticated, IsCompanyUser]
-
-    def get(self, request, *args, **kwargs):
-        company = get_object_or_404(Company, user=request.user)
-        queryset = JobOffer.objects.filter(company=company)
-        serializer = JobOfferSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class CompanyOfferView(ViewSet):
-    # Return details for the specified offer for the specified Company
-    # only users to whom the company belongs can use it
-    permission_classes = [IsAuthenticated, IsCompanyUser]
-
-    def retrieve(self, request, pk=None):
-        queryset = JobOffer.objects.all()
-        offer = get_object_or_404(queryset, pk=pk, company__user=request.user)
-        serializer = JobOfferSerializer(offer)
-        return Response(serializer.data)
-
-
-class CompanyPublicView(ViewSet):
+class CompanyPublicListRetrieveView(ViewSet):
     # Return a list and details of active Company models
     lookup_field = 'slug'
+    queryset = Company.objects.filter(is_active=True)
 
     def list(self, request):
-        companies = Company.objects.filter(is_active=True).order_by("company_size")
-        serializer = CompanyListSerializer(companies, many=True)
+        serializer = CompanyListSerializer(self.queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, slug=None):
-        queryset = Company.objects.filter(is_active=True)
-        company = get_object_or_404(queryset, slug=slug)
+        company = get_object_or_404(self.queryset, slug=slug)
         serializer = CompanyDetailsSerializer(company)
         return Response(serializer.data)
 
@@ -64,7 +33,7 @@ class UserCompanyView(APIView):
     # Return Company object for the specified user object
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         user = self.request.user
         company = Company.objects.filter(user=user).first()
         if not company:
@@ -74,14 +43,16 @@ class UserCompanyView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class CompanyUserView(APIView):
+class CompanyManagementApiView(APIView):
     # Allow user to edit or delete Company
     permission_classes = [IsAuthenticated, IsCompanyUser]
+    serializer_class = CompanyEditSerializer
 
     def put(self, request):
         company_id = request.data.get("company_id")
         company = get_object_or_404(Company, pk=company_id)
-        serializer = CompanyEditSerializer(company, data=request.data, partial=True)
+        serializer = self.serializer_class(company, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data)
+

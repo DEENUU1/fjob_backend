@@ -18,7 +18,20 @@ class CompanyEditSerializer(ModelSerializer):
 
     class Meta:
         model = Company
-        fields = '__all__'
+        fields = [
+            "company_id",
+            "name",
+            "logo",
+            "company_size",
+            "description",
+            "addresses",
+            "linkedin_url",
+            "facebook_url",
+            "twitter_url",
+            "instagram_url",
+            "youtube_url",
+            "is_active"
+        ]
 
 
 class CompanyListSerializer(ModelSerializer):
