@@ -28,7 +28,6 @@ class Candidate(models.Model):
     message = models.TextField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     job_offer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=10,  choices=STATUS, default="PENDING")

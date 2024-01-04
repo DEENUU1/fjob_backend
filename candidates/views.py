@@ -16,7 +16,7 @@ from .serializers import (
 )
 from company.permissions import IsCompanyUser
 from rest_framework.filters import OrderingFilter
-
+from offer.models import JobOffer
 from django_filters import rest_framework as filters
 
 
@@ -41,19 +41,20 @@ class CandidateCompanyRetrieveUpdateViewSet(ViewSet):
     def retrieve(self, request, pk=None):
         user = request.user
         company = get_object_or_404(Company, user=user)
-        candidate = get_object_or_404(Candidate, pk=pk, company=company)
+        job_offer = get_object_or_404(JobOffer, company=company, pk=request.data.job_offer)
+        candidate = get_object_or_404(Candidate, pk=pk, company=company, job_offer=job_offer)
         serializer = CandidateCompanyListSerializer(candidate)
         return Response(serializer.data)
 
-    def partial_update(self, request, pk=None):
-        user = request.user
-        company = get_object_or_404(Company, user=user)
-        candidate = get_object_or_404(Candidate, pk=pk, company=company)
-        serializer = CandidateCompanyUpdateSerializer(candidate, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def partial_update(self, request, pk=None):
+    #     user = request.user
+    #     company = get_object_or_404(Company, user=user)
+    #     candidate = get_object_or_404(Candidate, pk=pk, company=company)
+    #     serializer = CandidateCompanyUpdateSerializer(candidate, data=request.data, partial=True)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CandidateCompanyListView(ListAPIView):

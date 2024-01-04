@@ -33,7 +33,6 @@ class CandidateCompanyListSerializer(ModelSerializer):
             "message",
             "created_at",
             "updated_at",
-            "company",
             "job_offer",
             "status",
             "cv"
@@ -45,6 +44,5 @@ class CandidateCompanyUpdateSerializer(ModelSerializer):
         model = Candidate
         fields = [
             "id",
-            "company",
             "status"
         ]
