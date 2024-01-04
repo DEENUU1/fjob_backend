@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/company/', include('company.urls')),
     path('api/payment/', include('payment.urls')),
     path('api/support/', include('support.urls')),
+    path('api/candidate/', include('candidates.urls')),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
 if settings.DEBUG:

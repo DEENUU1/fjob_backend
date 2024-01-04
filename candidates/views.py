@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView
 from company.models import Company
 from fjob.pagination import CustomPagination
 from .models import Candidate
@@ -56,7 +56,7 @@ class CandidateCompanyRetrieveUpdateViewSet(ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CandidateCompanyListView(APIView):
+class CandidateCompanyListView(ListAPIView):
     queryset = Candidate.objects.all()
     serializer_class = CandidateCompanyListSerializer
     pagination_class = CustomPagination
@@ -72,5 +72,7 @@ class CandidateCompanyListView(APIView):
         "status"
     ]
 
-    def get(self, *args, **kwargs):
-        return super().get(*args, **kwargs)
+    def get_queryset(self, *args, **kwargs):
+        job_offer_id = self.kwargs.get("job_offer_id")
+        queryset = Candidate.objects.filter(job_offer__id=job_offer_id)
+        return queryset
