@@ -12,13 +12,13 @@ class Command(BaseCommand):
         employment_types = ["B2B", "Permanent", "Mandate contact", "Specific-task contact"]
 
         for experience in experiences:
-            Experience.objects.create(name=experience)
+            Experience.objects.get_or_create(name=experience)
 
         for work_type in work_types:
-            WorkType.objects.create(name=work_type)
+            WorkType.objects.get_or_create(name=work_type)
 
         for employment_type in employment_types:
-            EmploymentType.objects.create(name=employment_type)
+            EmploymentType.objects.get_or_create(name=employment_type)
 
         self.stdout.write(
             self.style.SUCCESS("Finished adding default values to database")
