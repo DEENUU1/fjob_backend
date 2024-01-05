@@ -4,12 +4,12 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     CandidateCreateView,
     CandidateUserListView,
-    CandidateCompanyRetrieveUpdateViewSet,
+    CandidateCompanyViewSet,
     CandidateCompanyListView,
 )
 
 router = DefaultRouter()
-router.register("candidate", CandidateCompanyRetrieveUpdateViewSet, basename="candidate_management")
+router.register("candidate", CandidateCompanyViewSet, basename="candidate_management")
 
 urlpatterns = [
     path("candidate/", CandidateCreateView.as_view(), name="candidate_create"),

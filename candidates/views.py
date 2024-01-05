@@ -35,16 +35,8 @@ class CandidateUserListView(APIView):
         return Response(serializer.data)
 
 
-class CandidateCompanyRetrieveUpdateViewSet(ViewSet):
+class CandidateCompanyViewSet(ViewSet):
     permission_classes = [IsAuthenticated, IsCompanyUser]
-
-    def retrieve(self, request, pk=None):
-        user = request.user
-        company = get_object_or_404(Company, user=user)
-        job_offer = get_object_or_404(JobOffer, company=company, pk=request.data.job_offer)
-        candidate = get_object_or_404(Candidate, pk=pk, company=company, job_offer=job_offer)
-        serializer = CandidateCompanyListSerializer(candidate)
-        return Response(serializer.data)
 
     def partial_update(self, request, pk=None):
         candidate = get_object_or_404(Candidate, pk=pk)
