@@ -120,16 +120,21 @@ Fjob consists of 3 repositories:
 <img src="assets/frontend_1.png" alt="frontend_1"/>
 <img src="assets/frontend_2.png" alt="frontend_2"/>
 <img src="assets/frontend_3.png" alt="frontend_3"/>
-<img src="assets/frontend_4.png" alt="frontend_4"/>
+<img src="assets/Screenshot_5.png" alt="2"/>
+<img src="assets/Screenshot_1.png" alt="frontend_4"/>
 <img src="assets/frontend_5.png" alt="frontend_5"/>
+<img src="assets/Screenshot_4.png" alt="1"/>
 <img src="assets/frontend_6.png" alt="frontend_6"/>
 <img src="assets/frontend_7.png" alt="frontend_7"/>
 <img src="assets/frontend_8.png" alt="frontend_8"/>
+<img src="assets/Screenshot_3.png" alt="1"/>
 <img src="assets/frontend_9.png" alt="frontend_9"/>
 <img src="assets/frontend_10.png" alt="frontend_10"/>
 <img src="assets/frontend_11.png" alt="frontend_11"/>
 <img src="assets/frontend_12.png" alt="frontend_12"/>
 <img src="assets/frontend_13.png" alt="frontend_13"/>
+<img src="assets/Screenshot_6.png" alt="2"/>
+<img src="assets/Screenshot_7.png" alt="2"/>
 <img src="assets/frontend_14.png" alt="frontend_14"/>
 <img src="assets/frontend_15.png" alt="frontend_15"/>
 
