@@ -46,22 +46,21 @@ class CandidateCompanyRetrieveUpdateViewSet(ViewSet):
         serializer = CandidateCompanyListSerializer(candidate)
         return Response(serializer.data)
 
-    # def partial_update(self, request, pk=None):
-    #     user = request.user
-    #     company = get_object_or_404(Company, user=user)
-    #     candidate = get_object_or_404(Candidate, pk=pk, company=company)
-    #     serializer = CandidateCompanyUpdateSerializer(candidate, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def partial_update(self, request, pk=None):
+        candidate = get_object_or_404(Candidate, pk=pk)
+        serializer = CandidateCompanyUpdateSerializer(candidate, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CandidateCompanyListView(ListAPIView):
     queryset = Candidate.objects.all()
     serializer_class = CandidateCompanyListSerializer
-    pagination_class = CustomPagination
+    # pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
+    permission_classes = [IsAuthenticated, IsCompanyUser]
 
     # Order by created time
     ordering_fields = [
