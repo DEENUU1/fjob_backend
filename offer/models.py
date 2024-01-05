@@ -89,7 +89,7 @@ class JobOffer(models.Model):
     is_remote = models.BooleanField(default=False)
     is_hybrid = models.BooleanField(default=False)
     days_until_expiration = models.IntegerField(default=30)
-    apply_form = models.URLField(null=True, blank=True)
+    apply_form = models.URLField(null=True, blank=True, default=None)
     skills = models.CharField(max_length=100, null=True, blank=True)
     salary = models.ManyToManyField(Salary, blank=True)
     experience = models.ManyToManyField(Experience, blank=True)
