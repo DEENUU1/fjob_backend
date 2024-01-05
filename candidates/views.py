@@ -5,8 +5,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 from rest_framework.generics import CreateAPIView, ListAPIView
-from company.models import Company
-from fjob.pagination import CustomPagination
 from .models import Candidate
 from .serializers import (
     CandidateCompanyListSerializer,
@@ -16,7 +14,6 @@ from .serializers import (
 )
 from company.permissions import IsCompanyUser
 from rest_framework.filters import OrderingFilter
-from offer.models import JobOffer
 from django_filters import rest_framework as filters
 
 
@@ -50,7 +47,6 @@ class CandidateCompanyViewSet(ViewSet):
 class CandidateCompanyListView(ListAPIView):
     queryset = Candidate.objects.all()
     serializer_class = CandidateCompanyListSerializer
-    # pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
     permission_classes = [IsAuthenticated, IsCompanyUser]
 
