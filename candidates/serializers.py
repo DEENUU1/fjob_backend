@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
 from .models import Candidate
+from offer.serializers import JobOfferHelperSerializer
 
 
 class CandidateCreateSerializer(ModelSerializer):
@@ -10,6 +11,8 @@ class CandidateCreateSerializer(ModelSerializer):
 
 
 class CandidateUserSerializer(ModelSerializer):
+    job_offer = JobOfferHelperSerializer()
+
     class Meta:
         model = Candidate
         fields = [

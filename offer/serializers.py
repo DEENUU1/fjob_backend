@@ -79,7 +79,7 @@ class JobOfferSerializer(ModelSerializer):
 class JobOfferHelperSerializer(ModelSerializer):
     class Meta:
         model = JobOffer
-        fields = ["id", "title"]
+        fields = ["id", "title", "slug"]
 
 
 class JobOfferSerializerCreate(ModelSerializer):
