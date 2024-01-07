@@ -22,7 +22,6 @@ class CompanySerializer(ModelSerializer):
 class CompanyEditSerializer(ModelSerializer):
     addresses = AddressSerializer(many=True)
     company_id = IntegerField(write_only=True)
-    category = CompanyCategorySerializer()
 
     class Meta:
         model = Company
