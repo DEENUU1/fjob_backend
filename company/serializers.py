@@ -12,6 +12,7 @@ class CompanyCategorySerializer(ModelSerializer):
 
 class CompanySerializer(ModelSerializer):
     addresses = AddressSerializer(many=True)
+    category = CompanyCategorySerializer()
 
     class Meta:
         model = Company
@@ -21,6 +22,7 @@ class CompanySerializer(ModelSerializer):
 class CompanyEditSerializer(ModelSerializer):
     addresses = AddressSerializer(many=True)
     company_id = IntegerField(write_only=True)
+    category = CompanyCategorySerializer()
 
     class Meta:
         model = Company
@@ -42,12 +44,16 @@ class CompanyEditSerializer(ModelSerializer):
 
 
 class CompanyListSerializer(ModelSerializer):
+    category = CompanyCategorySerializer()
+
     class Meta:
         model = Company
         fields = ["id", "name", "slug", "logo", "category"]
 
 
 class CompanyDetailsSerializer(ModelSerializer):
+    category = CompanyCategorySerializer()
+
     class Meta:
         model = Company
         fields = [
