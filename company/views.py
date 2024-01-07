@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
+from rest_framework.generics import ListAPIView
 from .models import Company
 from .permissions import IsCompanyUser
 from .serializers import (
@@ -12,6 +13,7 @@ from .serializers import (
     CompanyDetailsSerializer,
     CompanyEditSerializer,
 )
+
 
 
 class CompanyPublicListRetrieveView(ViewSet):

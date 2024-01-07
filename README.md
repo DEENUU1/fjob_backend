@@ -195,6 +195,12 @@ Upload default cities and regions for Poland
 python manage.py poland 
 ```
 
+Create default CompanyCategory objects
+
+```bash
+python manage.py category
+```
+
 ### Stripe 
 To run stripe locally use this command to run a webhook
 ```bash

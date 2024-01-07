@@ -1,7 +1,13 @@
 from rest_framework.serializers import ModelSerializer, IntegerField
 
 from location.serializers import AddressSerializer
-from .models import Company
+from .models import Company, CompanyCategory
+
+
+class CompanyCategorySerializer(ModelSerializer):
+    class Meta:
+        model = CompanyCategory
+        fields = "__all__"
 
 
 class CompanySerializer(ModelSerializer):
