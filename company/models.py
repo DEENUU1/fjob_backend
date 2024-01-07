@@ -14,9 +14,22 @@ def validate_file_size(value):
         raise ValidationError("Max file size is 5 MB")
 
 
+class CompanyCategory(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Company Category"
+        verbose_name_plural = "Company Categories"
+        ordering = ['name']
+
+
 class Company(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
+    category = models.ForeignKey(CompanyCategory, on_delete=models.CASCADE, null=True, blank=True)
     logo = models.FileField(
         upload_to="logo",
         validators=[
@@ -43,7 +56,7 @@ class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     class Meta:
