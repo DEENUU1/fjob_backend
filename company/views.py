@@ -5,15 +5,20 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 from rest_framework.generics import ListAPIView
-from .models import Company
+from .models import Company, CompanyCategory
 from .permissions import IsCompanyUser
 from .serializers import (
     CompanySerializer,
     CompanyListSerializer,
     CompanyDetailsSerializer,
     CompanyEditSerializer,
+    CompanyCategorySerializer,
 )
 
+
+class CompanyCategoryListView(ListAPIView):
+    queryset = CompanyCategory.objects.all()
+    serializer_class = CompanyCategorySerializer
 
 
 class CompanyPublicListRetrieveView(ViewSet):
