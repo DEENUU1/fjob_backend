@@ -96,7 +96,7 @@ class JobOfferSerializerCreate(ModelSerializer):
             "apply_form",
             "skills",
             "salary",
-            "experience"
+            "experience",
             "work_type",
             "employment_type",
             "status",

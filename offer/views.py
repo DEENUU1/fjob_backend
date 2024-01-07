@@ -72,7 +72,7 @@ class SalaryView(APIView):
 class OfferListView(ListAPIView):
     # Return list of JobOffer with status "ACTIVE"
 
-    queryset = JobOffer.objects.filter(status="ACTIVE")
+    queryset = JobOffer.objects.filter(status="ACTIVE", is_expired=False)
     serializer_class = JobOfferSerializer
     pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
