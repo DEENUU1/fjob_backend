@@ -99,7 +99,7 @@ class JobOffer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS, default="DRAFT")
 
-    # This fields are only used for job offers that are scraped from other websites
+    # These fields are only used for job offers that are scraped from other websites
     # It shouldn't display for company when the user is trying to add a new offer
     company_logo = models.URLField(null=True, blank=True)
     url = models.URLField(null=True, blank=True)
@@ -112,17 +112,17 @@ class JobOffer(models.Model):
         verbose_name_plural = "Job Offers"
 
     @property
-    def is_new(self):
+    def is_new(self) -> bool:
         threshold_days = 1
         return (timezone.now() - self.created_at) < timedelta(days=threshold_days)
 
     @property
-    def is_expired(self):
+    def is_expired(self) -> bool:
         return (timezone.now() - self.created_at) >= timedelta(days=self.days_until_expiration)
 
     @property
-    def days_until_expiration_str(self):
-        return self.days_until_expiration - (timezone.now() - self.created_at).days
+    def days_until_expiration_str(self) -> str:
+        return str(self.days_until_expiration - (timezone.now() - self.created_at).days)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
