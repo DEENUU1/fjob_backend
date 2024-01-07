@@ -15,6 +15,7 @@ from .serializers import (
 from company.permissions import IsCompanyUser
 from rest_framework.filters import OrderingFilter
 from django_filters import rest_framework as filters
+from fjob.pagination import CustomPagination
 
 
 class CandidateCreateView(CreateAPIView):
@@ -49,6 +50,7 @@ class CandidateCompanyListView(ListAPIView):
     serializer_class = CandidateCompanyListSerializer
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
     permission_classes = [IsAuthenticated, IsCompanyUser]
+    pagination_class = CustomPagination
 
     # Order by created time
     ordering_fields = [
