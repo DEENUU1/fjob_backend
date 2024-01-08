@@ -90,3 +90,16 @@ class CountCandidateStatus(APIView):
     def get(self, request, job_offer_id):
         status_count = self.get_candidate_status_count(job_offer_id)
         return Response(status_count)
+
+
+class CandidateTotalStat(APIView):
+    permission_classes = [IsAuthenticated, IsCompanyUser]
+
+    def get_candidate_total_stat(self, job_offer_id):
+        candidates = Candidate.objects.filter(job_offer_id=job_offer_id)
+        total_count = candidates.count()
+        return total_count
+
+    def get(self, request, job_offer_id):
+        total_stat = self.get_candidate_total_stat(job_offer_id)
+        return Response(total_stat)
