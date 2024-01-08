@@ -6,6 +6,7 @@ from .views import (
     CandidateUserListView,
     CandidateCompanyViewSet,
     CandidateCompanyListView,
+    CountCandidateStatus
 )
 
 router = DefaultRouter()
@@ -15,6 +16,7 @@ urlpatterns = [
     path("candidate/", CandidateCreateView.as_view(), name="candidate_create"),
     path("candidate/offer/<int:job_offer_id>/", CandidateCompanyListView.as_view(), name="candidate_list_offer"),
     path("candidate/user/", CandidateUserListView.as_view(),  name="candidate_list_user"),
+    path("candidate/<int:job_offer_id>/stat", CountCandidateStatus.as_view(), name="candidate_list_stat")
 ]
 
 urlpatterns += router.urls

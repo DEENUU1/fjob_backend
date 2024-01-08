@@ -66,3 +66,25 @@ class CandidateCompanyListView(ListAPIView):
         job_offer_id = self.kwargs.get("job_offer_id")
         queryset = Candidate.objects.filter(job_offer__id=job_offer_id)
         return queryset
+
+
+class CountCandidateStatus(APIView):
+    permission_classes = [IsAuthenticated, IsCompanyUser]
+
+    def get_candidate_status_count(self, job_offer_id):
+        candidates = Candidate.objects.filter(
+            job_offer_id=job_offer_id
+        )
+        pending_count = candidates.filter(status="PENDING").count()
+        accepted_count = candidates.filter(status="ACCEPTED").count()
+        rejected_count = candidates.filter(status="REJECTED").count()
+
+        return {
+            "PENDING": pending_count,
+            "ACCEPTED": accepted_count,
+            "REJECTED": rejected_count,
+        }
+
+    def get(self, request, job_offer_id):
+        status_count = self.get_candidate_status_count(job_offer_id)
+        return Response(status_count)
