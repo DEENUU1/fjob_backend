@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import WorkType, EmploymentType, Experience, Salary, JobOffer
+from .models import WorkType, EmploymentType, Experience, Salary, JobOffer, JobOfferRate
 
 
 class SalaryAdmin(admin.ModelAdmin):
@@ -23,3 +23,4 @@ admin.site.register(EmploymentType)
 admin.site.register(Experience)
 admin.site.register(Salary, SalaryAdmin)
 admin.site.register(JobOffer, JobOfferAdmin)
+admin.site.register(JobOfferRate)

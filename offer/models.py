@@ -1,5 +1,3 @@
-import random
-import string
 from datetime import timedelta
 
 from django.db import models
@@ -130,3 +128,18 @@ class JobOffer(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+
+class JobOfferRate(models.Model):
+    RATE = (
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 5),
+    )
+    job_offer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
+    rate = models.IntegerField(choices=RATE)
+
+    def __str__(self) -> str:
+        return f"{self.job_offer} - {self.rate}"
