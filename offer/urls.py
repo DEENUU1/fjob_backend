@@ -12,6 +12,7 @@ from .views import (
     OfferPrivateCompanyViewSet,
     ScrapedDataView,
     JobOfferRateCreateAPIView,
+    JobOfferRateStatsAPIView,
 )
 
 router = DefaultRouter()
@@ -27,5 +28,6 @@ urlpatterns = [
     path("experience/", ExperienceListAPIView.as_view(), name="experience_type_list"),
     path("offer/<str:slug>/", JobOfferRetrieveAPIView.as_view(), name="job_offer_detail"),
     path("offer/<str:slug>/rate", JobOfferRateCreateAPIView.as_view(), name="job_offer_rate_create"),
+    path("offer/<str:slug>/rate/stat", JobOfferRateStatsAPIView.as_view(), name="job_offer_rate_stat"),
 ]
 urlpatterns += router.urls

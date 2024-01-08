@@ -10,9 +10,11 @@ from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
+
 from company.models import Company
 from company.permissions import IsCompanyUser
 from fjob.pagination import CustomPagination
+from offer.rate_throttle import JobOfferRateAnonThrottle, JobOfferRateUserThrottle
 from .models import (
     WorkType,
     EmploymentType,
@@ -31,7 +33,7 @@ from .serializers import (
     JobOfferCompanySerializer,
     JobOfferRateCreateSerializer,
 )
-from offer.rate_throttle import JobOfferRateAnonThrottle, JobOfferRateUserThrottle
+from collections import Counter
 
 
 class WorkTypeListAPIView(ListAPIView):
@@ -196,3 +198,35 @@ class JobOfferRateCreateAPIView(CreateAPIView):
     # This view use JobOfferRateThrottle which allows user and anon to create 5 JobOfferRate objects per day
     serializer_class = JobOfferRateCreateSerializer
     throttle_classes = [JobOfferRateAnonThrottle, JobOfferRateUserThrottle]
+
+
+class JobOfferRateStatsAPIView(APIView):
+    # Return stats (rates) for specified JobOffer
+
+    def get(self, request, slug):
+        job_offer = get_object_or_404(JobOffer, slug=slug)
+        job_offer_rates = job_offer.jobofferrate_set.all()
+
+        if not job_offer_rates:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        # Calculate JobOffer average rate
+        avg = sum(rate.rate for rate in job_offer_rates) / len(job_offer_rates)
+
+        # Calculate JobOffer rates for 1, 2, 3, 4, 5 stars
+        num_rates = len(job_offer_rates)
+        rates = [rate.rate for rate in job_offer_rates]
+        rates = Counter(rates)
+        rates = [rates[1], rates[2], rates[3], rates[4], rates[5]]
+
+        result = {
+            "avg": avg,
+            "num_rates": num_rates,
+            "1_rate": rates[0],
+            "2_rate": rates[1],
+            "3_rate": rates[2],
+            "4_rate": rates[3],
+            "5_rate": rates[4],
+        }
+
+        return Response(result)
