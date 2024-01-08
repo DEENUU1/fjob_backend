@@ -59,7 +59,8 @@ class CandidateCompanyListView(ListAPIView):
 
     # Filter candidates by status
     filterset_fields = [
-        "status"
+        "status",
+        "future_recruitment",
     ]
 
     def get_queryset(self, *args, **kwargs):
