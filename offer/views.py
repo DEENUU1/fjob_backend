@@ -222,11 +222,11 @@ class JobOfferRateStatsAPIView(APIView):
         result = {
             "avg": avg,
             "num_rates": num_rates,
-            "1_rate": rates[0],
-            "2_rate": rates[1],
-            "3_rate": rates[2],
-            "4_rate": rates[3],
-            "5_rate": rates[4],
+            "one_rate": rates[0],
+            "two_rate": rates[1],
+            "three_rate": rates[2],
+            "four_rate": rates[3],
+            "five_rate": rates[4],
         }
 
         return Response(result)
