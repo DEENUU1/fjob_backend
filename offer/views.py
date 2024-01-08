@@ -19,7 +19,6 @@ from .models import (
     Experience,
     Salary,
     JobOffer,
-    JobOfferRate,
 )
 from .save_scraped import save_scraped
 from .serializers import (
@@ -32,7 +31,7 @@ from .serializers import (
     JobOfferCompanySerializer,
     JobOfferRateCreateSerializer,
 )
-from offer.rate_throttle import JobOfferRateThrottle
+from offer.rate_throttle import JobOfferRateAnonThrottle, JobOfferRateUserThrottle
 
 
 class WorkTypeListAPIView(ListAPIView):
@@ -196,4 +195,4 @@ class JobOfferRateCreateAPIView(CreateAPIView):
     # Create JobOfferRate object for specified JobOffer
     # This view use JobOfferRateThrottle which allows user and anon to create 5 JobOfferRate objects per day
     serializer_class = JobOfferRateCreateSerializer
-    throttle_classes = [JobOfferRateThrottle]
+    throttle_classes = [JobOfferRateAnonThrottle, JobOfferRateUserThrottle]

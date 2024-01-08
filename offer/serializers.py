@@ -173,7 +173,7 @@ class ScrapedDataSerializer(serializers.Serializer):
     addresses = serializers.ListField(allow_null=True, child=serializers.DictField(required=False))
 
 
-class JobOfferRateCreateSerializer(serializers.Serializer):
+class JobOfferRateCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobOfferRate
         fields = ["rate", "job_offer"]

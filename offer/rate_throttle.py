@@ -1,9 +1,15 @@
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 
-class JobOfferRateThrottle(UserRateThrottle, AnonRateThrottle):
-    scope = 'user anon'
+class JobOfferRateUserThrottle(UserRateThrottle, AnonRateThrottle):
+    scope = 'user'
     THROTTLE_RATES = {
-        'user': '5/day',
+        'user': '5/day'
+    }
+
+
+class JobOfferRateAnonThrottle(UserRateThrottle, AnonRateThrottle):
+    scope = 'anon'
+    THROTTLE_RATES = {
         'anon': '5/day'
     }
