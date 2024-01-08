@@ -8,7 +8,8 @@ from .models import (
     EmploymentType,
     Experience,
     Salary,
-    JobOffer
+    JobOffer,
+    JobOfferRate,
 )
 
 
@@ -170,3 +171,9 @@ class ScrapedDataSerializer(serializers.Serializer):
     url = serializers.URLField()
     company_name = serializers.CharField(allow_null=True, required=False)
     addresses = serializers.ListField(allow_null=True, child=serializers.DictField(required=False))
+
+
+class JobOfferRateCreateSerializer(serializers.Serializer):
+    class Meta:
+        model = JobOfferRate
+        fields = ["rate", "job_offer"]
