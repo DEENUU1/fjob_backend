@@ -140,6 +140,12 @@ class JobOfferRate(models.Model):
     )
     job_offer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
     rate = models.IntegerField(choices=RATE)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self) -> str:
         return f"{self.job_offer} - {self.rate}"
+
+    class Meta:
+        ordering = ["-rate"]
+        verbose_name = "Job Offer Rate"
+        verbose_name_plural = "Job Offer Rates"
