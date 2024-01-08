@@ -1,0 +1,16 @@
+FRONTEND:
+- poprawić paginację w JobOfferList
+- poprawić formularze z multiselect oraz boolean 
+- poprawić odświeżanie strony po jakiejś zmianie np po edycji profilu firmy, usunięciu z favourites etc
+
+
+BACKEND:
+
+- poprawić JWT oraz djoser
+- porpawić payment app bo wygląda jak gówno 	 
+- Dodać middleware? Lub inny sposób do monitorowania tego ile użytkowników wyświetliło szczegóły danej ofert pracy - tylko gdy jest wystawiona przez firmę 
+
+
+
+OGÓLNE:
+- poprawić dokumentację dla nowych feacherów i poprawionych bugów 

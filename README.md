@@ -105,10 +105,10 @@ Fjob consists of 3 repositories:
 - SQLite
 - Stripe
 
-<img src="assets/api1.png" alt="endpoints_1"/>
-<img src="assets/api2.png" alt="endpoints_2"/>
-<img src="assets/api3.png" alt="endpoints_3"/>
-<img src="assets/api4.png" alt="endpoints_4"/>
+
+<img src="assets/api_1.png" alt="endpoints_1"/>
+<img src="assets/api_2.png" alt="endpoints_2"/>
+<img src="assets/api_3.png" alt="endpoints_3"/>
 
 
 #### Frontend
@@ -120,10 +120,10 @@ Fjob consists of 3 repositories:
 <img src="assets/frontend_1.png" alt="frontend_1"/>
 <img src="assets/frontend_2.png" alt="frontend_2"/>
 <img src="assets/frontend_3.png" alt="frontend_3"/>
-<img src="assets/Screenshot_5.png" alt="2"/>
-<img src="assets/Screenshot_1.png" alt="frontend_4"/>
+<img src="assets/companies.png" alt="2"/>
+<img src="assets/offerlist.png" alt="frontend_4"/>
 <img src="assets/frontend_5.png" alt="frontend_5"/>
-<img src="assets/Screenshot_4.png" alt="1"/>
+<img src="assets/applyform.png" alt="1"/>
 <img src="assets/frontend_6.png" alt="frontend_6"/>
 <img src="assets/frontend_7.png" alt="frontend_7"/>
 <img src="assets/frontend_8.png" alt="frontend_8"/>
@@ -131,12 +131,14 @@ Fjob consists of 3 repositories:
 <img src="assets/frontend_9.png" alt="frontend_9"/>
 <img src="assets/frontend_10.png" alt="frontend_10"/>
 <img src="assets/frontend_11.png" alt="frontend_11"/>
-<img src="assets/frontend_12.png" alt="frontend_12"/>
+<img src="assets/dashboard_1.png" alt="frontend_12"/>
 <img src="assets/frontend_13.png" alt="frontend_13"/>
-<img src="assets/Screenshot_6.png" alt="2"/>
-<img src="assets/Screenshot_7.png" alt="2"/>
+<img src="assets/dashboard_2.png" alt="frontend_12"/>
+<img src="assets/dashboard_3.png" alt="frontend_12"/>
+<img src="assets/dashboard_4.png" alt="frontend_12"/>
 <img src="assets/frontend_14.png" alt="frontend_14"/>
 <img src="assets/frontend_15.png" alt="frontend_15"/>
+
 
 
 #### Scrapers
@@ -149,7 +151,7 @@ Fjob consists of 3 repositories:
 - AWS EventBridge
 - AWS CodeBuild
 
-## Backend locally
+## Local environment installation
 
 Backend in local mode use SQLite so there is no need to use Docker/Docker-compose
 
@@ -207,40 +209,6 @@ To run stripe locally use this command to run a webhook
 stripe listen --forward-to localhost:8000/api/payment/new_company/webhook
 ```
 
-## Frontend locally
-
-#### Installation
-
-```bash
-# Clone repository
-git clone <url>
-
-# Install npm packages
-npm install 
-
-# Create .env file in root directory `env.local`
-NEXT_PUBLIC_HOST=http://localhost:8000
-API_URL=http://localhost:8000/
-WORK_MODE=dev
-
-# Run developer mode
-npm run dev 
-```
-
-## Scrapers locally
-
-#### Installation
-
-```bash
-# Clone repository
-git clone <url>
-
-# Install libraries
-pip install -r requirements
-
-# Create .env file 
-cp .env_example .env
-```
 
 ## Authors
 
