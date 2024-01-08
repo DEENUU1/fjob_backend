@@ -83,7 +83,7 @@ class CountCandidateStatus(APIView):
         return {
             "count": all_objects,
             "pending": pending_count,
-            "accept": accepted_count,
+            "accepted": accepted_count,
             "rejected": rejected_count,
         }
 
