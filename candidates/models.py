@@ -25,6 +25,7 @@ class Candidate(models.Model):
     last_name = models.CharField(max_length=20)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
+    future_recruitment = models.BooleanField(default=False)
     message = models.TextField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

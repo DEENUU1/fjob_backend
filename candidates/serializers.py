@@ -33,6 +33,7 @@ class CandidateCompanyListSerializer(ModelSerializer):
             "last_name",
             "email",
             "phone",
+            "future_recruitment",
             "message",
             "created_at",
             "updated_at",
