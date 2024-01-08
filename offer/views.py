@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from rest_framework import status
@@ -29,9 +28,9 @@ from .serializers import (
     JobOfferSerializer,
     JobOfferSerializerCreate,
     ScrapedDataSerializer,
+    JobOfferCompanySerializer
 )
-from django.utils import timezone
-from datetime import timedelta
+
 
 class WorkTypeListAPIView(ListAPIView):
     # Return list of WorkType objects
@@ -144,7 +143,7 @@ class OfferPrivateCompanyViewSet(ViewSet):
     def list(self, request):
         company = get_object_or_404(Company, user=request.user)
         queryset = JobOffer.objects.filter(company=company)
-        serializer = JobOfferSerializer(queryset, many=True)
+        serializer = JobOfferCompanySerializer(queryset, many=True)
         return Response(serializer.data)
 
     def create(self, request):

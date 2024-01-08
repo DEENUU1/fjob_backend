@@ -76,6 +76,51 @@ class JobOfferSerializer(ModelSerializer):
         ]
 
 
+class JobOfferCompanySerializer(ModelSerializer):
+    salary = SalarySerializer(many=True)
+    experience = ExperienceSerializer(many=True)
+    work_type = WorkTypeSerializer(many=True)
+    employment_type = EmploymentTypeSerializer(many=True)
+    company = CompanySerializer()
+    addresses = AddressSerializer(many=True)
+    is_new = serializers.ReadOnlyField()
+    is_expired = serializers.ReadOnlyField()
+    days_until_expiration_str = serializers.ReadOnlyField()
+    candidate_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = JobOffer
+        fields = [
+            "id",
+            "title",
+            "slug",
+            "description",
+            "company",
+            "addresses",
+            "is_remote",
+            "is_hybrid",
+            "apply_form",
+            "skills",
+            "salary",
+            "experience",
+            "work_type",
+            "employment_type",
+            "created_at",
+            "status",
+            "company_logo",
+            "url",
+            "is_scraped",
+            "company_name",
+            "days_until_expiration_str",
+            "is_expired",
+            "is_new",
+            "candidate_count",
+        ]
+
+    def get_candidate_count(self, obj):
+        return obj.candidate_set.count()
+
+
 class JobOfferHelperSerializer(ModelSerializer):
     class Meta:
         model = JobOffer
