@@ -167,6 +167,27 @@ class JobOfferSerializerCreate(ModelSerializer):
         return value
 
 
+class JobOfferSerializerUpdate(ModelSerializer):
+    class Meta:
+        model = JobOffer
+        fields = [
+            "id",
+            "title",
+            "description",
+            "company",
+            "addresses",
+            "is_remote",
+            "is_hybrid",
+            "apply_form",
+            "skills",
+            "salary",
+            "experience",
+            "work_type",
+            "employment_type",
+            "status",
+        ]
+
+
 class ScrapedDataSerializer(serializers.Serializer):
     title = serializers.CharField()
     description = serializers.CharField(allow_null=True, required=False)

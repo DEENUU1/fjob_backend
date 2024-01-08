@@ -32,6 +32,7 @@ from .serializers import (
     ScrapedDataSerializer,
     JobOfferCompanySerializer,
     JobOfferRateCreateSerializer,
+    JobOfferSerializerUpdate
 )
 from collections import Counter
 
@@ -165,7 +166,7 @@ class OfferPrivateCompanyViewSet(ViewSet):
                 {"info": "Offer is expired"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = JobOfferSerializerCreate(offer, data=request.data)
+        serializer = JobOfferSerializerUpdate(offer, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
