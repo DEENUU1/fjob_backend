@@ -122,7 +122,11 @@ class JobOffer(models.Model):
 
     @property
     def days_until_expiration_str(self) -> str:
-        return str(self.days_until_expiration - (timezone.now() - self.created_at).days)
+        diff = self.days_until_expiration - (timezone.now() - self.created_at).days
+        if diff > 0:
+            return f"{diff} days"
+        else:
+            return "expired"
 
     def __str__(self) -> str:
         return self.title

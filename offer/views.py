@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
 from rest_framework import status
@@ -29,7 +30,8 @@ from .serializers import (
     JobOfferSerializerCreate,
     ScrapedDataSerializer,
 )
-
+from django.utils import timezone
+from datetime import timedelta
 
 class WorkTypeListAPIView(ListAPIView):
     # Return list of WorkType objects
@@ -70,9 +72,10 @@ class SalaryView(APIView):
 
 
 class OfferListView(ListAPIView):
-    # Return list of JobOffer with status "ACTIVE"
+    queryset = JobOffer.objects.filter(
+        status="ACTIVE",
+    )
 
-    queryset = JobOffer.objects.filter(status="ACTIVE", is_expired=False)
     serializer_class = JobOfferSerializer
     pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
