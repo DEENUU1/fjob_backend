@@ -11,6 +11,7 @@ from .models import (
     JobOffer,
     JobOfferRate,
 )
+from django.db.models import Avg
 
 
 class WorkTypeSerializer(ModelSerializer):
@@ -88,6 +89,7 @@ class JobOfferCompanySerializer(ModelSerializer):
     is_expired = serializers.ReadOnlyField()
     days_until_expiration_str = serializers.ReadOnlyField()
     candidate_count = serializers.SerializerMethodField()
+    avg_rate = serializers.SerializerMethodField()
 
     class Meta:
         model = JobOffer
@@ -116,10 +118,18 @@ class JobOfferCompanySerializer(ModelSerializer):
             "is_expired",
             "is_new",
             "candidate_count",
+            "avg_rate",
         ]
 
     def get_candidate_count(self, obj):
         return obj.candidate_set.count()
+
+    def get_avg_rate(self, obj):
+        avg_rating = obj.jobofferrate_set.aggregate(Avg('rate'))['rate__avg']
+        if avg_rating:
+            return round(avg_rating, 2)
+        else:
+            return None
 
 
 class JobOfferHelperSerializer(ModelSerializer):
