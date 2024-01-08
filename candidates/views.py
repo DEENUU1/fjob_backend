@@ -78,11 +78,13 @@ class CountCandidateStatus(APIView):
         pending_count = candidates.filter(status="PENDING").count()
         accepted_count = candidates.filter(status="ACCEPTED").count()
         rejected_count = candidates.filter(status="REJECTED").count()
+        all_objects = candidates.count()
 
         return {
-            "PENDING": pending_count,
-            "ACCEPTED": accepted_count,
-            "REJECTED": rejected_count,
+            "count": all_objects,
+            "pending": pending_count,
+            "accept": accepted_count,
+            "rejected": rejected_count,
         }
 
     def get(self, request, job_offer_id):
