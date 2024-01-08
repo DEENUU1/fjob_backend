@@ -18,6 +18,8 @@ from django_filters import rest_framework as filters
 from fjob.pagination import CustomPagination
 
 from django.db.models import Count
+from datetime import timedelta, date
+from django.utils import timezone
 
 
 class CandidateCreateView(CreateAPIView):
@@ -102,5 +104,23 @@ class NumCandidatePerDayTimeline(APIView):
         candidates = Candidate.objects.filter(
             job_offer_id=job_offer_id
         )
-        num_candidates_per_day = candidates.values('created_at__date').annotate(num_candidates=Count('id')).order_by('created_at__date')
-        return Response(num_candidates_per_day)
+
+        num_candidates_per_day = candidates.values('created_at__date').annotate(num_candidates=Count('id')).order_by(
+            'created_at__date')
+
+        start_date = num_candidates_per_day.first()['created_at__date']
+        end_date = num_candidates_per_day.last()['created_at__date']
+        all_dates = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+
+        results_dict = {entry['created_at__date']: entry['num_candidates'] for entry in num_candidates_per_day}
+
+        # Complete empty dates
+        for date in all_dates:
+            if date not in results_dict:
+                results_dict[date] = 0
+
+        # Sort data
+        sorted_results = [{'created_at__date': str(date), 'num_candidates': results_dict[date]} for date in
+                          sorted(results_dict.keys())]
+
+        return Response(sorted_results)
