@@ -17,6 +17,8 @@ from rest_framework.filters import OrderingFilter
 from django_filters import rest_framework as filters
 from fjob.pagination import CustomPagination
 
+from django.db.models import Count
+
 
 class CandidateCreateView(CreateAPIView):
     # Apply form
@@ -91,3 +93,14 @@ class CountCandidateStatus(APIView):
     def get(self, request, job_offer_id):
         status_count = self.get_candidate_status_count(job_offer_id)
         return Response(status_count)
+
+
+class NumCandidatePerDayTimeline(APIView):
+    permission_classes = [IsAuthenticated, IsCompanyUser]
+
+    def get(self, request, job_offer_id):
+        candidates = Candidate.objects.filter(
+            job_offer_id=job_offer_id
+        )
+        num_candidates_per_day = candidates.values('created_at__date').annotate(num_candidates=Count('id')).order_by('created_at__date')
+        return Response(num_candidates_per_day)
