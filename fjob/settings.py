@@ -194,21 +194,21 @@ if WORKING_MODE == "dev":
         }
     }
 elif WORKING_MODE == "prod":
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #         'NAME': os.getenv("GC_SQL_NAME"),
-    #         'USER': os.getenv("GC_SQL_USER"),
-    #         'PASSWORD': os.getenv("GC_SQL_PASSWORD"),
-    #         'HOST': os.getenv("GC_SQL_HOST"),
-    #     }
-    # }
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv("GC_SQL_NAME"),
+            'USER': os.getenv("GC_SQL_USER"),
+            'PASSWORD': os.getenv("GC_SQL_PASSWORD"),
+            'HOST': os.getenv("GC_SQL_HOST"),
         }
     }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.sqlite3",
+    #         "NAME": BASE_DIR / "db.sqlite3",
+    #     }
+    # }
 elif WORKING_MODE == "test":
     DATABASES = {
         'default': {
