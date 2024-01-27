@@ -194,13 +194,23 @@ if WORKING_MODE == "dev":
         }
     }
 elif WORKING_MODE == "prod":
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #         'NAME': os.getenv("GC_SQL_NAME"),
+    #         'USER': os.getenv("GC_SQL_USER"),
+    #         'PASSWORD': os.getenv("GC_SQL_PASSWORD"),
+    #         'HOST': os.getenv("GC_SQL_HOST"),
+    #     }
+    # }
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.getenv("GC_SQL_NAME"),
-            'USER': os.getenv("GC_SQL_USER"),
-            'PASSWORD': os.getenv("GC_SQL_PASSWORD"),
-            'HOST': os.getenv("GC_SQL_HOST"),
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRE_HOST"),
+            "PORT": os.getenv("POSTGRE_PORT"),
         }
     }
 elif WORKING_MODE == "test":
