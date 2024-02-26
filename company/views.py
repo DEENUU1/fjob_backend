@@ -40,7 +40,7 @@ class CompanyPublicListAPIView(APIView):
 
     _service = CompanyService(CompanyRepository())
 
-    def get(self):
+    def get(self, request):
         """
         Handles the HTTP GET request to retrieve a list of all active companies.
 
@@ -62,7 +62,7 @@ class CompanyPublicRetrieveAPIView(APIView):
 
     _service = CompanyService(CompanyRepository())
 
-    def get(self, slug: str):
+    def get(self, request, slug: str):
         """
         Handles the HTTP GET request to retrieve details of a specific active company.
 
@@ -96,8 +96,7 @@ class UserCompanyView(APIView):
         Returns:
         - Response: The serialized data of the company details.
         """
-        user = self.request.user
-        company = self._service.get_company_by_user(user)
+        company = self._service.get_company_by_user(self.request.user)
         serializer = OutputCompanySerializer(company)
         return Response(serializer.data)
 
