@@ -29,12 +29,18 @@ class CandidateService:
     def get_candidate_timeline(self, job_offer_id: int):
         candidates = self._repository.filter_by_job_offer(job_offer_id)
 
-        num_candidates_per_day = candidates.values('created_at__date').annotate(num_candidates=Count('id')).order_by(
-            'created_at__date')
+        num_candidates_per_day = (
+            candidates
+            .values('created_at__date')
+            .annotate(num_candidates=Count('id'))
+            .order_by('created_at__date')
+        )
 
         start_date = num_candidates_per_day.first()['created_at__date']
         end_date = num_candidates_per_day.last()['created_at__date']
-        all_dates = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+        all_dates = [
+            start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)
+        ]
 
         results_dict = {entry['created_at__date']: entry['num_candidates'] for entry in num_candidates_per_day}
 
@@ -44,8 +50,11 @@ class CandidateService:
                 results_dict[date] = 0
 
         # Sort data
-        sorted_results = [{'created_at__date': str(date), 'num_candidates': results_dict[date]} for date in
-                          sorted(results_dict.keys())]
+        sorted_results = [
+            {'created_at__date': str(date), 'num_candidates': results_dict[date]} for date in sorted(
+                results_dict.keys()
+            )
+        ]
         return sorted_results
 
     def get_user_applications(self, user):

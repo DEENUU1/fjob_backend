@@ -13,10 +13,10 @@ from fjob.pagination import CustomPagination
 from .models import Candidate
 from .repository.candidate_repository import CandidateRepository
 from .serializers import (
-    CandidateCompanyListSerializer,
-    CandidateCreateSerializer,
-    CandidateUserSerializer,
-    CandidateCompanyUpdateSerializer
+    OutputCandidateCompanyListSerializer,
+    InputCandidateSerializer,
+    OutputCandidateUserSerializer,
+    InputCandidateCompanyUpdateSerializer
 )
 from .services.candidate import CandidateService
 
@@ -25,7 +25,7 @@ class CandidateCreateAPIView(APIView):
     _service = CandidateService(CandidateRepository())
 
     def post(self, request):
-        serializer = CandidateCreateSerializer(data=request.data)
+        serializer = InputCandidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
         candidate = self._service.create(data)
@@ -39,7 +39,7 @@ class CandidateUserListView(APIView):
     def get(self, request):
         user = request.user
         candidates = self._service.get_user_applications(user)
-        serializer = CandidateUserSerializer(candidates, many=True)
+        serializer = OutputCandidateUserSerializer(candidates, many=True)
         return Response(serializer.data)
 
 
@@ -49,7 +49,7 @@ class CandidateCompanyViewSet(ViewSet):
     def partial_update(self, request, pk=None):
         # Todo move logic to service layer
         candidate = get_object_or_404(Candidate, pk=pk)
-        serializer = CandidateCompanyUpdateSerializer(candidate, data=request.data, partial=True)
+        serializer = InputCandidateCompanyUpdateSerializer(candidate, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -58,7 +58,7 @@ class CandidateCompanyViewSet(ViewSet):
 
 class CandidateCompanyListView(ListAPIView):
     queryset = Candidate.objects.all()
-    serializer_class = CandidateCompanyListSerializer
+    serializer_class = OutputCandidateCompanyListSerializer
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
     permission_classes = [IsAuthenticated, IsCompanyUser]
     pagination_class = CustomPagination

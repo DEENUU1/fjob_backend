@@ -4,13 +4,13 @@ from .models import Candidate
 from offer.serializers import JobOfferHelperSerializer
 
 
-class CandidateCreateSerializer(ModelSerializer):
+class InputCandidateSerializer(ModelSerializer):
     class Meta:
         model = Candidate
         fields = "__all__"
 
 
-class CandidateUserSerializer(ModelSerializer):
+class OutputCandidateUserSerializer(ModelSerializer):
     job_offer = JobOfferHelperSerializer()
 
     class Meta:
@@ -24,7 +24,7 @@ class CandidateUserSerializer(ModelSerializer):
         ]
 
 
-class CandidateCompanyListSerializer(ModelSerializer):
+class OutputCandidateCompanyListSerializer(ModelSerializer):
     class Meta:
         model = Candidate
         fields = [
@@ -43,7 +43,7 @@ class CandidateCompanyListSerializer(ModelSerializer):
         ]
 
 
-class CandidateCompanyUpdateSerializer(ModelSerializer):
+class InputCandidateCompanyUpdateSerializer(ModelSerializer):
     class Meta:
         model = Candidate
         fields = [
