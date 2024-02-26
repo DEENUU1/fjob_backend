@@ -1,11 +1,13 @@
 import pytest
 from rest_framework.exceptions import NotFound
-from offer.models import EmploymentType
+
 from offer.repository.employment_type_repository import EmploymentTypeRepository
+
 
 @pytest.fixture
 def repository():
     return EmploymentTypeRepository()
+
 
 @pytest.mark.django_db
 def test_create_employment_type(repository):
@@ -15,6 +17,7 @@ def test_create_employment_type(repository):
     employment_type = repository.create(employment_type_data)
     assert employment_type.id is not None
     assert employment_type.name == "Full-Time"
+
 
 @pytest.mark.django_db
 def test_get_employment_type_by_id(repository):
@@ -26,6 +29,7 @@ def test_get_employment_type_by_id(repository):
     retrieved_employment_type = repository.get_by_id(created_employment_type.id)
     assert retrieved_employment_type is not None
     assert retrieved_employment_type.name == "Contract"
+
 
 @pytest.mark.django_db
 def test_update_employment_type(repository):
@@ -39,6 +43,7 @@ def test_update_employment_type(repository):
 
     assert updated_employment_type is not None
     assert updated_employment_type.name == "Fixed-Term"
+
 
 @pytest.mark.django_db
 def test_delete_employment_type(repository):
