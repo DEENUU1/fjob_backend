@@ -22,20 +22,49 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class ProductListAPIView(APIView):
+    """
+    API view for listing all products.
+
+    Attributes:
+    - _service: An instance of the ProductService for handling product-related operations.
+    """
+
     _service = ProductService(ProductRepository())
 
     def get(self):
+        """
+        Handles the HTTP GET request to retrieve a list of all products.
+
+        Returns:
+        - Response: The serialized data of all products.
+        """
         products = self._service.get_all()
         serializer = OutputProductListSerializer(products, many=True)
         return Response(serializer.data)
 
 
 class StripeCheckoutSessionView(APIView):
-    # Create checkout session
-    permission_classes = (IsAuthenticated, )
+    """
+    API view for creating a Stripe checkout session.
+
+    Attributes:
+    - permission_classes: The permissions required for accessing this view.
+    - _service: An instance of the PaymentService for handling payment-related operations.
+    """
+
+    permission_classes = (IsAuthenticated,)
     _service = PaymentService()
 
     def post(self, request):
+        """
+        Handles the HTTP POST request to create a Stripe checkout session.
+
+        Parameters:
+        - request: The HTTP request object.
+
+        Returns:
+        - Response: The serialized data of the created checkout session.
+        """
         success_url = request.build_absolute_uri(reverse("success"))
         cancel_url = request.build_absolute_uri(reverse("cancel"))
 
@@ -47,7 +76,7 @@ class StripeCheckoutSessionView(APIView):
         company_id = self.request.data.get("company_id", None)
         product = Product.objects.get(id=product_id)
 
-        # If product type is "NEW_OFFER" but company_id is None it should return bad request
+        # If product type is "NEW_OFFER" but company_id is None, it should return bad request
         if product.type == "NEW_OFFER" and company_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -65,6 +94,15 @@ class StripeCheckoutSessionView(APIView):
 
 @csrf_exempt
 def stripe_webhook(request):
+    """
+    Webhook endpoint for processing Stripe events.
+
+    Parameters:
+    - request: The HTTP request object.
+
+    Returns:
+    - HttpResponse: An HTTP response indicating the success of the webhook processing.
+    """
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
 
@@ -80,7 +118,7 @@ def stripe_webhook(request):
         purchase_type = session.metadata["type"]
         value = session.metadata["value"]
 
-        # If payment is success increment number of available offers with a given value
+        # If payment is success, increment the number of available offers with a given value
         if purchase_type == "NEW_OFFER":
             company_id = session.metadata["company_id"]
             _service = CompanyService(CompanyRepository())
@@ -90,7 +128,21 @@ def stripe_webhook(request):
 
 
 class StripeIntentView(APIView):
+    """
+    API view for creating a Stripe payment intent.
+
+    """
+
     def post(self, request, *args, **kwargs):
+        """
+        Handles the HTTP POST request to create a Stripe payment intent.
+
+        Parameters:
+        - request: The HTTP request object.
+
+        Returns:
+        - Response: The serialized data of the created payment intent.
+        """
         req_json = json.loads(request.body)
         customer = stripe.Customer.create(email=req_json["email"])
         intent = stripe.PaymentIntent.create(
@@ -102,10 +154,32 @@ class StripeIntentView(APIView):
 
 
 class SuccessView(APIView):
+    """
+    API view for indicating a successful transaction.
+
+    """
+
     def get(self, request):
+        """
+        Handles the HTTP GET request indicating a successful transaction.
+
+        Returns:
+        - Response: A success message.
+        """
         return Response({"info": "Success!"})
 
 
 class CancelView(APIView):
+    """
+    API view for indicating a canceled transaction.
+
+    """
+
     def get(self, request):
+        """
+        Handles the HTTP GET request indicating a canceled transaction.
+
+        Returns:
+        - Response: A cancellation message.
+        """
         return Response({"info": "Cancel!"})

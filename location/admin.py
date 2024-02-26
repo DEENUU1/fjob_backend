@@ -22,6 +22,7 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name',)
     list_filter = ('name',)
 
+
 admin.site.register(Address, AddressAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Region, RegionAdmin)

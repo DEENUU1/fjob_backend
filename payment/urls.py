@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import StripeCheckoutSessionView, stripe_webhook, SuccessView, CancelView, StripeIntentView, ProductListAPIView
+from .views import StripeCheckoutSessionView, stripe_webhook, SuccessView, CancelView, StripeIntentView, \
+    ProductListAPIView
 
 urlpatterns = [
     path(
