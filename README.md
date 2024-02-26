@@ -35,6 +35,9 @@ Fjob consists of 3 repositories:
 
 ## Features
 
+<strong>!NEW! I started refactoring the current application and moved a large part of the code initially saved in views to the service layer using the repository pattern.
+Some views have remained unchanged due to, for example, their simplicity related to the use of Django </strong>
+
 1. <strong>JWT and OAuth Google</strong> Integration:
    - Utilizes JSON Web Tokens (JWT) in conjunction with OAuth Google for secure authentication and authorization processes.
 2. <strong>Web Scraping</strong> and API-driven Database Storage:
