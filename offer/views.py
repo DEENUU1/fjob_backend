@@ -83,7 +83,7 @@ class OfferListView(ListAPIView):
     serializer_class = JobOfferSerializer
     pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
-    throttle_classes = [UserRateThrottle]
+    throttle_classes = (UserRateThrottle, )
 
     # JobOffer fields by which objects can be ordered
     # Currently there is a ordering by created time (from newest/oldest) and salary (from lowest/highest)
@@ -120,7 +120,7 @@ class JobOfferRetrieveAPIView(RetrieveAPIView):
     lookup_field = 'slug'
     queryset = JobOffer.objects.filter(status="ACTIVE")
     serializer_class = JobOfferSerializer
-    throttle_classes = [UserRateThrottle]
+    throttle_classes = (UserRateThrottle, )
 
 
 class CompanyPublicOfferListView(ListAPIView):
@@ -143,7 +143,7 @@ class CompanyPublicOfferListView(ListAPIView):
 
 class OfferPrivateCompanyViewSet(ViewSet):
     # Set of endpoints for Company to create, update and delete JobOffer
-    permission_classes = [IsAuthenticated, IsCompanyUser]
+    permission_classes = (IsAuthenticated, IsCompanyUser, )
 
     def list(self, request):
         company = get_object_or_404(Company, user=request.user)
@@ -181,7 +181,7 @@ class ScrapedDataView(APIView):
     # Endpoint which allows to POST scraped data and save to database
     # It's a bridge between Lambda functions and Google Cloud SQL
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
 
     def post(self, request, *args, **kwargs):
         serializer = ScrapedDataSerializer(data=request.data, many=True)
@@ -198,7 +198,7 @@ class JobOfferRateCreateAPIView(CreateAPIView):
     # Create JobOfferRate object for specified JobOffer
     # This view use JobOfferRateThrottle which allows user and anon to create 5 JobOfferRate objects per day
     serializer_class = JobOfferRateCreateSerializer
-    throttle_classes = [JobOfferRateAnonThrottle, JobOfferRateUserThrottle]
+    throttle_classes = (JobOfferRateAnonThrottle, JobOfferRateUserThrottle, )
 
 
 class JobOfferRateStatsAPIView(APIView):

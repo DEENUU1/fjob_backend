@@ -13,7 +13,7 @@ from .services.favourite import FavouriteService
 
 
 class FavouriteAPIView(APIView):
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = (IsAuthenticated, )
     _service = FavouriteService(FavouriteRepository())
 
     def get(self, request):

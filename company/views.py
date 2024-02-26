@@ -41,7 +41,7 @@ class CompanyPublicRetrieveAPIView(APIView):
 
 
 class UserCompanyView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
     _service = CompanyService(CompanyRepository())
 
     def get(self, request):
@@ -52,14 +52,13 @@ class UserCompanyView(APIView):
 
 
 class CompanyManagementApiView(APIView):
-    permission_classes = [IsAuthenticated, IsCompanyUser]
-    serializer_class = InputCompanyEditSerializer
+    permission_classes = (IsAuthenticated, IsCompanyUser, )
 
     def put(self, request):
         # todo move logic to service layer
         company_id = request.data.get("company_id")
         company = get_object_or_404(Company, pk=company_id)
-        serializer = self.serializer_class(company, data=request.data, partial=True)
+        serializer = InputCompanyEditSerializer(company, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)

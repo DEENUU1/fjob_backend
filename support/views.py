@@ -23,7 +23,7 @@ class ContactCreateAPIView(APIView):
 
 
 class ReportCreateAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
     _service = ReportService(ReportRepository())
 
     def post(self, request, *args, **kwargs):

@@ -32,7 +32,7 @@ class ProductListAPIView(APIView):
 
 class StripeCheckoutSessionView(APIView):
     # Create checkout session
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
     _service = PaymentService()
 
     def post(self, request):

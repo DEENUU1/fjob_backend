@@ -33,7 +33,7 @@ class CandidateCreateAPIView(APIView):
 
 
 class CandidateUserListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
     _service = CandidateService(CandidateRepository())
 
     def get(self, request):
@@ -44,7 +44,7 @@ class CandidateUserListView(APIView):
 
 
 class CandidateCompanyViewSet(ViewSet):
-    permission_classes = [IsAuthenticated, IsCompanyUser]
+    permission_classes = (IsAuthenticated, IsCompanyUser, )
 
     def partial_update(self, request, pk=None):
         # Todo move logic to service layer
@@ -60,7 +60,7 @@ class CandidateCompanyListView(ListAPIView):
     queryset = Candidate.objects.all()
     serializer_class = OutputCandidateCompanyListSerializer
     filter_backends = (filters.DjangoFilterBackend, OrderingFilter)
-    permission_classes = [IsAuthenticated, IsCompanyUser]
+    permission_classes = (IsAuthenticated, IsCompanyUser, )
     pagination_class = CustomPagination
 
     # Order by created time
@@ -81,7 +81,7 @@ class CandidateCompanyListView(ListAPIView):
 
 
 class CountCandidateStatus(APIView):
-    permission_classes = [IsAuthenticated, IsCompanyUser]
+    permission_classes = (IsAuthenticated, IsCompanyUser, )
     _service = CandidateService(CandidateRepository())
 
     def get(self, request, job_offer_id: int):
@@ -90,7 +90,7 @@ class CountCandidateStatus(APIView):
 
 
 class NumCandidatePerDayTimeline(APIView):
-    permission_classes = [IsAuthenticated, IsCompanyUser]
+    permission_classes = (IsAuthenticated, IsCompanyUser, )
     _service = CandidateService(CandidateRepository())
 
     def get(self, request, job_offer_id: int):
