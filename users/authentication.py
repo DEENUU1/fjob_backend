@@ -3,7 +3,28 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class CustomJWTAuthentication(JWTAuthentication):
+    """
+    Custom JWT Authentication class extending the default JWTAuthentication.
+
+    Overrides the authenticate method to handle token extraction from both headers and cookies.
+
+    Methods:
+    - authenticate(self, request): Authenticates the user based on the provided token.
+
+    Attributes:
+    - None
+    """
+
     def authenticate(self, request):
+        """
+        Authenticates the user based on the provided token from headers or cookies.
+
+        Parameters:
+        - request: The HTTP request object.
+
+        Returns:
+        - Tuple[User, Token]: A tuple containing the user and the validated token, or None if authentication fails.
+        """
         try:
             header = self.get_header(request)
 
