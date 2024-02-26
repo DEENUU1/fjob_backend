@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+
 from company.models import CompanyCategory
 
 
@@ -6,7 +7,6 @@ class Command(BaseCommand):
     help = "Create default category objects"
 
     def handle(self, *args, **options):
-
         categories = [
             "IT",
             "Finance",
@@ -29,7 +29,6 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.SUCCESS(f"Created category {category}")
             )
-
 
         self.stdout.write(
             self.style.SUCCESS("Finished saving polish cities and regions to database")
