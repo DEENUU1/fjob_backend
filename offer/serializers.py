@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
-from company.serializers import CompanySerializer
-from location.serializers import AddressSerializer
+from company.serializers import OutputCompanySerializer
+from location.serializers import OutputAddressSerializer
 from .models import (
     WorkType,
     EmploymentType,
@@ -43,8 +43,8 @@ class JobOfferSerializer(ModelSerializer):
     experience = ExperienceSerializer(many=True)
     work_type = WorkTypeSerializer(many=True)
     employment_type = EmploymentTypeSerializer(many=True)
-    company = CompanySerializer()
-    addresses = AddressSerializer(many=True)
+    company = OutputCompanySerializer()
+    addresses = OutputAddressSerializer(many=True)
     is_new = serializers.ReadOnlyField()
     is_expired = serializers.ReadOnlyField()
     days_until_expiration_str = serializers.ReadOnlyField()
@@ -83,8 +83,8 @@ class JobOfferCompanySerializer(ModelSerializer):
     experience = ExperienceSerializer(many=True)
     work_type = WorkTypeSerializer(many=True)
     employment_type = EmploymentTypeSerializer(many=True)
-    company = CompanySerializer()
-    addresses = AddressSerializer(many=True)
+    company = OutputCompanySerializer()
+    addresses = OutputAddressSerializer(many=True)
     is_new = serializers.ReadOnlyField()
     is_expired = serializers.ReadOnlyField()
     days_until_expiration_str = serializers.ReadOnlyField()

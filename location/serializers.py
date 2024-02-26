@@ -8,28 +8,28 @@ from .models import (
 )
 
 
-class CountrySerializer(ModelSerializer):
+class OutputCountrySerializer(ModelSerializer):
     class Meta:
         model = Country
         fields = '__all__'
 
 
-class RegionSerializer(ModelSerializer):
+class OutputRegionSerializer(ModelSerializer):
     class Meta:
         model = Region
         fields = '__all__'
 
 
-class CitySerializer(ModelSerializer):
+class OutputCitySerializer(ModelSerializer):
     class Meta:
         model = City
         fields = '__all__'
 
 
-class AddressSerializer(ModelSerializer):
-    country = CountrySerializer()
-    city = CitySerializer()
-    region = RegionSerializer()
+class OutputAddressSerializer(ModelSerializer):
+    country = OutputCountrySerializer()
+    city = OutputCitySerializer()
+    region = OutputRegionSerializer()
 
     class Meta:
         model = Address

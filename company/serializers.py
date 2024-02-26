@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, IntegerField
 
-from location.serializers import AddressSerializer
+from location.serializers import OutputAddressSerializer
 from .models import Company, CompanyCategory
 
 
@@ -11,7 +11,7 @@ class OutputCompanyCategorySerializer(ModelSerializer):
 
 
 class OutputCompanySerializer(ModelSerializer):
-    addresses = AddressSerializer(many=True)
+    addresses = OutputAddressSerializer(many=True)
     category = OutputCompanyCategorySerializer()
 
     class Meta:
@@ -20,7 +20,7 @@ class OutputCompanySerializer(ModelSerializer):
 
 
 class InputCompanyEditSerializer(ModelSerializer):
-    addresses = AddressSerializer(many=True)
+    addresses = OutputAddressSerializer(many=True)
     company_id = IntegerField(write_only=True)
 
     class Meta:
