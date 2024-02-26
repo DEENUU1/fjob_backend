@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 
 from location.models import City, Region, Country, Address
 from offer.models import JobOffer, EmploymentType, WorkType, Experience, Salary
