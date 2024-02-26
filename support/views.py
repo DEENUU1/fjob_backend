@@ -1,29 +1,33 @@
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView
 from .serializers import (
-    ContactCreateSerializer,
-    ReportCreateSerializer
+    InputContactCreateSerializer,
+    InputReportCreateSerializer
 )
+from rest_framework.views import APIView
+from support.services.contact import ContactService
+from support.services.report import ReportService
+from support.repository.contact_repository import ContactRepository
+from support.repository.report_repository import ReportRepository
 
 
-class ContactCreateAPIView(CreateAPIView):
-    serializer_class = ContactCreateSerializer
+class ContactCreateAPIView(APIView):
+    _service = ContactService(ContactRepository())
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = InputContactCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self._service.create(serializer.validated_data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ReportCreateAPIView(CreateAPIView):
-    serializer_class = ReportCreateSerializer
+class ReportCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
+    _service = ReportService(ReportRepository())
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = InputReportCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self._service.create(serializer.validated_data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
