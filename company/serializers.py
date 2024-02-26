@@ -4,22 +4,22 @@ from location.serializers import AddressSerializer
 from .models import Company, CompanyCategory
 
 
-class CompanyCategorySerializer(ModelSerializer):
+class OutputCompanyCategorySerializer(ModelSerializer):
     class Meta:
         model = CompanyCategory
         fields = "__all__"
 
 
-class CompanySerializer(ModelSerializer):
+class OutputCompanySerializer(ModelSerializer):
     addresses = AddressSerializer(many=True)
-    category = CompanyCategorySerializer()
+    category = OutputCompanyCategorySerializer()
 
     class Meta:
         model = Company
         fields = '__all__'
 
 
-class CompanyEditSerializer(ModelSerializer):
+class InputCompanyEditSerializer(ModelSerializer):
     addresses = AddressSerializer(many=True)
     company_id = IntegerField(write_only=True)
 
@@ -42,16 +42,22 @@ class CompanyEditSerializer(ModelSerializer):
         ]
 
 
-class CompanyListSerializer(ModelSerializer):
-    category = CompanyCategorySerializer()
+class OutputCompanyListSerializer(ModelSerializer):
+    category = OutputCompanyCategorySerializer()
 
     class Meta:
         model = Company
-        fields = ["id", "name", "slug", "logo", "category"]
+        fields = [
+            "id",
+            "name",
+            "slug",
+            "logo",
+            "category"
+        ]
 
 
-class CompanyDetailsSerializer(ModelSerializer):
-    category = CompanyCategorySerializer()
+class OutputCompanyDetailsSerializer(ModelSerializer):
+    category = OutputCompanyCategorySerializer()
 
     class Meta:
         model = Company
