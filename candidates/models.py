@@ -1,17 +1,10 @@
-from django.core.exceptions import ValidationError
+from django.conf import settings
 from django.core.validators import FileExtensionValidator
 from django.db import models
+
 from company.models import Company
 from offer.models import JobOffer
 from users.models import UserAccount
-from django.conf import settings
-
-
-def validate_file_size(value):
-    filesize = value.size
-
-    if filesize > settings.MAX_IMAGE_SIZE:
-        raise ValidationError("Max file size is 5 MB")
 
 
 class Candidate(models.Model):
@@ -31,7 +24,7 @@ class Candidate(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     job_offer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE, blank=True, null=True)
-    status = models.CharField(max_length=10,  choices=STATUS, default="PENDING")
+    status = models.CharField(max_length=10, choices=STATUS, default="PENDING")
     cv = models.FileField(
         upload_to="cv",
         validators=[
