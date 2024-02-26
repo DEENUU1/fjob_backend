@@ -67,5 +67,5 @@ class CompanyRepository(CRUDRepository):
         - value (int): The value by which to increment the number of available offers.
         """
         company = self.get_by_id(company_id)
-        company.num_of_available_offers += value
+        company.num_of_offers_to_add += value
         company.save()
