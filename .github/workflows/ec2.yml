@@ -12,6 +12,7 @@ concurrency:
 jobs:
   deploy:
     name: Deploy
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Configure SSH
