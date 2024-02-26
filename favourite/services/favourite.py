@@ -56,4 +56,4 @@ class FavouriteService:
         Returns:
         - None
         """
-        return self._repository.delete(user=user, pk=pk)
+        return self._repository.delete(user=user, _id=pk)
