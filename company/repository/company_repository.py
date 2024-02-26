@@ -14,3 +14,8 @@ class CompanyRepository(CRUDRepository):
 
     def get_company_by_user(self, user):
         return self._model.objects.filter(user=user).first()
+
+    def increment_num_of_available_offers(self, company_id: int, value: int):
+        company = self.get_by_id(company_id)
+        company.num_of_available_offers += value
+        company.save()

@@ -12,3 +12,6 @@ class CompanyService:
 
     def get_company_by_user(self, user):
         return self._repository.get_company_by_user(user)
+
+    def increment_num_of_available_offers(self, company_id: int, value: int):
+        return self._repository.increment_num_of_available_offers(company_id, value)
