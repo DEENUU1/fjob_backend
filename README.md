@@ -1,5 +1,13 @@
 <a name="readme-top"></a>
 
+
+**If you are a recruiter, you probably see that the entire business logic of the application is located in views, this is a problem of this project that I will improve, and currently, I have implemented this type of logic in this project:** <a href="https://github.com/DEENUU1/digital-fortress">https://github.com/DEENUU1/digital-fortress</a>
+
+**I used better practices used in Django:**
+- **Input/Output Serializer**
+- **Use Repository Pattern for database operations**
+- **Business logic is stored in Service layer**
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
