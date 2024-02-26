@@ -1,5 +1,4 @@
 from django.urls import path
-from rest_framework.routers import DefaultRouter
 
 from .views import (
     CompanyPublicListAPIView,
@@ -9,20 +8,18 @@ from .views import (
     CompanyCategoryListView,
 )
 
-router = DefaultRouter()
-router.register(
-    "",
-    CompanyPublicListAPIView,
-    basename="company_public_list"
-)
-
-router.register(
-    "<slug:slug>",
-    CompanyPublicRetrieveAPIView,
-    basename="company_public_retrieve"
-)
 
 urlpatterns = [
+    path(
+        "<str:slug>",
+        CompanyPublicRetrieveAPIView.as_view(),
+        name="company_public_retrieve"
+    ),
+    path(
+        "",
+        CompanyPublicListAPIView.as_view(),
+        name="company_public_list"
+    ),
     path(
         "company/",
         UserCompanyView.as_view(),
@@ -40,4 +37,3 @@ urlpatterns = [
     ),
 ]
 
-urlpatterns += router.urls
