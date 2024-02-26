@@ -56,7 +56,7 @@ class CompanyManagementApiView(APIView):
     serializer_class = InputCompanyEditSerializer
 
     def put(self, request):
-        # todo move logic to serive layer
+        # todo move logic to service layer
         company_id = request.data.get("company_id")
         company = get_object_or_404(Company, pk=company_id)
         serializer = self.serializer_class(company, data=request.data, partial=True)

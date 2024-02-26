@@ -1,39 +1,32 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.views import APIView
 
-from .models import (
-    Favourite,
-)
+from .repository.favourite_repository import FavouriteRepository
 from .serializers import (
-    FavouriteSerializer,
-    FavouriteSerializerList
+    InputFavouriteSerializer,
+    OutputFavouriteSerializerList
 
 )
+from .services.favourite import FavouriteService
 
 
-class FavouriteView(ViewSet):
+class FavouriteAPIView(APIView):
     permission_classes = [IsAuthenticated, ]
+    _service = FavouriteService(FavouriteRepository())
 
-    def list(self, request):
-        favourites = Favourite.objects.filter(user=request.user)
-        serializer = FavouriteSerializerList(favourites, many=True)
+    def get(self, request):
+        favourites = self._service.get_all(request.user)
+        serializer = OutputFavouriteSerializerList(favourites, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def create(self, request):
-        serializer = FavouriteSerializer(data=request.data, context={'request': request})
+    def post(self, request):
+        serializer = InputFavouriteSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self._service.create(serializer.validated_data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def destroy(self, request, pk):
-        favourite = get_object_or_404(Favourite, pk=pk)
-
-        # Check if Favourite object belongs to current user
-        if favourite.user != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-        favourite.delete()
+    def delete(self, request, pk):
+        self._service.delete(request.user, pk)
         return Response(status=status.HTTP_204_NO_CONTENT)

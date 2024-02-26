@@ -1,10 +1,10 @@
-from rest_framework.routers import DefaultRouter
-
+from django.urls import path
 from .views import (
-    FavouriteView,
+    FavouriteAPIView,
 )
 
-router = DefaultRouter()
-router.register("", FavouriteView, basename="favourite")
 
-urlpatterns = router.urls
+urlpatterns = [
+    path("", FavouriteAPIView.as_view(), name="favourite_list_create_delete"),
+
+]

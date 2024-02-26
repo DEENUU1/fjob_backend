@@ -4,10 +4,10 @@ from offer.serializers import JobOfferHelperSerializer
 from .models import Favourite
 
 
-class FavouriteSerializer(ModelSerializer):
+class InputFavouriteSerializer(ModelSerializer):
     class Meta:
         model = Favourite
-        fields = ("id", "user", "offer",)
+        fields = ["id", "user", "offer"]
 
     def validate(self, data):
         user = self.context['request'].user
@@ -25,9 +25,9 @@ class FavouriteSerializer(ModelSerializer):
         return data
 
 
-class FavouriteSerializerList(ModelSerializer):
+class OutputFavouriteSerializerList(ModelSerializer):
     offer = JobOfferHelperSerializer()
 
     class Meta:
         model = Favourite
-        fields = ("id", "user", "offer",)
+        fields = ["id", "user", "offer"]
