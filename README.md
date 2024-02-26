@@ -81,25 +81,35 @@ Fjob consists of 3 repositories:
 
 
 ## Technologies:
-
-#### Backend
+- Python
 
 - Python
     - Django
     - Django Rest Framework
     - Celery
-    - Docker
-    - Docker Compose
     - Pytest
+    - Selenium
+    - Requests
+    - Beautiful Soup 4
+- React 
+  - Nextjs
+- Typescript
+- AWS 
+  - EC2
+  - S3 Bucket
+  - Elastic IP
+  - Route 53
+  - AWS Lambda
+  - EventBridge
+  - CodeBuild
+  - Amplify
+- Google Cloud SQL (postgre)
+- Docker
+- Docker Compose
 - Redis
 - CI/CD
-- AWS EC2
-- AWS S3 Bucket
-- AWS Elastic IP
-- AWS Route 53
 - Certbot
 - NGINX
-- Google Cloud SQL (postgre)
 - SQLite
 - Stripe
 
@@ -109,11 +119,6 @@ Fjob consists of 3 repositories:
 <img src="assets/api_3.png" alt="endpoints_3"/>
 
 
-#### Frontend
-
-- Nextjs
-- Typescript
-- AWS Amplify
 
 <img src="assets/frontend_1.png" alt="frontend_1"/>
 <img src="assets/frontend_2.png" alt="frontend_2"/>
@@ -137,17 +142,6 @@ Fjob consists of 3 repositories:
 <img src="assets/frontend_14.png" alt="frontend_14"/>
 <img src="assets/frontend_15.png" alt="frontend_15"/>
 
-
-
-#### Scrapers
-
-- Python
-    - Selenium
-    - Requests
-    - Beautiful Soup 4
-- AWS Lambda
-- AWS EventBridge
-- AWS CodeBuild
 
 ## Local environment installation
 
