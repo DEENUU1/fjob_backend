@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-from django_filters import rest_framework as filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -15,14 +15,18 @@ from company.models import Company
 from company.permissions import IsCompanyUser
 from fjob.pagination import CustomPagination
 from offer.rate_throttle import JobOfferRateAnonThrottle, JobOfferRateUserThrottle
+from offer.repository.offer_rate_repository import JobOfferRateRepository
+from offer.repository.offer_repository import OfferRepository
+from offer.repository.salary_repository import SalaryRepository
+from offer.services.offer import OfferService
+from offer.services.offer_rate import OfferRateService
+from offer.services.salary import SalaryService
 from .models import (
     WorkType,
     EmploymentType,
     Experience,
-    Salary,
     JobOffer,
 )
-from .save_scraped import save_scraped
 from .serializers import (
     WorkTypeSerializer,
     EmploymentTypeSerializer,
@@ -34,59 +38,62 @@ from .serializers import (
     JobOfferRateCreateSerializer,
     JobOfferSerializerUpdate
 )
-from collections import Counter
 
 
 class WorkTypeListAPIView(ListAPIView):
-    # Return list of WorkType objects
+    """
+    ListAPIView to retrieve a list of WorkType objects.
+    """
     queryset = WorkType.objects.all()
     serializer_class = WorkTypeSerializer
 
 
 class EmploymentTypeListAPIView(ListAPIView):
-    # Return list of EmploymentType objects
+    """
+    ListAPIView to retrieve a list of EmploymentType objects.
+    """
     queryset = EmploymentType.objects.all()
     serializer_class = EmploymentTypeSerializer
 
 
 class ExperienceListAPIView(ListAPIView):
-    # Return list of Experience objects
+    """
+    ListAPIView to retrieve a list of Experience objects.
+    """
     queryset = Experience.objects.all()
     serializer_class = ExperienceSerializer
 
 
 class SalaryView(APIView):
-    # Return lowest and highest salary
+    """
+    API endpoint to retrieve minimum and maximum salary information.
+    """
 
-    def get(self, requests):
-        salaries = Salary.objects.all()
+    _service = SalaryService(SalaryRepository())
 
-        if not salaries:
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
-        min_salary = min(salary.salary_from for salary in salaries)
-        max_salary = max(salary.salary_to for salary in salaries)
-
-        result = {
-            "min": min_salary,
-            "max": max_salary,
-        }
-
+    def get(self, request):
+        """
+        Retrieve and return minimum and maximum salary information.
+        """
+        result = self._service.return_min_max_salary()
         return Response(result)
 
 
 class OfferListView(ListAPIView):
+    """
+    ListAPIView to retrieve a paginated list of active Job Offers with various filtering and sorting options.
+    """
+
     queryset = JobOffer.objects.filter(
         status="ACTIVE",
     )
-
     serializer_class = JobOfferSerializer
     pagination_class = CustomPagination
-    filter_backends = (filters.DjangoFilterBackend, OrderingFilter, SearchFilter)
-    throttle_classes = (UserRateThrottle, )
+    filter_backends = (DjangoFilterBackend, OrderingFilter, SearchFilter)
+    throttle_classes = (UserRateThrottle,)
 
     # JobOffer fields by which objects can be ordered
-    # Currently there is a ordering by created time (from newest/oldest) and salary (from lowest/highest)
+    # Currently there is ordering by created time (from newest/oldest) and salary (from lowest/highest)
     ordering_fields = [
         "created_at",
         # salary__salary_from should be used for - price lowest
@@ -95,13 +102,13 @@ class OfferListView(ListAPIView):
         "salary__salary_to",
     ]
     # Job offer fields by which objects can be searched
-    # @ allows to run Full-text search, works only with PostgreSQL
+    # @ allows Full-text search, works only with PostgreSQL
     if settings.WORKING_MODE == "prod":
         search_fields = ["@title", "@description", "@skills"]
     else:
         search_fields = ["title", "description", "skills"]
     # Job offer fields by which objects can be filtered
-    # Todo add filtering by city and region
+    # Todo: add filtering by city and region
     filterset_fields = [
         "is_remote",
         "is_hybrid",
@@ -111,24 +118,34 @@ class OfferListView(ListAPIView):
         "employment_type"
     ]
 
-    def get(self, *args, **kwargs):
-        return super().get(*args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        """
+        Retrieve and return a paginated list of active Job Offers with applied filters and sorting.
+        """
+        return super().get(request, *args, **kwargs)
 
 
 class JobOfferRetrieveAPIView(RetrieveAPIView):
-    # Return details for specified JobOffer based on slug
+    """
+    RetrieveAPIView to get details for a specific Job Offer based on its slug.
+    """
     lookup_field = 'slug'
     queryset = JobOffer.objects.filter(status="ACTIVE")
     serializer_class = JobOfferSerializer
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
 
 class CompanyPublicOfferListView(ListAPIView):
-    # Return list of offer (with status "ACTIVE") for specified Company
+    """
+    ListAPIView to get a list of Job Offers (with status "ACTIVE") for a specified Company.
+    """
     serializer_class = JobOfferSerializer
     lookup_field = 'slug'
 
     def get_queryset(self):
+        """
+        Get the queryset of Job Offers with status "ACTIVE" for the specified Company.
+        """
         # Get company_id from URL param
         company_id = self.kwargs.get("slug")
         company = get_object_or_404(Company, slug=company_id)
@@ -136,22 +153,34 @@ class CompanyPublicOfferListView(ListAPIView):
         return JobOffer.objects.filter(company=company, status="ACTIVE")
 
     def list(self, request, *args, **kwargs):
+        """
+        List Job Offers with status "ACTIVE" for the specified Company.
+        """
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
 
 class OfferPrivateCompanyViewSet(ViewSet):
-    # Set of endpoints for Company to create, update and delete JobOffer
-    permission_classes = (IsAuthenticated, IsCompanyUser, )
+    """
+    A set of endpoints for the Company to manage Job Offers, including creation, update, and deletion.
+    """
+
+    permission_classes = (IsAuthenticated, IsCompanyUser,)
 
     def list(self, request):
+        """
+        Retrieve a list of Job Offers associated with the authenticated Company.
+        """
         company = get_object_or_404(Company, user=request.user)
         queryset = JobOffer.objects.filter(company=company)
         serializer = JobOfferCompanySerializer(queryset, many=True)
         return Response(serializer.data)
 
     def create(self, request):
+        """
+        Create a new Job Offer for the authenticated Company.
+        """
         serializer = JobOfferSerializerCreate(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -159,6 +188,9 @@ class OfferPrivateCompanyViewSet(ViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, pk=None):
+        """
+        Update an existing Job Offer for the authenticated Company.
+        """
         offer = get_object_or_404(JobOffer, pk=pk)
 
         if offer.is_expired:
@@ -172,62 +204,52 @@ class OfferPrivateCompanyViewSet(ViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
+        """
+        Delete an existing Job Offer for the authenticated Company.
+        """
         offer = get_object_or_404(JobOffer, pk=pk)
         offer.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ScrapedDataView(APIView):
-    # Endpoint which allows to POST scraped data and save to database
-    # It's a bridge between Lambda functions and Google Cloud SQL
+    """
+    API endpoint to handle the saving of scraped data for Job Offers.
+    Requires Token Authentication for access.
+    """
+
     authentication_classes = [TokenAuthentication]
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
+    _service = OfferService(OfferRepository())
 
     def post(self, request, *args, **kwargs):
+        """
+        Save scraped data for multiple Job Offers.
+        """
         serializer = ScrapedDataSerializer(data=request.data, many=True)
-        if serializer.is_valid():
-            data = serializer.validated_data
-            for item in data:
-                save_scraped(item)
-
-            return Response({"message": "Data saved successfully"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        self._service.save_scraped_offers(serializer.validated_data)
+        return Response({"message": "Data saved successfully"}, status=status.HTTP_201_CREATED)
 
 
 class JobOfferRateCreateAPIView(CreateAPIView):
-    # Create JobOfferRate object for specified JobOffer
-    # This view use JobOfferRateThrottle which allows user and anon to create 5 JobOfferRate objects per day
+    """
+    CreateAPIView for submitting ratings for Job Offers.
+    """
     serializer_class = JobOfferRateCreateSerializer
-    throttle_classes = (JobOfferRateAnonThrottle, JobOfferRateUserThrottle, )
+    throttle_classes = (JobOfferRateAnonThrottle, JobOfferRateUserThrottle,)
 
 
 class JobOfferRateStatsAPIView(APIView):
-    # Return stats (rates) for specified JobOffer
+    """
+    API endpoint to retrieve statistics for Job Offer ratings.
+    """
 
-    def get(self, request, slug):
-        job_offer = get_object_or_404(JobOffer, slug=slug)
-        job_offer_rates = job_offer.jobofferrate_set.all()
+    _service = OfferRateService(JobOfferRateRepository())
 
-        if not job_offer_rates:
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
-        # Calculate JobOffer average rate
-        avg = sum(rate.rate for rate in job_offer_rates) / len(job_offer_rates)
-
-        # Calculate JobOffer rates for 1, 2, 3, 4, 5 stars
-        num_rates = len(job_offer_rates)
-        rates = [rate.rate for rate in job_offer_rates]
-        rates = Counter(rates)
-        rates = [rates[1], rates[2], rates[3], rates[4], rates[5]]
-
-        result = {
-            "avg": avg,
-            "num_rates": num_rates,
-            "one_rate": rates[0],
-            "two_rate": rates[1],
-            "three_rate": rates[2],
-            "four_rate": rates[3],
-            "five_rate": rates[4],
-        }
-
+    def get(self, request, slug: str):
+        """
+        Retrieve statistics for a specific Job Offer based on its slug.
+        """
+        result = self._service.get_offer_rate_details(slug)
         return Response(result)
