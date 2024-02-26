@@ -46,8 +46,7 @@ class CandidateCreateAPIView(APIView):
         """
         serializer = InputCandidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        data = serializer.validated_data
-        candidate = self._service.create(data)
+        candidate = self._service.create(serializer.validated_data)
         return Response(candidate.id, status=status.HTTP_201_CREATED)
 
 
@@ -75,8 +74,7 @@ class CandidateUserListView(APIView):
         Returns:
         - Response: A response with serialized candidate data for the authenticated user.
         """
-        user = request.user
-        candidates = self._service.get_user_applications(user)
+        candidates = self._service.get_user_applications(request.user)
         serializer = OutputCandidateUserSerializer(candidates, many=True)
         return Response(serializer.data)
 
