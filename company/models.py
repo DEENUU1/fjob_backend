@@ -1,17 +1,10 @@
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 
+from company.utils.validate_file_size import validate_file_size
 from location.models import Address
 from users.models import UserAccount
-
-
-def validate_file_size(value):
-    filesize = value.size
-
-    if filesize > settings.MAX_IMAGE_SIZE:
-        raise ValidationError("Max file size is 5 MB")
 
 
 class CompanyCategory(models.Model):

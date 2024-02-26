@@ -5,8 +5,19 @@ from .models import Company
 
 
 @receiver(post_save, sender=Company)
-def create_slug(sender, instance, created, **kwargs):
-    # Create slug for Company object based on name and id
+def create_slug(sender, instance, created, **kwargs) -> None:
+    """
+    Signal handler to create a slug for a Company object based on its name and id.
+
+    Parameters:
+    - sender: The sender of the signal (Company model in this case).
+    - instance: The instance of the Company model being saved.
+    - created (bool): A flag indicating whether the instance is being created.
+    - kwargs: Additional keyword arguments.
+
+    Returns:
+    - None
+    """
     if created:
         transformed_name = SlugTransformer.transform(instance.name)
         instance.slug = f"{instance.id}-{transformed_name}"
