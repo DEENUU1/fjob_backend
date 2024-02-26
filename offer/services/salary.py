@@ -27,9 +27,11 @@ class SalaryService:
         - Dictionary containing "min" and "max" keys with corresponding salary values.
         """
         salaries = self._repository.get_all()
-
-        min_salary = min(salary.salary_from for salary in salaries)
-        max_salary = max(salary.salary_to for salary in salaries)
+        try:
+            min_salary = min(salary.salary_from for salary in salaries)
+            max_salary = max(salary.salary_to for salary in salaries)
+        except ValueError:
+            return None
 
         return {
             "min": min_salary,

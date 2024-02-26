@@ -1,5 +1,6 @@
 from typing import Any, Optional, List, Dict
 
+from django.core.exceptions import FieldError
 from rest_framework.exceptions import NotFound
 
 
@@ -40,9 +41,15 @@ class CRUDRepository:
         - List[Optional[Any]]: A list of objects.
         """
         if user:
-            return self._model.objects.filter(user=user).order_by('-created_at')
+            try:
+                return self._model.objects.filter(user=user).order_by('-created_at')
+            except FieldError:
+                return self._model.objects.filter(user=user)
         else:
-            return self._model.objects.all().order_by('-created_at')
+            try:
+                return self._model.objects.all().order_by('-created_at')
+            except FieldError:
+                return self._model.objects.all()
 
     def get_by_id(self, _id: int, user=None) -> Optional[Any]:
         """
