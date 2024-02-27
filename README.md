@@ -9,7 +9,7 @@
 
 <br />
 <div align="center">
-  <h3 align="center">Fjob backend</h3>
+  <h3 align="center">FJob backend</h3>
 
   <p align="center">
     FJob is a fullstack application (main technologies: Django Rest Framework, Nextjs, Selenium). FJob, by collecting job offers from many job portals (currently only JustJoinIT, but there are already scripts ready to collect data from: olx, Pracujpl, nofluffjobs, Pracujpl) and enabling companies to post their own job offers will allow you to easily search for job offers.
@@ -20,6 +20,17 @@
     <a href="https://github.com/DEENUU1/fjob_backend/issues">Request Feature</a>
   </p>
 </div>
+
+## !Info!
+<strong>
+The project has undergone significant changes in terms of code architecture. 
+Initially, all application logic resided in views. 
+Currently, thanks to the use of Repository Pattern and Service Layer, 
+views have been significantly improved. 
+Not all views use this architecture, 
+I left some of them unchanged because they use abstract classes from DRF, 
+so there is practically no business logic in them.
+</strong>
 
 ## System Architecture
 
@@ -81,32 +92,29 @@ Some views have remained unchanged due to, for example, their simplicity related
     - Implements AWS EventBridge to automatically trigger each web scraping function.
 17. Sentry Integration for Error Monitoring:
     - Integrates with the Sentry platform to monitor and analyze errors in the system.
-
+18. I wrote over <strong>120 tests</strong>, both unit and integration
 
 ## Technologies:
 - Python
-
-- Python
-    - Django
-    - Django Rest Framework
+    - Django / Django Rest Framework
+    - Selenium
     - Celery
     - Pytest
-    - Selenium
     - Requests
     - Beautiful Soup 4
 - React 
-  - Nextjs
-- Typescript
+  - Next.JS
+  - Typescript
 - AWS 
   - EC2
   - S3 Bucket
   - Elastic IP
   - Route 53
-  - AWS Lambda
+  - Lambda
   - EventBridge
   - CodeBuild
   - Amplify
-- Google Cloud SQL (postgre)
+- Google Cloud SQL (postgreSQL)
 - Docker
 - Docker Compose
 - Redis
@@ -116,12 +124,14 @@ Some views have remained unchanged due to, for example, their simplicity related
 - SQLite
 - Stripe
 
-
+## Backend - Endpoints
 <img src="assets/api_1.png" alt="endpoints_1"/>
 <img src="assets/api_2.png" alt="endpoints_2"/>
 <img src="assets/api_3.png" alt="endpoints_3"/>
 
 
+## Frontend
+I'm not a frontend developer, but I think it looks pretty good
 
 <img src="assets/frontend_1.png" alt="frontend_1"/>
 <img src="assets/frontend_2.png" alt="frontend_2"/>
@@ -150,7 +160,7 @@ Some views have remained unchanged due to, for example, their simplicity related
 
 Backend in local mode use SQLite so there is no need to use Docker/Docker-compose
 
-#### Installation
+#### Installation - without docker
 
 ```bash
 # Clone repository
@@ -164,6 +174,35 @@ pip install -r requirements.txt
 
 # Apply migrations
 python manage.py migrate 
+
+# Create super user 
+python manage.py createsuperuser (in User Type type "USER")
+
+# Run server 
+python manage.py runserver 
+```
+
+#### Installation - with docker
+
+```bash
+# Clone repository
+git clone <url>
+
+# Create .env file 
+cp .env_example .env
+
+# Build image
+docker-compose build
+
+# Run containers
+docker-compose up # -d 
+
+# Apply migrations
+python manage.py migrate 
+
+# 
+# Run this commands inside web container
+# 
 
 # Create super user 
 python manage.py createsuperuser (in User Type type "USER")
