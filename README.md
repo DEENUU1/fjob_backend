@@ -31,6 +31,10 @@ Not all views use this architecture,
 I left some of them unchanged because they use abstract classes from DRF, 
 so there is practically no business logic in them.
 </strong>
+<hr>
+<strong>
+The application is no longer available in the demo version, I don't have money to maintain it with this architecture :(
+</strong>
 
 ## System Architecture
 
