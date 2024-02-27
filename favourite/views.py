@@ -12,7 +12,7 @@ from .serializers import (
 from .services.favourite import FavouriteService
 
 
-class FavouriteAPIView(APIView):
+class FavouriteListCreateAPIView(APIView):
     """
     API view for handling Favourite operations.
 
@@ -52,6 +52,11 @@ class FavouriteAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         self._service.create(serializer.validated_data)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class FavouriteDeleteAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+    _service = FavouriteService(FavouriteRepository())
 
     def delete(self, request, pk):
         """

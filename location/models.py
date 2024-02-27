@@ -1,7 +1,8 @@
 from django.db import models
+from utils.base_model import BaseModel
 
 
-class Country(models.Model):
+class Country(BaseModel):
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -13,7 +14,7 @@ class Country(models.Model):
         verbose_name_plural = "Countries"
 
 
-class Region(models.Model):
+class Region(BaseModel):
     name = models.CharField(max_length=255)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
 
@@ -26,7 +27,7 @@ class Region(models.Model):
         verbose_name_plural = "Regions"
 
 
-class City(models.Model):
+class City(BaseModel):
     name = models.CharField(max_length=255)
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True, blank=True)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True, blank=True)
@@ -42,7 +43,7 @@ class City(models.Model):
         verbose_name_plural = "Cities"
 
 
-class Address(models.Model):
+class Address(BaseModel):
     country = models.ForeignKey(Country, on_delete=models.CASCADE, null=True, blank=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, null=True, blank=True)
     region = models.ForeignKey(Region, on_delete=models.CASCADE, null=True, blank=True)

@@ -5,9 +5,10 @@ from django.utils import timezone
 
 from company.models import Company
 from location.models import Address
+from utils.base_model import BaseModel
 
 
-class WorkType(models.Model):
+class WorkType(BaseModel):
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -19,7 +20,7 @@ class WorkType(models.Model):
         verbose_name_plural = 'Work Types'
 
 
-class EmploymentType(models.Model):
+class EmploymentType(BaseModel):
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -31,7 +32,7 @@ class EmploymentType(models.Model):
         verbose_name_plural = 'Employment Types'
 
 
-class Experience(models.Model):
+class Experience(BaseModel):
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
@@ -43,7 +44,7 @@ class Experience(models.Model):
         verbose_name_plural = 'Experiences'
 
 
-class Salary(models.Model):
+class Salary(BaseModel):
     CURRENCIES = (
         ('PLN', 'PLN'),
         ('EURO', 'EURO'),
@@ -71,7 +72,7 @@ class Salary(models.Model):
         verbose_name_plural = 'Salaries'
 
 
-class JobOffer(models.Model):
+class JobOffer(BaseModel):
     STATUS = (
         ("DRAFT", "DRAFT"),
         ("PENDING", "PENDING"),
@@ -93,8 +94,6 @@ class JobOffer(models.Model):
     experience = models.ManyToManyField(Experience, blank=True)
     work_type = models.ManyToManyField(WorkType, blank=True)
     employment_type = models.ManyToManyField(EmploymentType, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS, default="DRAFT")
 
     # These fields are only used for job offers that are scraped from other websites
@@ -130,7 +129,7 @@ class JobOffer(models.Model):
         return self.title
 
 
-class JobOfferRate(models.Model):
+class JobOfferRate(BaseModel):
     RATE = (
         (1, 1),
         (2, 2),
@@ -140,7 +139,6 @@ class JobOfferRate(models.Model):
     )
     job_offer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
     rate = models.IntegerField(choices=RATE)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self) -> str:
         return f"{self.job_offer} - {self.rate}"

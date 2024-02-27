@@ -4,7 +4,7 @@ import pytest
 from rest_framework.test import force_authenticate, APIRequestFactory
 
 from favourite.models import Favourite
-from favourite.views import FavouriteAPIView
+from favourite.views import FavouriteListCreateAPIView, FavouriteDeleteAPIView
 from tests.fixtures import job_offer, user
 
 factory = APIRequestFactory()
@@ -12,7 +12,7 @@ factory = APIRequestFactory()
 
 @pytest.mark.django_db
 def test_success_return_list_of_favourite_job_offers_for_specified_user(user, job_offer):
-    view = FavouriteAPIView.as_view()
+    view = FavouriteListCreateAPIView.as_view()
     Favourite.objects.create(offer=job_offer, user=user)
     request = factory.get('/api/favourite/')
     force_authenticate(request, user=user)
@@ -23,7 +23,7 @@ def test_success_return_list_of_favourite_job_offers_for_specified_user(user, jo
 
 @pytest.mark.django_db
 def test_error_list_of_favourite_job_offers_not_authenticated(user, job_offer):
-    view = FavouriteAPIView.as_view()
+    view = FavouriteListCreateAPIView.as_view()
     Favourite.objects.create(offer=job_offer, user=user)
     request = factory.get('/api/favourite/')
     response = view(request)
@@ -32,7 +32,7 @@ def test_error_list_of_favourite_job_offers_not_authenticated(user, job_offer):
 
 @pytest.mark.django_db
 def test_success_create_favourite_job_offer_for_specified_user(user, job_offer):
-    view = FavouriteAPIView.as_view()
+    view = FavouriteListCreateAPIView.as_view()
 
     data = json.dumps({"offer_id": 1, "offer": 1, "user": user.id})
 
@@ -44,7 +44,7 @@ def test_success_create_favourite_job_offer_for_specified_user(user, job_offer):
 
 @pytest.mark.django_db
 def test_error_create_favourite_job_offer_for_not_authenticated_user(user, job_offer):
-    view = FavouriteAPIView.as_view()
+    view = FavouriteListCreateAPIView.as_view()
 
     data = json.dumps({"offer_id": 1, "offer": 1, "user": user.id})
 
@@ -55,7 +55,7 @@ def test_error_create_favourite_job_offer_for_not_authenticated_user(user, job_o
 
 @pytest.mark.django_db
 def test_error_create_favourite_job_offer_already_saved(user, job_offer):
-    view = FavouriteAPIView.as_view()
+    view = FavouriteListCreateAPIView.as_view()
     Favourite.objects.create(offer=job_offer, user=user)
     data = json.dumps({"offer_id": 1, "offer": 1, "user": user.id})
 
@@ -67,7 +67,7 @@ def test_error_create_favourite_job_offer_already_saved(user, job_offer):
 
 @pytest.mark.django_db
 def test_success_delete_favourite_job_offer_for_specified_user(user, job_offer):
-    view = FavouriteAPIView.as_view()
+    view = FavouriteDeleteAPIView.as_view()
     favourite = Favourite.objects.create(offer=job_offer, user=user)
 
     request = factory.delete(f'/api/favourite/{favourite.id}/')
@@ -78,7 +78,7 @@ def test_success_delete_favourite_job_offer_for_specified_user(user, job_offer):
 
 @pytest.mark.django_db
 def test_error_delete_favourite_job_offer_for_not_authenticated_user(user, job_offer):
-    view = FavouriteAPIView.as_view()
+    view = FavouriteDeleteAPIView.as_view()
     favourite = Favourite.objects.create(offer=job_offer, user=user)
 
     request = factory.delete(f'/api/favourite/{favourite.id}/')

@@ -1,18 +1,15 @@
-from datetime import timedelta
-
 from django.db import models
-from django.utils import timezone
+from utils.base_model import BaseModel
 
 from offer.models import JobOffer
 from users.models import UserAccount
 
 
-class Contact(models.Model):
+class Contact(BaseModel):
     subject = models.CharField(max_length=50)
     message = models.TextField(max_length=500)
     email = models.EmailField()
     reviewed = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.subject
@@ -23,12 +20,11 @@ class Contact(models.Model):
         verbose_name_plural = 'Contacts'
 
 
-class Report(models.Model):
+class Report(BaseModel):
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     offer = models.ForeignKey(JobOffer, on_delete=models.CASCADE)
     description = models.CharField(max_length=255)
     reviewed = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.description

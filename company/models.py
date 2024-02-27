@@ -5,9 +5,10 @@ from django.db import models
 from company.utils.validate_file_size import validate_file_size
 from location.models import Address
 from users.models import UserAccount
+from utils.base_model import BaseModel
 
 
-class CompanyCategory(models.Model):
+class CompanyCategory(BaseModel):
     name = models.CharField(max_length=50)
 
     def __str__(self) -> str:
@@ -19,7 +20,7 @@ class CompanyCategory(models.Model):
         ordering = ['name']
 
 
-class Company(models.Model):
+class Company(BaseModel):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     category = models.ForeignKey(CompanyCategory, on_delete=models.CASCADE, null=True, blank=True)
@@ -46,7 +47,6 @@ class Company(models.Model):
     instagram_url = models.URLField(null=True, blank=True)
     youtube_url = models.URLField(null=True, blank=True)
     website_url = models.URLField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
